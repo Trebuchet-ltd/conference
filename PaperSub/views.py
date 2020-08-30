@@ -1,3 +1,15 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.http import HttpResponse
 
-# Create your views here.
+from rest_framework import viewsets
+from rest_framework.response import Response
+from .models import *
+from .serializers import *
+
+
+class PaperViewset(viewsets.ModelViewSet):
+    queryset = Paper.objects.all()
+    serializer_class = PaperSerializer
+
+    def perform_create(self, serializer):
+        serializer.save()

@@ -1,5 +1,10 @@
 asgiref==3.2.10
 Django==3.1
+django-crispy-forms==1.9.2
+django-filter==2.3.0
+django-login-required-middleware==0.4
+django-widget-tweaks==1.4.8
+djangorestframework==3.11.1
 mysql==0.0.2
 mysql-connector==2.2.9
 mysql-connector-python-rf==2.2.2

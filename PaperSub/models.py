@@ -9,4 +9,4 @@ class Paper(models.Model):
     status = models.CharField(max_length=255)
     comment = models.CharField(max_length=255)
     keyword = models.CharField(max_length=255)
-    file = models.FileField(upload_to='papers/')
+    file = models.FileField(upload_to='papers/', null=True)
