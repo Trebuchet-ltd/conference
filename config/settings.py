@@ -27,6 +27,7 @@ DEBUG = True
 # TODO: Allowed hosts.
 ALLOWED_HOSTS = ['*']
 
+CORS_ORIGIN_ALLOW_ALL = DEBUG
 # Application definition
 
 INSTALLED_APPS = [
@@ -98,7 +99,6 @@ DATABASES = {
         'PASSWORD': 'c0onf1r1nc1'
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
