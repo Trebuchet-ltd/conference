@@ -11,14 +11,14 @@ from papers.serializers import PaperSerializer
 
 class UserSerializer(serializers.ModelSerializer):
     # Just the titles.
-    papers = serializers.StringRelatedField(many=True)
+    submissions = serializers.StringRelatedField(many=True)
 
     # Populated
     # papers = PaperSerializer(many=True)
 
     class Meta:
         model = User
-        fields = ['id', 'email', 'first_name', 'last_name', 'phone', 'payment_status', 'nationality', 'papers']
+        fields = ['id', 'email', 'first_name', 'last_name', 'phone', 'payment_status', 'nationality', 'submissions']
 
 
 class CustomRegisterSerializer(RegisterSerializer):
