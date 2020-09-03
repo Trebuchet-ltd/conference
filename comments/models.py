@@ -3,7 +3,6 @@ from papers.models import Paper
 from users.models import User
 
 
-
 class Comment(models.Model):
     paper = models.ForeignKey(Paper, on_delete=models.CASCADE, related_name='comments')
     message = models.CharField(max_length=255)
