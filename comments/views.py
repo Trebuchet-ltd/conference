@@ -7,11 +7,9 @@ from .models import *
 from .serializers import *
 
 
-class PaperViewset(viewsets.ModelViewSet):
-    queryset = Paper.objects.all()
-    serializer_class = PaperSerializer
-
-    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+class CommentViewset(viewsets.ModelViewSet):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
 
     def perform_create(self, serializer):
         serializer.save()

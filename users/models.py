@@ -37,6 +37,10 @@ COUNTRIES = ["India", "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", 
 
 COUNTRY_OPTIONS = [(country, country) for country in COUNTRIES]
 
+ROLES = [
+
+]
+
 
 class User(AbstractUser):
     username = None

@@ -23,6 +23,7 @@ urlpatterns = [
     path('auth/', include('rest_auth.urls')),
     path('auth/registration/', include('rest_auth.registration.urls')),
     path('papers/', include(('papers.urls', 'papers'), namespace='papers')),
+    path('comments/', include(('comments.urls', 'comments'), namespace='comments')),
     path('payment/', include('payment.urls')),
 ]
 
