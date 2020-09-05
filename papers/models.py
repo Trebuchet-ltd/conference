@@ -7,8 +7,8 @@ from users.models import User
 
 def media_location(instance, filename):
     if instance.is_poster:
-        return f'media/posters/{filename}'
-    return f'media/papers/{filename}'
+        return f'static/media/posters/{filename}'
+    return f'static/media/papers/{filename}'
 
 
 class Paper(models.Model):
