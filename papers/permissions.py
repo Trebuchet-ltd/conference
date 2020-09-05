@@ -50,5 +50,7 @@ class RetrieveAndIsAuthor(permissions.BasePermission):
     message = "!RetrieveAndIsAuthor"
 
     def has_permission(self, request, view):
-        is_author = Paper.objects.get(pk=view.kwargs['pk']).author.id == request.user.id
-        return view.action in ['retrieve', 'destroy'] and is_author
+        is_author = False
+        if view.action in ['retrieve', 'destroy']:
+            is_author = Paper.objects.get(pk=view.kwargs['pk']).author.id == request.user.id
+        return is_author
