@@ -19,6 +19,7 @@ class Paper(models.Model):
     file = models.FileField(upload_to=media_location, null=True)
     is_poster = models.BooleanField(default=False)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='submissions')
+    reviewer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='assigned_papers', null=True)
     approved_paper = models.OneToOneField(User, on_delete=models.CASCADE, related_name='paper', null=True)
     approved_poster = models.OneToOneField(User, on_delete=models.CASCADE, related_name='poster', null=True)
 

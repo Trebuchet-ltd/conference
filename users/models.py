@@ -38,9 +38,9 @@ COUNTRIES = ["India", "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", 
 COUNTRY_OPTIONS = [(country, country) for country in COUNTRIES]
 
 ROLES = [
-    ('speaker','speaker'),
-    ('organiser','organiser'),
-    ('viewer','viewer')
+    ('speaker', 'speaker'),
+    ('organiser', 'organiser'),
+    ('viewer', 'viewer')
 ]
 
 
@@ -52,9 +52,9 @@ class User(AbstractUser):
     nationality = models.CharField(choices=COUNTRY_OPTIONS, max_length=25, default='India')
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['phone', 'payment_status']
+    REQUIRED_FIELDS = ['phone']
 
-    role = models.CharField(choices=ROLES,max_length=255,default='viewer')
+    role = models.CharField(choices=ROLES, max_length=255, default='viewer')
     objects = UserManager()
 
     def __str__(self):

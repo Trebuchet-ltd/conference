@@ -10,4 +10,5 @@ router.register(r'', views.PaperViewset)
 
 urlpatterns = [
     path('', include(router.urls)),
+    url('me', views.PaperList.as_view())
 ]
