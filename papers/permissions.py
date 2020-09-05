@@ -51,7 +51,7 @@ class RetrieveAndIsAuthor(permissions.BasePermission):
 
     def has_permission(self, request, view):
         is_author = False
-        if view.action in ['retrieve', 'destroy']:
+        if view.action in ['retrieve', 'destroy', 'update']:
             try:
                 is_author = Paper.objects.get(pk=view.kwargs['pk']).author.id == request.user.id
             except AttributeError:

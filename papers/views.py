@@ -7,6 +7,7 @@ from rest_framework.generics import ListAPIView
 from .models import *
 from .serializers import *
 from .permissions import *
+from django.utils.timezone import now
 
 
 class PaperViewset(viewsets.ModelViewSet):
@@ -18,7 +19,16 @@ class PaperViewset(viewsets.ModelViewSet):
     # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
+        serializer.save(author=self.request.user, submission_time=now())
+
+    def get_serializer_class(self):
+        if self.request.user.role == 'organiser':
+            return OrganiserPaperSerializer
+        elif self.request.user.role == 'reviewer':
+            return ReviewerPaperSerializer
+        elif self.action == 'update':
+            return FileUploadPaperSerializer
+        return PaperSerializer
 
 
 class PaperList(ListAPIView):
