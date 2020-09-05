@@ -9,6 +9,6 @@ router = DefaultRouter()
 router.register(r'', views.PaperViewset)
 
 urlpatterns = [
+    url('me', views.PaperList.as_view()),
     path('', include(router.urls)),
-    url('me', views.PaperList.as_view())
 ]
