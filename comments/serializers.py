@@ -5,4 +5,8 @@ from .models import *
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
-        fields = '__all__'
+        fields = ['paper', 'message', 'author', 'time']
+        extra_kwargs = {
+            'author': {'read_only': True},
+            'time': {'read_only': True},
+        }

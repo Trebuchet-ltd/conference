@@ -1,9 +1,15 @@
 from django.db import models
 from users.models import User
 
+REVIEW_STAGES = [
+    ('reviewing', 'reviewing'),
+    ('assigned', 'assigned'),
+    ('reviewed', 'reviewed'),
+    ('approved', 'approved'),
+    ('rejected', 'rejected'),
+    ('corrections', 'corrections'),
+]
 
-# TODO: Make status an enum.
-# TODO: Add Approved_Paper field.
 
 def media_location(instance, filename):
     if instance.is_poster:
@@ -14,14 +20,12 @@ def media_location(instance, filename):
 class Paper(models.Model):
     title = models.CharField(max_length=255)
     description = models.CharField(max_length=1000)
-    status = models.CharField(max_length=255, default='pending')
+    status = models.CharField(choices=REVIEW_STAGES, max_length=12, default='reviewing')
     keyword = models.CharField(max_length=255)
     file = models.FileField(upload_to=media_location, null=True)
     is_poster = models.BooleanField(default=False)
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='submissions')
-    reviewer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='assigned_papers', null=True)
-    approved_paper = models.OneToOneField(User, on_delete=models.CASCADE, related_name='paper', null=True)
-    approved_poster = models.OneToOneField(User, on_delete=models.CASCADE, related_name='poster', null=True)
+    reviewer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='papers', null=True)
+    author = models.OneToOneField(User, on_delete=models.CASCADE, related_name='paper', null=True)
 
     def __str__(self):
         return self.title

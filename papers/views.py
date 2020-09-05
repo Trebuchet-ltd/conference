@@ -27,4 +27,5 @@ class PaperList(ListAPIView):
     permission_classes = [permissions.IsAuthenticated, IsViewer]
 
     def get_queryset(self):
-        return Paper.objects.filter(author=self.request.user)
+        print(self.request.user, self.request.user.id)
+        return Paper.objects.filter(author=self.request.user.id)

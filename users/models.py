@@ -44,12 +44,17 @@ ROLES = [
 ]
 
 
+def media_location(instance, filename):
+    return f'static/media/dp/{filename}'
+
+
 class User(AbstractUser):
     username = None
     email = models.EmailField(_('email address'), unique=True)
     phone = models.CharField(max_length=13)
     payment_status = models.CharField(choices=PAYMENT_STATUSES, max_length=10, default='not paid')
     nationality = models.CharField(choices=COUNTRY_OPTIONS, max_length=25, default='India')
+    profile_picture = models.FileField(upload_to=media_location, null=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['phone']
