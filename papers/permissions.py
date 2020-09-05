@@ -1,7 +1,7 @@
 from rest_framework import permissions
 
 from django.conf import settings
-from django.shortcuts import get_object_or_404
+from django.contrib.sites.models import Site
 from .models import Paper
 
 
@@ -52,5 +52,10 @@ class RetrieveAndIsAuthor(permissions.BasePermission):
     def has_permission(self, request, view):
         is_author = False
         if view.action in ['retrieve', 'destroy']:
-            is_author = Paper.objects.get(pk=view.kwargs['pk']).author.id == request.user.id
+            try:
+                is_author = Paper.objects.get(pk=view.kwargs['pk']).author.id == request.user.id
+            except AttributeError:
+                is_author = False
+            except Paper.DoesNotExist:
+                is_author = True
         return is_author
