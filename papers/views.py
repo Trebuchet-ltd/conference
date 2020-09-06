@@ -34,7 +34,7 @@ class PaperViewset(viewsets.ModelViewSet):
 class PaperList(ListAPIView):
     queryset = Paper.objects.all()
     serializer_class = PaperSerializer
-    permission_classes = [permissions.IsAuthenticated, IsViewer]
+    permission_classes = [permissions.IsAuthenticated, (IsViewer | IsReviewer)]
 
     def get_queryset(self):
         print(self.request.user, self.request.user.id)

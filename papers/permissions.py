@@ -23,6 +23,13 @@ class IsViewer(permissions.BasePermission):
         return request.user.role == 'viewer'
 
 
+class IsReviewer(permissions.BasePermission):
+    message = 'Not reviewer'
+
+    def has_permission(self, request, view):
+        return request.user.role == 'reviewer'
+
+
 class IsOrgnaiser(permissions.BasePermission):
     message = 'Not Organiser'
 
