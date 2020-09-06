@@ -49,8 +49,8 @@ class CreateAndIsViewer(IsViewer):
     message = "!CreateAndIsAuthenticated"
 
     def has_permission(self, request, view):
-        print(request.user.role, request.user.id, request.method)
-        return (request.method in ['POST', 'PUT']
+        print(request.user.role, request.user.id, view.action)
+        return (view.action in ['create']
                 and super(CreateAndIsViewer, self).has_permission(request, view))
 
 
@@ -59,7 +59,7 @@ class RetrieveAndIsAuthor(permissions.BasePermission):
 
     def has_permission(self, request, view):
         is_author = False
-        if request.method in ['GET', 'DELETE', 'PUT']:
+        if view.action in ['retrieve', 'destroy', 'update']:
             try:
                 is_author = Paper.objects.get(pk=view.kwargs['pk']).author.id == request.user.id
             except AttributeError:
