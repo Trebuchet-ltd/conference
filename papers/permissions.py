@@ -49,7 +49,7 @@ class CreateAndIsViewer(IsViewer):
     message = "!CreateAndIsAuthenticated"
 
     def has_permission(self, request, view):
-        print(request.user.role, request.user.id, view.action)
+        print('Permissions', request.user.role, request.user.id, view.action)
         return (view.action in ['create']
                 and super(CreateAndIsViewer, self).has_permission(request, view))
 
