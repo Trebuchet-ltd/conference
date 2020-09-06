@@ -62,8 +62,6 @@ class FileUploadPaperSerializer(serializers.ModelSerializer):
 
         extra_kwargs = {
             'author': {'read_only': True},
-            'title': {'read_only': True},
-            'description': {'read_only': True},
             'comments': {'read_only': True},
             'keyword': {'read_only': True},
             'is_poster': {'read_only': True},
