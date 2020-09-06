@@ -21,7 +21,7 @@ class Paper(models.Model):
     title = models.CharField(max_length=255)
     description = models.CharField(max_length=1000)
     status = models.CharField(choices=REVIEW_STAGES, max_length=12, default='reviewing')
-    keyword = models.CharField(max_length=255,null=True,blank=True)
+    keyword = models.CharField(max_length=255, null=True, blank=True)
     file = models.FileField(upload_to=media_location, null=True)
     is_poster = models.BooleanField(default=False)
     reviewer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='papers', null=True)
