@@ -49,7 +49,7 @@ class CreateAndIsViewer(IsViewer):
     message = "!CreateAndIsAuthenticated"
 
     def has_permission(self, request, view):
-        return (view.action in 'create'
+        return (view.action in ['create']
                 and super(CreateAndIsViewer, self).has_permission(request, view))
 
 
