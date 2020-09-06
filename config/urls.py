@@ -24,9 +24,10 @@ urlpatterns = [
     path('auth/registration/', include('rest_auth.registration.urls')),
     path('papers/', include(('papers.urls', 'papers'), namespace='papers')),
     path('comments/', include(('comments.urls', 'comments'), namespace='comments')),
+    path('users/', include(('users.urls', 'users'), namespace='users')),
     path('payment/', include('payment.urls')),
+    url(r'^account/', include('allauth.urls')),
 ]
-
-# url(r'^account/', include('allauth.urls')),
+#
 # url(r'^accounts-rest/registration/account-confirm-email/(?P<key>.+)/$', confirm_email,
 #     name='account_confirm_email'),
