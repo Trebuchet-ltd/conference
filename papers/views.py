@@ -19,7 +19,7 @@ class PaperViewset(viewsets.ModelViewSet):
     # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def perform_create(self, serializer):
-        serializer.save(author=self.request.user, submission_time=now())
+        serializer.save(author=self.request.user, submission_time=now(), status='submitted')
 
     def get_serializer_class(self):
         if self.request.user.role == 'organiser':
