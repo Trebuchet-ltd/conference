@@ -118,7 +118,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 AUTH_USER_MODEL = 'users.User'
 
-# TODO: setup SMTP for mail verification.
+# TODO: setup routes for mail verification.
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
@@ -155,7 +155,7 @@ EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 #
 # from django.conf import settings
 # from django.core.mail import send_mail
-# send_mail('Hai', 'Test messsage', settings.EMAIL_HOST_USER, ['jyothisp52@gmail.com', 'sahilathrij@gmail.com'], fail_silently=False)
+# send_mail('From server', 'Test messsage', settings.EMAIL_HOST_USER, ['jyothisp52@gmail.com', 'sahilathrij@gmail.com'], fail_silently=False)
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/

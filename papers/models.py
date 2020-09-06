@@ -2,6 +2,7 @@ from django.db import models
 from users.models import User
 
 REVIEW_STAGES = [
+    ('submitted', 'submitted'),
     ('reviewing', 'reviewing'),
     ('assigned', 'assigned'),
     ('reviewed', 'reviewed'),
@@ -20,7 +21,7 @@ def media_location(instance, filename):
 class Paper(models.Model):
     title = models.CharField(max_length=255)
     description = models.CharField(max_length=1000)
-    status = models.CharField(choices=REVIEW_STAGES, max_length=12, default='reviewing')
+    status = models.CharField(choices=REVIEW_STAGES, max_length=12, default='submitted')
     keyword = models.CharField(max_length=255, null=True, blank=True)
     file = models.FileField(upload_to=media_location, null=True)
     is_poster = models.BooleanField(default=False)
