@@ -9,6 +9,7 @@ REVIEW_STAGES = [
     ('approved', 'approved'),
     ('rejected', 'rejected'),
     ('corrections', 'corrections'),
+    ('upload paper', 'upload paper'),
 ]
 
 
