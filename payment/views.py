@@ -121,4 +121,6 @@ class PaymentViewSet(viewsets.ModelViewSet):
         p.status=s["payment_request"]['status']
         p.save()
 
-        return Response(s["payment_request"]["longurl"])
+        url = {"URL": s["payment_request"]["longurl"]}
+
+        return Response(json.dumps(url))
