@@ -59,6 +59,7 @@ class User(AbstractUser):
     username = None
     email = models.EmailField(_('email address'), unique=True)
     phone = models.CharField(max_length=13)
+    fax = models.CharField(max_length=30, default='')
     payment_status = models.CharField(choices=PAYMENT_STATUSES, max_length=10, default='not paid')
     nationality = models.CharField(choices=COUNTRY_OPTIONS, max_length=25, default='India')
     profile_picture = models.FileField(upload_to=media_location, null=True)
