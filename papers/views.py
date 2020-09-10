@@ -13,8 +13,8 @@ from django.utils.timezone import now
 class PaperViewset(viewsets.ModelViewSet):
     queryset = Paper.objects.all()
     serializer_class = PaperSerializer
-    permission_classes = [
-        permissions.IsAuthenticated & (CreateAndIsViewer | NotCreateAndIsOrgnaiser | RetrieveAndIsAuthor)]
+    # permission_classes = [
+    #     permissions.IsAuthenticated & (CreateAndIsViewer | NotCreateAndIsOrgnaiser | RetrieveAndIsAuthor)]
 
     # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
