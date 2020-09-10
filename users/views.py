@@ -21,6 +21,6 @@ def complete_view(request):
 class UserList(ListAPIView):
     queryset = User.objects.filter(role='viewer')
     serializer_class = UserSerializer
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
 
