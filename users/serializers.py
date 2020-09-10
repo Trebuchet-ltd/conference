@@ -37,7 +37,7 @@ class CustomRegisterSerializer(RegisterSerializer):
     subject = serializers.CharField(required=True, write_only=True)
     specialization = serializers.CharField(required=True, write_only=True)
     nationality = serializers.ChoiceField(choices=COUNTRY_OPTIONS)
-    payment_status = serializers.ChoiceField(choices=PAYMENT_STATUSES)
+    # payment_status = serializers.ChoiceField(choices=PAYMENT_STATUSES)
     redundant_role = serializers.IntegerField()
 
     def custom_signup(self, request, user):
@@ -46,7 +46,7 @@ class CustomRegisterSerializer(RegisterSerializer):
         user.password = self.validated_data.get('passoword', '')
         user.phone = self.validated_data.get('phone', '')
         user.nationality = self.validated_data.get('nationality', '')
-        user.payment_status = self.validated_data.get('payment_status', '')
+        # user.payment_status = self.validated_data.get('payment_status', '')
         user.designation = self.validated_data.get('designation', '')
         user.affiliation = self.validated_data.get('affiliation', '')
         user.highest_degree = self.validated_data.get('highest_degree', '')
