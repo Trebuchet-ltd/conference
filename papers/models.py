@@ -25,6 +25,7 @@ class Paper(models.Model):
     status = models.CharField(choices=REVIEW_STAGES, max_length=12, default='submitted')
     keyword = models.CharField(max_length=255, null=True, blank=True)
     file = models.FileField(upload_to=media_location, null=True)
+    abstract = models.FileField(upload_to='static/media/abstracts/', null=True)
     is_poster = models.BooleanField(default=False)
     reviewer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='papers', null=True)
     author = models.OneToOneField(User, on_delete=models.CASCADE, related_name='paper', null=True)
