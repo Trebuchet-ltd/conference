@@ -63,11 +63,14 @@ class PaymentViewSet(viewsets.ModelViewSet):
             }
         else:
             rate = Rate.objects.first()
-            date_1 = datetime.datetime.strptime(rate.updated_on, "%m/%d/%y")
+            print(rate)
+            date_1=None
+            if rate!=None:
+                date_1 = rate.updated_on
             if date_1 == datetime.date.today():
                 payload = {
                     'purpose': 'ISBIS Conference',
-                    'amount': rate.rate*50,
+                    'amount': round(rate.rate*50,2),
                     'buyer_name': val.first_name,
                     'email': val.email,
                     'phone': val.phone,
@@ -85,7 +88,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
                     rate.save()
                     payload = {
                         'purpose': 'ISBIS Conference',
-                        'amount': rate.rate*50,
+                        'amount': round(rate.rate*50,2),
                         'buyer_name': val.first_name,
                         'email': val.email,
                         'phone': val.phone,
