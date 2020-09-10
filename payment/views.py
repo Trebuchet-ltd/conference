@@ -25,6 +25,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['post'])
     def hook(self, request, pk=None):
+        print(request.data)
         data = request.data
         mac_provided = data.pop('mac')
         message = "|".join(v for k, v in sorted(data.items(), key=lambda x: x[0].lower()))
@@ -63,7 +64,6 @@ class PaymentViewSet(viewsets.ModelViewSet):
             }
         else:
             rate = Rate.objects.first()
-            print(rate)
             date_1=None
             if rate!=None:
                 date_1 = rate.updated_on
@@ -83,7 +83,6 @@ class PaymentViewSet(viewsets.ModelViewSet):
             else:
                 try:
                     r = requests.get('https://api.exchangeratesapi.io/latest?base=USD&symbols=INR')
-                    print (r.json())
                     rate.rate=r.json()['rates']['INR']
                     rate.save()
                     payload = {
@@ -114,7 +113,6 @@ class PaymentViewSet(viewsets.ModelViewSet):
         response = requests.post("https://test.instamojo.com/api/1.1/payment-requests/", data=payload, headers=headers)
         s=json.loads(response.text)
 
-        print(s)
         p = Payments()
         p.p_id=s["payment_request"]['id']
         p.name=s["payment_request"]['buyer_name']
@@ -122,5 +120,4 @@ class PaymentViewSet(viewsets.ModelViewSet):
         p.status=s["payment_request"]['status']
         p.save()
 
-        print (response.text)
         return Response(s["payment_request"]["longurl"])
