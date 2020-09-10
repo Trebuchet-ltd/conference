@@ -13,6 +13,7 @@ from users.models import *
 import datetime
 import hmac
 import hashlib
+import codecs
 
 # Create your views here.
 class PaymentViewSet(viewsets.ModelViewSet):
@@ -25,13 +26,13 @@ class PaymentViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['post'])
     def hook(self, request, pk=None):
-        print(request.data)
         data = request.data
         data = data.dict()
+        print(data)
         mac_provided = data.pop('mac')
         message = "|".join(v for k, v in sorted(data.items(), key=lambda x: x[0].lower()))
         # Pass the 'salt' without the <>.
-        mac_calculated = hmac.new("94b0fe58a7ea44f6a09d38c53cb55531", message, hashlib.sha1).hexdigest()
+        mac_calculated = hmac.new(codecs.encode("94b0fe58a7ea44f6a09d38c53cb55531"), codecs.encode(message), hashlib.sha1).hexdigest()
         if mac_provided == mac_calculated:
             pay = Payments.objects.get(p_id=data['payment_id'])
             if data['status'] == "Credit":
