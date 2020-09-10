@@ -77,7 +77,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
                     'redirect_url': 'http://www.example.com/redirect/',
                     'send_email': 'True',
                     'send_sms': 'True',
-                    'webhook': 'http://www.example.com/webhook/',
+                    'webhook': 'https://isbis.trebuchet.one/api/payment/hook/hook/',
                     'allow_repeated_payments': 'False',
                 }
             else:
@@ -95,7 +95,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
                         'redirect_url': 'http://www.example.com/redirect/',
                         'send_email': 'True',
                         'send_sms': 'True',
-                        'webhook': 'http://www.example.com/webhook/',
+                        'webhook': 'https://isbis.trebuchet.one/api/payment/hook/hook/',
                         'allow_repeated_payments': 'False',
                     }
                 except :
@@ -108,7 +108,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
                         'redirect_url': 'http://www.example.com/redirect/',
                         'send_email': 'True',
                         'send_sms': 'True',
-                        'webhook': 'http://www.example.com/webhook/',
+                        'webhook': 'https://isbis.trebuchet.one/api/payment/hook/hook/',
                         'allow_repeated_payments': 'False',
                     }
         response = requests.post("https://test.instamojo.com/api/1.1/payment-requests/", data=payload, headers=headers)
