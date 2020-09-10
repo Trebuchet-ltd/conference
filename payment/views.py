@@ -34,7 +34,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
         # Pass the 'salt' without the <>.
         mac_calculated = hmac.new(codecs.encode("94b0fe58a7ea44f6a09d38c53cb55531"), codecs.encode(message), hashlib.sha1).hexdigest()
         if mac_provided == mac_calculated:
-            pay = Payments.objects.get(p_id=data['payment_id'])
+            pay = Payments.objects.get(p_id=data['payment_request_id'])
             if data['status'] == "Credit":
                 pay.status='done'
             # Payment was successful, mark it as completed in your database.
