@@ -43,13 +43,6 @@ ROLES = [
     ('viewer', 'viewer')
 ]
 
-GENDERS = [
-    ('male', 'male'),
-    ('female', 'female'),
-    ('other', 'other'),
-    ('prefer not to say', 'prefer not to say'),
-]
-
 
 def media_location(instance, filename):
     return f'static/media/dp/{filename}'
@@ -59,17 +52,15 @@ class User(AbstractUser):
     username = None
     email = models.EmailField(_('email address'), unique=True)
     phone = models.CharField(max_length=13)
-    fax = models.CharField(max_length=30, default='')
     payment_status = models.CharField(choices=PAYMENT_STATUSES, max_length=10, default='not paid')
     nationality = models.CharField(choices=COUNTRY_OPTIONS, max_length=25, default='India')
     profile_picture = models.FileField(upload_to=media_location, null=True)
-    address = models.CharField(max_length=255, default='')
     designation = models.CharField(max_length=50, default='')
     affiliation = models.CharField(max_length=50, default='')
-    gender = models.CharField(choices=GENDERS, max_length=18, default='prefer not to say')
     highest_degree = models.CharField(max_length=100, default='')
     subject = models.CharField(max_length=100, default='')
     specialization = models.CharField(max_length=100, default='')
+    redundant_role = models.IntegerField(default=0)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['phone']
