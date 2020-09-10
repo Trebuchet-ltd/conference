@@ -27,6 +27,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
     def hook(self, request, pk=None):
         print(request.data)
         data = request.data
+        data = dict(data.iterlist())
         mac_provided = data.pop('mac')
         message = "|".join(v for k, v in sorted(data.items(), key=lambda x: x[0].lower()))
         # Pass the 'salt' without the <>.
