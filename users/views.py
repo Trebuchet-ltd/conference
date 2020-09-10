@@ -19,7 +19,7 @@ def complete_view(request):
 
 
 class UserList(ListAPIView):
-    queryset = User.objects.filter(role='viewer')
+    queryset = User.objects.all()
     serializer_class = UserSerializer
     # permission_classes = [IsAuthenticated]
 
