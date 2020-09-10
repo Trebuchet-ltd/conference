@@ -20,7 +20,7 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         # fields = ['id', 'email', 'first_name', 'last_name', 'paper']
         fields = ['id', 'email', 'first_name', 'last_name', 'phone', 'payment_status', 'nationality', 'paper',
-                  'role', 'profile_picture', 'address', 'designation', 'affiliation', 'gender', 'highest_degree',
+                  'role', 'profile_picture', 'designation', 'affiliation', 'gender', 'highest_degree',
                   'subject', 'specialization', 'redundant_role']
 
 
