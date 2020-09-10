@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'papers',
     'payment',
     'comments',
+    'session'
 ]
 
 MIDDLEWARE = [

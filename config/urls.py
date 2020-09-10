@@ -26,6 +26,7 @@ urlpatterns = [
     path('comments/', include(('comments.urls', 'comments'), namespace='comments')),
     path('users/', include(('users.urls', 'users'), namespace='users')),
     path('payment/', include('payment.urls')),
+    path('session/',include(('session.urls','session'),namespace='session')),
     url(r'^account/', include('allauth.urls')),
 ]
 #
