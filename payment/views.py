@@ -111,11 +111,12 @@ class PaymentViewSet(viewsets.ModelViewSet):
         response = requests.post("https://test.instamojo.com/api/1.1/payment-requests/", data=payload, headers=headers)
         s=json.loads(response.text)
 
+        print(s)
         p = Payments()
-        p.p_id=s["payment_request"]
-        p.name=s['buyer_name']
-        p.amount=s['amount']
-        p.status=s['status']
+        p.p_id=s["payment_request"]['id']
+        p.name=s["payment_request"]['buyer_name']
+        p.amount=s["payment_request"]['amount']
+        p.status=s["payment_request"]['status']
         p.save()
 
         print (response.text)
