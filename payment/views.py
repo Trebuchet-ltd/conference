@@ -36,7 +36,10 @@ class PaymentViewSet(viewsets.ModelViewSet):
         if mac_provided == mac_calculated:
             pay = Payments.objects.get(p_id=data['payment_request_id'])
             if data['status'] == "Credit":
-                pay.status='done'
+                pay.status='paid'
+                PaymentUserSuccess = User.objects.get(id=pay.user_id)
+                PaymentUserSuccess.payment_status = 'paid'
+                PaymentUserSuccess.save()
             # Payment was successful, mark it as completed in your database.
             else:
                 pay.status='failed'
@@ -58,10 +61,10 @@ class PaymentViewSet(viewsets.ModelViewSet):
                 'buyer_name': val.first_name,
                 'email': val.email,
                 'phone': val.phone,
-                'redirect_url': 'http://www.example.com/redirect/',
+                'redirect_url': 'https://isbis.trebuchet.one/',
                 'send_email': 'True',
                 'send_sms': 'True',
-                'webhook': 'http://www.example.com/webhook/',
+                'webhook': 'https://isbis.trebuchet.one/api/payment/hook/hook/',
                 'allow_repeated_payments': 'False',
             }
         else:
@@ -76,7 +79,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
                     'buyer_name': val.first_name,
                     'email': val.email,
                     'phone': val.phone,
-                    'redirect_url': 'http://www.example.com/redirect/',
+                    'redirect_url': 'https://isbis.trebuchet.one/',
                     'send_email': 'True',
                     'send_sms': 'True',
                     'webhook': 'https://isbis.trebuchet.one/api/payment/hook/hook/',
@@ -93,7 +96,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
                         'buyer_name': val.first_name,
                         'email': val.email,
                         'phone': val.phone,
-                        'redirect_url': 'http://www.example.com/redirect/',
+                        'redirect_url': 'https://isbis.trebuchet.one/',
                         'send_email': 'True',
                         'send_sms': 'True',
                         'webhook': 'https://isbis.trebuchet.one/api/payment/hook/hook/',
@@ -106,7 +109,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
                         'buyer_name': val.first_name,
                         'email': val.email,
                         'phone': val.phone,
-                        'redirect_url': 'http://www.example.com/redirect/',
+                        'redirect_url': 'https://isbis.trebuchet.one/',
                         'send_email': 'True',
                         'send_sms': 'True',
                         'webhook': 'https://isbis.trebuchet.one/api/payment/hook/hook/',
@@ -120,6 +123,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
         p.name=s["payment_request"]['buyer_name']
         p.amount=s["payment_request"]['amount']
         p.status=s["payment_request"]['status']
+        p.user_id=request.data["id"]
         p.save()
 
         url = {"URL": s["payment_request"]["longurl"]}

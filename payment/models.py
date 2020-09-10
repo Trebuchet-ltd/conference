@@ -6,6 +6,7 @@ class Payments(models.Model):
     name = models.CharField(max_length=255)
     amount = models.CharField(max_length=255)
     status = models.CharField(max_length=255)
+    user_id = models.CharField(max_length=255)
 
 class Rate(models.Model):
     rate = models.CharField(max_length=255)
