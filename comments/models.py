@@ -1,6 +1,6 @@
 from django.db import models
 from papers.models import Paper
-from users.models import User
+from profile.models import User
 
 
 class Comment(models.Model):

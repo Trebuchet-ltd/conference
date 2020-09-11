@@ -5,7 +5,7 @@ from allauth.account.adapter import get_adapter
 from allauth.account.utils import setup_user_email
 from rest_auth.registration.serializers import RegisterSerializer
 
-from users.models import User, COUNTRY_OPTIONS, PAYMENT_STATUSES
+from profile.models import User, COUNTRY_OPTIONS, PAYMENT_STATUSES
 from papers.serializers import PaperSerializer
 
 

@@ -9,7 +9,7 @@ import json
 from .models import *
 from .serializers import *
 from rest_framework import status
-from users.models import *
+from profile.models import *
 import datetime
 import hmac
 import hashlib

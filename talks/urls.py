@@ -4,10 +4,12 @@ from rest_framework.routers import DefaultRouter
 
 from . import views
 
-app_name = 'sessions'
+app_name = 'talks'
 router = DefaultRouter()
-router.register(r'', views.SessionViewSet)
+router.register(r'sessions', views.SessionViewSet)
+router.register(r'participants', views.ParticipantViewSet)
 
 urlpatterns = [
+    path('accept/<int:participant_id>', views.accept_invitation, name='accept'),
     path('', include(router.urls)),
 ]

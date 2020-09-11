@@ -24,10 +24,10 @@ urlpatterns = [
     path('auth/registration/', include('rest_auth.registration.urls')),
     path('papers/', include(('papers.urls', 'papers'), namespace='papers')),
     path('comments/', include(('comments.urls', 'comments'), namespace='comments')),
-    path('users/', include(('users.urls', 'users'), namespace='users')),
+    path('profile/', include(('profile.urls', 'profile'), namespace='profile')),
     path('payment/', include('payment.urls')),
-    path('session/',include(('session.urls','session'),namespace='session')),
-    url(r'^account/', include('allauth.urls')),
+    path('talks/', include(('talks.urls', 'talks'), namespace='talks')),
+    path('account/', include('allauth.urls')),
 ]
 #
 # url(r'^accounts-rest/registration/account-confirm-email/(?P<key>.+)/$', confirm_email,
