@@ -7,11 +7,13 @@ class PaperSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Paper
-        fields = ['id', 'title', 'description', 'status', 'comments', 'keyword', 'file', 'is_poster', 'author',
-                  'abstract']
+        fields = '__all__'
+        # fields = ['id', 'title', 'description', 'status', 'comments', 'keyword', 'file', 'is_poster', 'author',
+        #           'abstract']
 
         extra_kwargs = {
-            'author': {'read_only': True}
+            'author': {'read_only': True},
+            'author_poster': {'read_only': True},
         }
 
 
@@ -20,11 +22,13 @@ class OrganiserPaperSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Paper
-        fields = ['id', 'title', 'description', 'status', 'comments', 'keyword', 'file', 'is_poster', 'author',
-                  'reviewer', 'abstract']
+        fields = '__all__'
+        # fields = ['id', 'title', 'description', 'status', 'comments', 'keyword', 'file', 'is_poster', 'author',
+        #           'reviewer', 'abstract']
 
         extra_kwargs = {
             'author': {'read_only': True},
+            'author_poster': {'read_only': True},
             'title': {'read_only': True},
             'description': {'read_only': True},
             'comments': {'read_only': True},
@@ -39,11 +43,13 @@ class ReviewerPaperSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Paper
-        fields = ['id', 'title', 'description', 'status', 'comments', 'keyword', 'file', 'is_poster', 'author',
-                  'reviewer', 'abstract']
+        fields = '__all__'
+        # fields = ['id', 'title', 'description', 'status', 'comments', 'keyword', 'file', 'is_poster', 'author',
+        #           'reviewer', 'abstract']
 
         extra_kwargs = {
             'author': {'read_only': True},
+            'author_poster': {'read_only': True},
             'title': {'read_only': True},
             'description': {'read_only': True},
             'comments': {'read_only': True},
@@ -60,11 +66,13 @@ class FileUploadPaperSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Paper
-        fields = ['id', 'title', 'description', 'status', 'comments', 'keyword', 'file', 'is_poster', 'author',
-                  'abstract']
+        fields = '__all__'
+        # fields = ['id', 'title', 'description', 'status', 'comments', 'keyword', 'file', 'is_poster', 'author',
+        #           'abstract']
 
         extra_kwargs = {
             'author': {'read_only': True},
+            'author_poster': {'read_only': True},
             'comments': {'read_only': True},
             'keyword': {'read_only': True},
             'is_poster': {'read_only': True},

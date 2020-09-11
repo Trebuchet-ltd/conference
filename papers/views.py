@@ -15,11 +15,15 @@ class PaperViewset(viewsets.ModelViewSet):
     serializer_class = PaperSerializer
     # permission_classes = [
     #     permissions.IsAuthenticated & (CreateAndIsViewer | NotCreateAndIsOrgnaiser | RetrieveAndIsAuthor)]
+    # TODO: Unfuck security.
 
     # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def perform_create(self, serializer):
-        serializer.save(author=self.request.user, submission_time=now(), status='submitted')
+        if serializer.validated_data['is_poster']:
+            serializer.save(author_poster=self.request.user, submission_time=now(), status='submitted')
+        else:
+            serializer.save(author=self.request.user, submission_time=now(), status='submitted')
 
     def get_serializer_class(self):
         if self.request.user.role == 'organiser':

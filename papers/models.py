@@ -29,6 +29,7 @@ class Paper(models.Model):
     is_poster = models.BooleanField(default=False)
     reviewer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='papers', null=True)
     author = models.OneToOneField(User, on_delete=models.CASCADE, related_name='paper', null=True)
+    author_poster = models.OneToOneField(User, on_delete=models.CASCADE, related_name='poster', null=True)
     submission_time = models.DateTimeField(auto_now=True)
 
     def __str__(self):

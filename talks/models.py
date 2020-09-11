@@ -10,8 +10,8 @@ INVITE_STATES = [
 
 class Session(models.Model):
     organiser = models.OneToOneField(to=User, on_delete=models.CASCADE, related_name='session_organising')
-    title = models.CharField(max_length=255)
-    desc = models.CharField(max_length=2048)
+    title = models.CharField(max_length=256)
+    desc = models.CharField(max_length=4096)
 
     def __str__(self):
         return f'{self.title} - ({self.organiser})'
