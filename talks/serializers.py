@@ -2,8 +2,14 @@ from rest_framework import serializers
 from .models import *
 
 
-class BaseSessionSerializer(serializers.ModelSerializer):
-    organiser = serializers.StringRelatedField()
+class BaseParticipantSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Participant
+        fields = '__all__'
+
+
+class SessionSerializer(serializers.ModelSerializer):
+    participants = BaseParticipantSerializer(many=True)
 
     class Meta:
         model = Session
@@ -11,16 +17,8 @@ class BaseSessionSerializer(serializers.ModelSerializer):
 
 
 class ParticipantSerializer(serializers.ModelSerializer):
-    session = BaseSessionSerializer()
+    session = serializers.StringRelatedField()
 
     class Meta:
         model = Participant
-        fields = '__all__'
-
-
-class SessionSerializer(serializers.ModelSerializer):
-    participants = ParticipantSerializer(many=True)
-
-    class Meta:
-        model = Session
         fields = '__all__'

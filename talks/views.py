@@ -23,6 +23,11 @@ class ParticipantViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['email']
 
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return ParticipantSerializer
+        return BaseParticipantSerializer
+
     def perform_create(self, serializer):
         print('Hello')
         print(serializer.validated_data)
