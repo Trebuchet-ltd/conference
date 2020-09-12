@@ -3,6 +3,8 @@ from .models import *
 
 
 class ParticipantSerializer(serializers.ModelSerializer):
+    session = serializers.StringRelatedField()
+
     class Meta:
         model = Participant
         fields = '__all__'
