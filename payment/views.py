@@ -32,7 +32,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
         mac_provided = data.pop('mac')
         message = "|".join(v for k, v in sorted(data.items(), key=lambda x: x[0].lower()))
         # Pass the 'salt' without the <>.
-        mac_calculated = hmac.new(codecs.encode("94b0fe58a7ea44f6a09d38c53cb55531"), codecs.encode(message), hashlib.sha1).hexdigest()
+        mac_calculated = hmac.new(codecs.encode("c2e8b650e569459b9bc22b07b5ff8ff9"), codecs.encode(message), hashlib.sha1).hexdigest()
         if mac_provided == mac_calculated:
             pay = Payments.objects.get(p_id=data['payment_request_id'])
             if data['status'] == "Credit":
@@ -51,13 +51,13 @@ class PaymentViewSet(viewsets.ModelViewSet):
 
     @action(detail=True,methods=['post'])
     def get_link(self, request, pk=None):
-        headers = {"X-Api-Key": "test_2accf58e3b53059e97169c873df", "X-Auth-Token": "test_4ab1f06cd9e3bcc0493e2ef4749"}
+        headers = {"X-Api-Key": "9433b167d61a543bf917d96c09a06150", "X-Auth-Token": "7176fd84bd8968e172c3f242fa8c1669"}
         val = User.objects.get(id=request.data["id"])
 
         if val.nationality=="India":
             payload = {
                 'purpose': 'ISBIS Conference',
-                'amount': 1,
+                'amount': 1000,
                 'buyer_name': val.first_name,
                 'email': val.email,
                 'phone': val.phone,
@@ -105,7 +105,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
                 except :
                     payload = {
                         'purpose': 'ISBIS Conference',
-                        'amount': rate.rate*50,
+                        'amount': round(rate.rate*50,2),
                         'buyer_name': val.first_name,
                         'email': val.email,
                         'phone': val.phone,
@@ -115,7 +115,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
                         'webhook': 'https://isbis.trebuchet.one/api/payment/hook/hook/',
                         'allow_repeated_payments': 'False',
                     }
-        response = requests.post("https://test.instamojo.com/api/1.1/payment-requests/", data=payload, headers=headers)
+        response = requests.post("https://www.instamojo.com/api/1.1/payment-requests/", data=payload, headers=headers)
         s=json.loads(response.text)
 
         print(s)
