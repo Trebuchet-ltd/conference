@@ -24,6 +24,7 @@ class ParticipantViewSet(viewsets.ModelViewSet):
     filterset_fields = ['email']
 
     def perform_create(self, serializer):
+        print('Hello')
         print(serializer.validated_data)
         name = ''
         try:
@@ -104,7 +105,7 @@ def create_session(request):
             )
             participant.save()
             participant_emails.append(participant_data['email'])
-        except IntegrityError :
+        except IntegrityError:
             print('same email')
 
     # TODO: Send Invite Mail. Create Notification.
