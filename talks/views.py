@@ -64,11 +64,11 @@ def accept_invitation(request, participant_id):
             return HttpResponse("failure")
         status = request.data["status"]
         if str(status) == '1':
+            participant.speaker = request.user
             participant.status = 'accepted'
         else:
             participant.status = 'declined'
             participant.email = None
-        participant.speaker = request.user
         participant.save()
         serializer = ParticipantSerializer(participant)
         return Response(serializer.data)
