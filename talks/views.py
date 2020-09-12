@@ -94,8 +94,9 @@ def create_session(request):
         participant = Participant(
             # TODO: Add the required fields.
             title=participant_data['title'],
-            # affiliation=participant_data['affiliation'],
+            affiliation=participant_data['affiliation'],
             email=participant_data['email'],
+            speaker=participant_data['speaker'],
             status='invited',
             session=session
         )
