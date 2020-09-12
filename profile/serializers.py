@@ -29,6 +29,12 @@ class UserSerializer(serializers.ModelSerializer):
         # fields = '__all__'
         exclude = ['password']
 
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        if not data['session_organising']:
+            data['session_organising'] =''
+        return data
+
 
 class CustomRegisterSerializer(RegisterSerializer):
     username = None
