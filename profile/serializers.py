@@ -7,11 +7,13 @@ from rest_auth.registration.serializers import RegisterSerializer
 
 from profile.models import User, COUNTRY_OPTIONS, PAYMENT_STATUSES
 from papers.serializers import PaperSerializer
+from talks.serializers import SessionSerializer
 
 
 class UserSerializer(serializers.ModelSerializer):
     # Just the titles.
     paper = serializers.StringRelatedField()
+    session_organising = SessionSerializer()
 
 
     # Populated
