@@ -1,3 +1,4 @@
+from django.db import IntegrityError
 from django.shortcuts import render
 from rest_framework import viewsets
 from .models import *
@@ -89,19 +90,33 @@ def create_session(request):
     """
     session = Session(title=request.data['title'], desc=request.data['description'], organiser=request.user)
     session.save()
-
+    participant_emails = []
     for participant_data in request.data['participants']:
-        participant = Participant(
-            # TODO: Add the required fields.
-            title=participant_data['title'],
-            affiliation=participant_data['affiliation'],
-            email=participant_data['email'],
-            speaker_name=participant_data['speaker'],
-            status='invited',
-            session=session
-        )
-        # TODO: Send Invite Mail. Create Notification.
-        participant.save()
+        try:
+            participant = Participant(
+                # TODO: Add the required fields.
+                title=participant_data['title'],
+                affiliation=participant_data['affiliation'],
+                email=participant_data['email'],
+                speaker_name=participant_data['speaker'],
+                status='invited',
+                session=session
+            )
+            participant.save()
+            participant_emails.append(participant_data['email'])
+        except IntegrityError :
+            print('same email')
+
+    # TODO: Send Invite Mail. Create Notification.
+    send_mail(
+        f'Session Invitation',
+        f'Hello , \n {session.organiser} has invited you to be part of the session, "{session.title}". '
+        f'Click the link below to confirm you participation in the session.'
+        f'https://isbis.trebuchet.one/profile',
+        settings.EMAIL_HOST_USER,
+        participant_emails,
+        fail_silently=False,
+    )
     serializer = SessionSerializer(session)
     print(serializer.data)
     return Response(serializer.data)
