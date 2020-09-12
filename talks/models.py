@@ -26,7 +26,7 @@ class Participant(models.Model):
     paper_id = models.CharField(max_length=255, null=True)
     abstract = models.FileField(upload_to='static/media/sessions/', null=True)
 
-    email = models.EmailField(unique=True)
+    email = models.EmailField(unique=True,null=True)
     session = models.ForeignKey(to=Session, on_delete=models.CASCADE, related_name='participants')
     status = models.CharField(choices=INVITE_STATES, default='invited', max_length=20)
 
