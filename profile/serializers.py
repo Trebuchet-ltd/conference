@@ -24,7 +24,7 @@ class UserSerializer(serializers.ModelSerializer):
         #           'role', 'profile_picture', 'designation', 'affiliation', 'highest_degree',
         #           'subject', 'specialization', 'redundant_role']
 
-        fields = '__all__'
+        # fields = '__all__'
         exclude = ['password']
 
 
