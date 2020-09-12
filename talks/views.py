@@ -96,7 +96,7 @@ def create_session(request):
             title=participant_data['title'],
             affiliation=participant_data['affiliation'],
             email=participant_data['email'],
-            speaker=participant_data['speaker'],
+            speaker_name=participant_data['speaker'],
             status='invited',
             session=session
         )

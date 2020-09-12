@@ -19,6 +19,7 @@ class Session(models.Model):
 
 class Participant(models.Model):
     title = models.CharField(max_length=255, null=True)
+    speaker_name = models.CharField(max_length=255, null=True)
     speaker = models.OneToOneField(to=User, on_delete=models.CASCADE, null=True,
                                    related_name='session_participating')
     affiliation = models.CharField(max_length=255, null=True)
