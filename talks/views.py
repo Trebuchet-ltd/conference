@@ -50,7 +50,7 @@ class ParticipantViewSet(viewsets.ModelViewSet):
         serializer.save()
 
 
-@api_view(['GET'])
+@api_view(['POST'])
 def accept_invitation(request, participant_id):
     """
     View for a user to accept a session invite.
@@ -60,17 +60,21 @@ def accept_invitation(request, participant_id):
         participant = Participant.objects.get(pk=participant_id)
         print(request.user.email, participant.email)
         if request.user.email != participant.email:
-            # TODO: Handle PermissionDeniedError
             print('User not invited.')
-        participant.status = 'accepted'
+            return HttpResponse("failure")
+        status=request.data["status"]
+        if status=='true':
+            participant.status = 'accepted'
+        else:
+            participant.status = 'declined'
+
         participant.speaker = request.user
         participant.save()
         serializer = ParticipantSerializer(participant)
         return Response(serializer.data)
     except Participant.DoesNotExist as e:
         print('The participant id is invalid.')
-        # TODO: Handle InvalidLinkError
-    return HttpResponse(str(request.user) + ' ' + str(participant_id))
+        return HttpResponse("failure")
 
 
 @api_view(['POST'])
@@ -100,7 +104,6 @@ def create_session(request):
     for participant_data in request.data['participants']:
         try:
             participant = Participant(
-                # TODO: Add the required fields.
                 title=participant_data['title'],
                 affiliation=participant_data['affiliation'],
                 email=participant_data['email'],
@@ -113,7 +116,6 @@ def create_session(request):
         except IntegrityError:
             print('same email')
 
-    # TODO: Send Invite Mail. Create Notification.
     send_mail(
         f'Session Invitation',
         f'Hello , \n {session.organiser} has invited you to be part of the session, "{session.title}". '
