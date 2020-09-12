@@ -13,15 +13,19 @@ class UserSerializer(serializers.ModelSerializer):
     # Just the titles.
     paper = serializers.StringRelatedField()
 
+
     # Populated
     # papers = PaperSerializer(many=True)
 
     class Meta:
         model = User
         # fields = ['id', 'email', 'first_name', 'last_name', 'paper']
-        fields = ['id', 'email', 'first_name', 'last_name', 'phone', 'payment_status', 'nationality', 'paper',
-                  'role', 'profile_picture', 'designation', 'affiliation', 'highest_degree',
-                  'subject', 'specialization', 'redundant_role']
+        # fields = ['id', 'email', 'first_name', 'last_name', 'phone', 'payment_status', 'nationality', 'paper',
+        #           'role', 'profile_picture', 'designation', 'affiliation', 'highest_degree',
+        #           'subject', 'specialization', 'redundant_role']
+
+        fields = '__all__'
+        exclude = ['password']
 
 
 class CustomRegisterSerializer(RegisterSerializer):
