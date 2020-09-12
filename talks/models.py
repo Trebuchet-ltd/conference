@@ -27,7 +27,7 @@ class Participant(models.Model):
     abstract = models.FileField(upload_to='static/media/sessions/', null=True)
 
     email = models.EmailField(unique=True,null=True)
-    session = models.ForeignKey(to=Session, on_delete=models.CASCADE, related_name='participants')
+    session = models.ForeignKey(to=Session, on_delete=models.CASCADE, related_name='participants',null=True)
     status = models.CharField(choices=INVITE_STATES, default='invited', max_length=20)
 
     def __str__(self):
