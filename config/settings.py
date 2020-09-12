@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'payment',
     'comments',
     'talks',
+    'notification'
 ]
 
 MIDDLEWARE = [

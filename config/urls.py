@@ -28,6 +28,7 @@ urlpatterns = [
     path('payment/', include('payment.urls')),
     path('talks/', include(('talks.urls', 'talks'), namespace='talks')),
     path('account/', include('allauth.urls')),
+    path('notification/',include('notification.urls')),
 ]
 #
 # url(r'^accounts-rest/registration/account-confirm-email/(?P<key>.+)/$', confirm_email,

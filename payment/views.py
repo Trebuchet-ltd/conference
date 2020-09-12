@@ -57,7 +57,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
         if val.nationality=="India":
             payload = {
                 'purpose': 'ISBIS Conference',
-                'amount': 2500,
+                'amount': 1,
                 'buyer_name': val.first_name,
                 'email': val.email,
                 'phone': val.phone,
@@ -118,6 +118,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
         response = requests.post("https://test.instamojo.com/api/1.1/payment-requests/", data=payload, headers=headers)
         s=json.loads(response.text)
 
+        print(s)
         p = Payments()
         p.p_id=s["payment_request"]['id']
         p.name=s["payment_request"]['buyer_name']
