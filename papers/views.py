@@ -20,6 +20,7 @@ class PaperViewset(viewsets.ModelViewSet):
     # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def perform_create(self, serializer):
+        print(serializer.validated_data)
         if serializer.validated_data['is_poster']:
             serializer.save(author_poster=self.request.user, submission_time=now(), status='submitted')
         else:
