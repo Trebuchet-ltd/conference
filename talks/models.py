@@ -24,10 +24,10 @@ class Participant(models.Model):
                                    related_name='session_participating')
     affiliation = models.CharField(max_length=255, null=True)
     paper_id = models.CharField(max_length=255, null=True)
-    abstract = models.FileField(upload_to='/static/media/sessions/', null=True)
+    abstract = models.FileField(upload_to='static/media/sessions/', null=True)
 
-    email = models.EmailField(unique=True,null=True)
-    session = models.ForeignKey(to=Session, on_delete=models.CASCADE, related_name='participants',null=True)
+    email = models.EmailField(unique=True, null=True)
+    session = models.ForeignKey(to=Session, on_delete=models.CASCADE, related_name='participants', null=True)
     status = models.CharField(choices=INVITE_STATES, default='invited', max_length=20)
 
     def __str__(self):
