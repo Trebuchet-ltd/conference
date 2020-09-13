@@ -7,6 +7,7 @@ class Payments(models.Model):
     amount = models.CharField(max_length=255)
     status = models.CharField(max_length=255)
     user_id = models.CharField(max_length=255)
+    location = models.CharField(max_length=255,default='Webhook')
 
 class Rate(models.Model):
     rate = models.CharField(max_length=255)
