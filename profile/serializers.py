@@ -15,7 +15,6 @@ class UserSerializer(serializers.ModelSerializer):
     paper = serializers.StringRelatedField()
     session_organising = SessionSerializer()
 
-
     # Populated
     # papers = PaperSerializer(many=True)
 
@@ -32,7 +31,7 @@ class UserSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         data = super().to_representation(instance)
         if not data['session_organising']:
-            data['session_organising'] =''
+            data['session_organising'] = ''
         return data
 
 
