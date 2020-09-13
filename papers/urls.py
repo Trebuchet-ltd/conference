@@ -10,6 +10,6 @@ router.register(r'', views.PaperViewset)
 
 urlpatterns = [
     url('me', views.PaperList.as_view()),
-    url('posters', views.PaperList.as_view()),
+    url('posters', views.PosterList.as_view()),
     path('', include(router.urls)),
 ]
