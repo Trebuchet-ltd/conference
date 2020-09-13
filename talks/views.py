@@ -10,6 +10,9 @@ from rest_framework.response import Response
 from django.http import HttpResponse
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.decorators import api_view
+from rest_framework import serializers
+
+ACCEPTED_ABSTRACT_FILE_TYPES = ['application/pdf']
 
 
 class SessionViewSet(viewsets.ModelViewSet):
@@ -27,6 +30,14 @@ class ParticipantViewSet(viewsets.ModelViewSet):
         if self.action == 'list':
             return ParticipantSerializer
         return BaseParticipantSerializer
+
+    def perform_update(self, serializer):
+        if 'abstract' in serializer.validated_data:
+            if serializer.validated_data['abstract'].content_type not in ACCEPTED_ABSTRACT_FILE_TYPES:
+                print(serializer.validated_data['abstract'].content_type)
+                raise serializers.ValidationError(
+                    'Filetype not supported. Supported types are: ' + str(ACCEPTED_ABSTRACT_FILE_TYPES))
+        serializer.save()
 
     def perform_create(self, serializer):
         print('Hello')
