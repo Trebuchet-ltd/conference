@@ -14,6 +14,7 @@ import datetime
 import hmac
 import hashlib
 import codecs
+from django.shortcuts import redirect
 
 # Create your views here.
 class PaymentViewSet(viewsets.ModelViewSet):
@@ -23,6 +24,34 @@ class PaymentViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         print("here")
+
+    @action(detail=True, methods=['get'])
+    def redirect(self,request,pk=None):
+        payment_id=request.query_params.get('payment_id')
+        payment_request_id=request.query_params.get('payment_request_id')
+        payment_status=request.query_params.get('payment_status')
+        headers = {"X-Api-Key": "9433b167d61a543bf917d96c09a06150", "X-Auth-Token": "7176fd84bd8968e172c3f242fa8c1669"}
+
+        response = requests.get(
+            "https://www.instamojo.com/api/1.1/payments/"+str(payment_id)+"/",
+            headers=headers)
+
+        response_json = response.json()
+        print (response_json)
+        if (payment_status !=None and payment_id!=None and payment_request_id!=None):
+            try:
+                pay = Payments.objects.get(p_id=payment_request_id)
+                if (response_json["payment"]["status"]==payment_status):
+                    if payment_status == "Credit":
+                        pay.status='paid'
+                        pay.location='URL'
+                        PaymentUserSuccess = User.objects.get(id=pay.user_id)
+                        PaymentUserSuccess.payment_status = 'paid'
+                        PaymentUserSuccess.save()
+                        pay.save()
+            except:
+                print('Error occured')
+        return redirect('https://isbis.trebuchet.one/')
 
     @action(detail=True, methods=['post'])
     def hook(self, request, pk=None):
@@ -37,6 +66,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
             pay = Payments.objects.get(p_id=data['payment_request_id'])
             if data['status'] == "Credit":
                 pay.status='paid'
+                pay.location='Webhook'
                 PaymentUserSuccess = User.objects.get(id=pay.user_id)
                 PaymentUserSuccess.payment_status = 'paid'
                 PaymentUserSuccess.save()
@@ -61,7 +91,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
                 'buyer_name': val.first_name,
                 'email': val.email,
                 'phone': val.phone,
-                'redirect_url': 'https://isbis.trebuchet.one/',
+                'redirect_url': 'https://isbis.trebuchet.one/api/payment/redirect/redirect',
                 'send_email': 'True',
                 'send_sms': 'True',
                 'webhook': 'https://isbis.trebuchet.one/api/payment/hook/hook/',
@@ -79,7 +109,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
                     'buyer_name': val.first_name,
                     'email': val.email,
                     'phone': val.phone,
-                    'redirect_url': 'https://isbis.trebuchet.one/',
+                    'redirect_url': 'https://isbis.trebuchet.one/api/payment/redirect/redirect',
                     'send_email': 'True',
                     'send_sms': 'True',
                     'webhook': 'https://isbis.trebuchet.one/api/payment/hook/hook/',
@@ -96,7 +126,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
                         'buyer_name': val.first_name,
                         'email': val.email,
                         'phone': val.phone,
-                        'redirect_url': 'https://isbis.trebuchet.one/',
+                        'redirect_url': 'https://isbis.trebuchet.one/api/payment/redirect/redirect',
                         'send_email': 'True',
                         'send_sms': 'True',
                         'webhook': 'https://isbis.trebuchet.one/api/payment/hook/hook/',
@@ -109,7 +139,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
                         'buyer_name': val.first_name,
                         'email': val.email,
                         'phone': val.phone,
-                        'redirect_url': 'https://isbis.trebuchet.one/',
+                        'redirect_url': 'https://isbis.trebuchet.one/api/payment/redirect/redirect',
                         'send_email': 'True',
                         'send_sms': 'True',
                         'webhook': 'https://isbis.trebuchet.one/api/payment/hook/hook/',
