@@ -13,6 +13,7 @@ from talks.serializers import SessionSerializer
 class UserSerializer(serializers.ModelSerializer):
     # Just the titles.
     paper = serializers.StringRelatedField()
+    poster = serializers.StringRelatedField()
     session_organising = SessionSerializer()
 
     # Populated
