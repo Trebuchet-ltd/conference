@@ -13,6 +13,7 @@ from django.utils.timezone import now
 class PaperViewset(viewsets.ModelViewSet):
     queryset = Paper.objects.all()
     serializer_class = PaperSerializer
+
     # permission_classes = [
     #     permissions.IsAuthenticated & (CreateAndIsViewer | NotCreateAndIsOrgnaiser | RetrieveAndIsAuthor)]
     # TODO: Unfuck security.
@@ -45,6 +46,23 @@ class PaperList(ListAPIView):
         if self.request.user.role == 'reviewer':
             return Paper.objects.filter(reviewer=self.request.user.id)
         return Paper.objects.filter(author=self.request.user.id)
+
+    def get_serializer_class(self):
+        if self.request.user.role == 'reviewer':
+            return ReviewerPaperSerializer
+        return PaperSerializer
+
+
+class PosterList(ListAPIView):
+    queryset = Paper.objects.all()
+    serializer_class = PaperSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        print(self.request.user, self.request.user.id)
+        if self.request.user.role == 'reviewer':
+            return Paper.objects.filter(reviewer=self.request.user.id)
+        return Paper.objects.filter(author_poster=self.request.user.id)
 
     def get_serializer_class(self):
         if self.request.user.role == 'reviewer':
