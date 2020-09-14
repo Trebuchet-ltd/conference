@@ -9,4 +9,5 @@ app_name = 'profile'
 urlpatterns = [
     url('users', views.UserList.as_view()),
     url('registration/complete', views.complete_view, name='account_confirm_complete'),
+    url('token', views.get_csrf, name='get_csrf'),
 ]

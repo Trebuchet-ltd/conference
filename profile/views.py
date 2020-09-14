@@ -6,6 +6,7 @@ from .models import User
 from .serializers import UserSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.generics import ListAPIView
+from django.middleware.csrf import get_token
 
 
 @api_view()
@@ -24,3 +25,6 @@ class UserList(ListAPIView):
     # permission_classes = [IsAuthenticated]
 
 
+@api_view()
+def get_csrf(request):
+    return Response(get_token(request))
