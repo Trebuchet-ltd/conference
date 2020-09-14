@@ -9,6 +9,7 @@ from .serializers import *
 from .permissions import *
 from django.utils.timezone import now
 
+ACCEPTED_ABSTRACT_FILE_TYPES = ['application/pdf']
 
 class PaperViewset(viewsets.ModelViewSet):
     queryset = Paper.objects.all()
@@ -19,6 +20,13 @@ class PaperViewset(viewsets.ModelViewSet):
     # TODO: Unfuck security.
 
     # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    def perform_update(self, serializer):
+        if 'abstract' in serializer.validated_data:
+            if serializer.validated_data['abstract'].content_type not in ACCEPTED_ABSTRACT_FILE_TYPES:
+                print(serializer.validated_data['abstract'].content_type)
+                raise serializers.ValidationError(
+                    'Filetype not supported. Supported types are: ' + str(ACCEPTED_ABSTRACT_FILE_TYPES))
+        serializer.save()
 
     def perform_create(self, serializer):
         print(serializer.validated_data)
