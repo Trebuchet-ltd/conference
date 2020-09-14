@@ -26,13 +26,22 @@ class PaperViewset(viewsets.ModelViewSet):
                 print(serializer.validated_data['abstract'].content_type)
                 raise serializers.ValidationError(
                     'Filetype not supported. Supported types are: ' + str(ACCEPTED_ABSTRACT_FILE_TYPES))
-        serializer.save()
+        if 'file' in serializer.validated_data:
+            if serializer.validated_data['file'].content_type not in ACCEPTED_ABSTRACT_FILE_TYPES:
+                print(serializer.validated_data['file'].content_type)
+                raise serializers.ValidationError(
+                    'Filetype not supported. Supported types are: ' + str(ACCEPTED_ABSTRACT_FILE_TYPES))
 
     def perform_create(self, serializer):
         print(serializer.validated_data)
         if 'abstract' in serializer.validated_data:
             if serializer.validated_data['abstract'].content_type not in ACCEPTED_ABSTRACT_FILE_TYPES:
                 print(serializer.validated_data['abstract'].content_type)
+                raise serializers.ValidationError(
+                    'Filetype not supported. Supported types are: ' + str(ACCEPTED_ABSTRACT_FILE_TYPES))
+        if 'file' in serializer.validated_data:
+            if serializer.validated_data['file'].content_type not in ACCEPTED_ABSTRACT_FILE_TYPES:
+                print(serializer.validated_data['file'].content_type)
                 raise serializers.ValidationError(
                     'Filetype not supported. Supported types are: ' + str(ACCEPTED_ABSTRACT_FILE_TYPES))
         serializer.save()
