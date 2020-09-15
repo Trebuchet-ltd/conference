@@ -6,6 +6,7 @@ django-filter==2.3.0
 django-login-required-middleware==0.4
 django-widget-tweaks==1.4.8
 djangorestframework==3.11.1
+django-rest-passwordreset==1.1.0
 mysql==0.0.2
 mysql-connector==2.2.9
 mysql-connector-python-rf==2.2.2
