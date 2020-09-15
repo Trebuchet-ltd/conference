@@ -7,6 +7,12 @@ INVITE_STATES = [
     ('declined', 'declined'),
 ]
 
+TRACKS = [
+    (1, 'Track 1'),
+    (2, 'Track 2'),
+    (3, 'Track 3'),
+]
+
 
 class Session(models.Model):
     organiser = models.OneToOneField(to=User, on_delete=models.CASCADE, related_name='session_organising')
@@ -35,3 +41,10 @@ class Participant(models.Model):
 
     def __str__(self):
         return f'{self.title} - [{str(self.speaker)}]'
+
+
+class Program(models.Model):
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
+    name = models.CharField(max_length=255)
+    track = models.IntegerField(choices=TRACKS, default=1)

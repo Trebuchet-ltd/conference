@@ -20,6 +20,11 @@ class SessionViewSet(viewsets.ModelViewSet):
     serializer_class = SessionSerializer
 
 
+class ProgramViewSet(viewsets.ModelViewSet):
+    queryset = Program.objects.all()
+    serializer_class = ProgramSerializer
+
+
 class ParticipantViewSet(viewsets.ModelViewSet):
     queryset = Participant.objects.all()
     serializer_class = ParticipantSerializer

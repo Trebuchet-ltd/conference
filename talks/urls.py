@@ -8,6 +8,7 @@ app_name = 'talks'
 router = DefaultRouter()
 router.register(r'sessions', views.SessionViewSet)
 router.register(r'participants', views.ParticipantViewSet)
+router.register(r'programs', views.ProgramViewSet)
 
 urlpatterns = [
     path('accept/<int:participant_id>', views.accept_invitation, name='accept'),
