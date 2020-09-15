@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'rest_auth.registration',
     'corsheaders',
     'django_filters',
+    'django_rest_passwordreset',
 
     # Project Apps.
     'profile',

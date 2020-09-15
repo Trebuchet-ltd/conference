@@ -10,6 +10,10 @@ from papers.serializers import PaperSerializer
 from talks.serializers import SessionSerializer
 
 
+class CustomTokenSerializer(serializers.Serializer):
+    token = serializers.CharField()
+
+
 class UserSerializer(serializers.ModelSerializer):
     # Just the titles.
     paper = serializers.StringRelatedField()
