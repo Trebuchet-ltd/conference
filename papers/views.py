@@ -11,6 +11,7 @@ from django.utils.timezone import now
 
 ACCEPTED_ABSTRACT_FILE_TYPES = ['application/pdf']
 
+
 class PaperViewset(viewsets.ModelViewSet):
     queryset = Paper.objects.all()
     serializer_class = PaperSerializer
@@ -32,6 +33,7 @@ class PaperViewset(viewsets.ModelViewSet):
                 raise serializers.ValidationError(
                     'Filetype not supported. Supported types are: ' + str(ACCEPTED_ABSTRACT_FILE_TYPES))
         serializer.save()
+
     def perform_create(self, serializer):
         print(serializer.validated_data)
         if 'abstract' in serializer.validated_data:

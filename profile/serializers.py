@@ -25,6 +25,7 @@ class UserSerializer(serializers.ModelSerializer):
                    'user_permissions']
         extra_kwargs = {
             'payment_status': {'read_only': True},
+            'role': {'read_only': True},
         }
 
     def to_representation(self, instance):
