@@ -10,10 +10,6 @@ from papers.serializers import PaperSerializer
 from talks.serializers import SessionSerializer
 
 
-class CustomTokenSerializer(serializers.Serializer):
-    token = serializers.CharField()
-
-
 class UserSerializer(serializers.ModelSerializer):
     # Just the titles.
     paper = serializers.StringRelatedField()
@@ -25,13 +21,11 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        # fields = ['id', 'email', 'first_name', 'last_name', 'paper']
-        # fields = ['id', 'email', 'first_name', 'last_name', 'phone', 'payment_status', 'nationality', 'paper',
-        #           'role', 'profile_picture', 'designation', 'affiliation', 'highest_degree',
-        #           'subject', 'specialization', 'redundant_role']
-
-        # fields = '__all__'
-        exclude = ['password']
+        exclude = ['password', 'last_login', 'is_superuser', 'is_staff', 'is_active', 'date_joined', 'groups',
+                   'user_permissions']
+        extra_kwargs = {
+            'payment_status': {'read_only': True},
+        }
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
