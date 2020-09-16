@@ -19,17 +19,17 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
-    path('/api/admin/', admin.site.urls),
-    path('/api/auth/', include('rest_auth.urls')),
-    path('/api/auth/registration/', include('rest_auth.registration.urls')),
-    path('/api/password_reset/', include('django_rest_passwordreset.urls', namespace='password_reset')),
-    path('/api/papers/', include(('papers.urls', 'papers'), namespace='papers')),
-    path('/api/comments/', include(('comments.urls', 'comments'), namespace='comments')),
-    path('/api/profile/', include(('profile.urls', 'profile'), namespace='profile')),
-    path('/api/payment/', include('payment.urls')),
-    path('/api/talks/', include(('talks.urls', 'talks'), namespace='talks')),
-    path('/api/account/', include('allauth.urls')),
-    path('/api/notification/', include('notification.urls')),
+    path('admin/', admin.site.urls),
+    path('auth/', include('rest_auth.urls')),
+    path('auth/registration/', include('rest_auth.registration.urls')),
+    path('password_reset/', include('django_rest_passwordreset.urls', namespace='password_reset')),
+    path('papers/', include(('papers.urls', 'papers'), namespace='papers')),
+    path('comments/', include(('comments.urls', 'comments'), namespace='comments')),
+    path('profile/', include(('profile.urls', 'profile'), namespace='profile')),
+    path('payment/', include('payment.urls')),
+    path('talks/', include(('talks.urls', 'talks'), namespace='talks')),
+    path('account/', include('allauth.urls')),
+    path('notification/', include('notification.urls')),
 ]
 #
 # url(r'^accounts-rest/registration/account-confirm-email/(?P<key>.+)/$', confirm_email,
