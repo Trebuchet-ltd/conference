@@ -45,9 +45,3 @@ def null_view(request):
 @api_view()
 def complete_view(request):
     return HttpResponse("Email account is activated")
-
-#
-# class UserList(ListAPIView):
-#     queryset = User.objects.all()
-#     serializer_class = UserSerializer
-#     permission_classes = [IsAuthenticated]
