@@ -50,4 +50,4 @@ def complete_view(request):
 class UserList(ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
