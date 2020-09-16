@@ -136,7 +136,7 @@ def create_session(request):
         f'Session Invitation',
         f'Hello , \n {session.organiser} has invited you to be part of the session, "{session.title}". '
         f'Click the link below to confirm you participation in the session.'
-        f'https://isbis.trebuchet.one/profile',
+        f'https://statconferencecusat.co.in/profile',
         settings.EMAIL_HOST_USER,
         participant_emails,
         fail_silently=False,

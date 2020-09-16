@@ -22,7 +22,7 @@ def password_reset_token_created(sender, reset_password_token, *args, **kwargs):
        When a token is created, an e-mail needs to be sent to the user
     """
 
-    base_url = 'https://isbis.trebuchet.one/reset/'
+    base_url = 'https://statconferencecusat.co.in/reset/'
     link = base_url + reset_password_token.key
     user_email = reset_password_token.user.email
     user_name = reset_password_token.user.first_name

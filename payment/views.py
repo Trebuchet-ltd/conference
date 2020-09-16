@@ -51,7 +51,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
                         pay.save()
             except:
                 print('Error occured')
-        return redirect('https://isbis.trebuchet.one/')
+        return redirect('https://statconferencecusat.co.in/')
 
     @action(detail=True, methods=['post'])
     def hook(self, request, pk=None):
@@ -91,10 +91,10 @@ class PaymentViewSet(viewsets.ModelViewSet):
                 'buyer_name': val.first_name,
                 'email': val.email,
                 'phone': val.phone,
-                'redirect_url': 'https://isbis.trebuchet.one/api/payment/redirect/redirect',
+                'redirect_url': 'https://statconferencecusat.co.in/api/payment/redirect/redirect',
                 'send_email': 'True',
                 'send_sms': 'True',
-                'webhook': 'https://isbis.trebuchet.one/api/payment/hook/hook/',
+                'webhook': 'https://statconferencecusat.co.in/api/payment/hook/hook/',
                 'allow_repeated_payments': 'False',
             }
         else:
@@ -109,10 +109,10 @@ class PaymentViewSet(viewsets.ModelViewSet):
                     'buyer_name': val.first_name,
                     'email': val.email,
                     'phone': val.phone,
-                    'redirect_url': 'https://isbis.trebuchet.one/api/payment/redirect/redirect',
+                    'redirect_url': 'https://statconferencecusat.co.in/api/payment/redirect/redirect',
                     'send_email': 'True',
                     'send_sms': 'True',
-                    'webhook': 'https://isbis.trebuchet.one/api/payment/hook/hook/',
+                    'webhook': 'https://statconferencecusat.co.in/api/payment/hook/hook/',
                     'allow_repeated_payments': 'False',
                 }
             else:
@@ -126,10 +126,10 @@ class PaymentViewSet(viewsets.ModelViewSet):
                         'buyer_name': val.first_name,
                         'email': val.email,
                         'phone': val.phone,
-                        'redirect_url': 'https://isbis.trebuchet.one/api/payment/redirect/redirect',
+                        'redirect_url': 'https://statconferencecusat.co.in/api/payment/redirect/redirect',
                         'send_email': 'True',
                         'send_sms': 'True',
-                        'webhook': 'https://isbis.trebuchet.one/api/payment/hook/hook/',
+                        'webhook': 'https://statconferencecusat.co.in/api/payment/hook/hook/',
                         'allow_repeated_payments': 'False',
                     }
                 except :
@@ -139,10 +139,10 @@ class PaymentViewSet(viewsets.ModelViewSet):
                         'buyer_name': val.first_name,
                         'email': val.email,
                         'phone': val.phone,
-                        'redirect_url': 'https://isbis.trebuchet.one/api/payment/redirect/redirect',
+                        'redirect_url': 'https://statconferencecusat.co.in/api/payment/redirect/redirect',
                         'send_email': 'True',
                         'send_sms': 'True',
-                        'webhook': 'https://isbis.trebuchet.one/api/payment/hook/hook/',
+                        'webhook': 'https://statconferencecusat.co.in/api/payment/hook/hook/',
                         'allow_repeated_payments': 'False',
                     }
         response = requests.post("https://www.instamojo.com/api/1.1/payment-requests/", data=payload, headers=headers)
