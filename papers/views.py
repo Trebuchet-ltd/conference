@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from rest_framework import permissions
-from rest_framework import viewsets
+from rest_framework import permissions, viewsets
 from rest_framework.response import Response
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.generics import ListAPIView
+from rest_framework.exceptions import ParseError
 from .models import *
 from .serializers import *
 from .permissions import *
@@ -94,3 +95,41 @@ class PosterList(ListAPIView):
         if self.request.user.role == 'reviewer':
             return ReviewerPaperSerializer
         return PaperSerializer
+
+
+@api_view(['POST'])
+@permission_classes((permissions.IsAuthenticated, IsOrgnaiser))
+def assign_paper(request):
+    if 'paper' not in request.data or 'reviewer' not in request.data:
+        raise ParseError('Fields missing. "paper" and "reviewer" required.')
+    try:
+        paper = Paper.objects.get(pk=request.data['paper'])
+        Paper.reviewer = request.data['reviewer']
+        paper.status = 'assigned'
+        paper.save()
+        serializer = PaperSerializer(paper)
+        return Response(serializer.data)
+    except Paper.DoesNotExist as e:
+        print(e)
+        print('The Paper with this id does not exist.', request.data['paper'])
+        return Response("The Paper with this id does not exist.")
+
+
+@api_view(['POST'])
+@permission_classes((permissions.IsAuthenticated, IsOrgnaiser))
+def change_paper_status(request):
+    if 'paper' not in request.data or 'status' not in request.data:
+        raise ParseError('Fields missing. "paper" and "status" required.')
+    try:
+        paper = Paper.objects.get(pk=request.data['paper'])
+        status = request.data['status']
+        if status not in ['reviewed', 'approved', 'rejected', 'corrections', 'upload paper']:
+            raise ParseError(f'Cannot set status to {status}')
+        paper.status = status
+        paper.save()
+        serializer = PaperSerializer(paper)
+        return Response(serializer.data)
+    except Paper.DoesNotExist as e:
+        print(e)
+        print('Paper id', request.data['paper'])
+        return Response("Paper with this id does not exist.")
