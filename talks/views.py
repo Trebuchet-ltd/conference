@@ -90,7 +90,7 @@ def accept_invitation(request, participant_id):
         return Response(serializer.data)
     except Participant.DoesNotExist as e:
         print('The participant id is invalid.')
-        return HttpResponse("failure")
+        return Response("Participant Id invalid")
 
 
 @api_view(['POST'])
