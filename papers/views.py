@@ -104,6 +104,7 @@ def assign_paper(request):
         raise ParseError('Fields missing. "paper" and "reviewer" required.')
     try:
         paper = Paper.objects.get(pk=request.data['paper'])
+        print(request.data['reviewer'])
         Paper.reviewer = request.data['reviewer']
         paper.status = 'reviewing'
         paper.save()
