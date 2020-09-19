@@ -105,7 +105,7 @@ def assign_paper(request):
     try:
         paper = Paper.objects.get(pk=request.data['paper'])
         Paper.reviewer = request.data['reviewer']
-        paper.status = 'assigned'
+        paper.status = 'reviewing'
         paper.save()
         serializer = PaperSerializer(paper)
         return Response(serializer.data)
