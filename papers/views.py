@@ -8,6 +8,7 @@ from rest_framework.exceptions import ParseError
 from .models import *
 from .serializers import *
 from .permissions import *
+from profile.models import *
 from django.utils.timezone import now
 
 ACCEPTED_ABSTRACT_FILE_TYPES = ['application/pdf']
@@ -105,7 +106,7 @@ def assign_paper(request):
     try:
         paper = Paper.objects.get(pk=request.data['paper'])
         print(request.data['reviewer'])
-        paper.reviewer = request.data['reviewer']
+        paper.reviewer = User.objects.get(pk=request.data['reviewer'])
         paper.status = 'reviewing'
         paper.save()
         serializer = PaperSerializer(paper)
