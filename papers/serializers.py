@@ -3,13 +3,6 @@ from .models import *
 from profile.models import User
 
 
-class SmallUserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ['username', 'payment_status', 'nationality', 'designation', 'affiliation', 'highest_degree',
-                  'subject', 'specialization']
-
-
 class PaperSerializer(serializers.ModelSerializer):
     comments = serializers.StringRelatedField(many=True)
 
@@ -27,7 +20,8 @@ class PaperSerializer(serializers.ModelSerializer):
 
 class OrganiserPaperSerializer(serializers.ModelSerializer):
     comments = serializers.StringRelatedField(many=True)
-    author_name = SmallUserSerializer(source='author')
+    author_name = serializers.StringRelatedField(source='author')
+    author_poster_name = serializers.StringRelatedField(source='author_poster')
 
     class Meta:
         model = Paper
