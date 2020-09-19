@@ -27,7 +27,7 @@ class PaperSerializer(serializers.ModelSerializer):
 
 class OrganiserPaperSerializer(serializers.ModelSerializer):
     comments = serializers.StringRelatedField(many=True)
-    author_name = SmallUserSerializer()
+    author_name = SmallUserSerializer(source='author')
 
     class Meta:
         model = Paper
