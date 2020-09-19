@@ -1,11 +1,17 @@
 from rest_framework import serializers
 from .models import *
+from profile.models import User
 from profile.serializers import UserSerializer
 
 
+class SmallUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields=['username','payment_status','nationality','designation','affiliation','highest_degree','subject','specialization']
+
 class PaperSerializer(serializers.ModelSerializer):
     comments = serializers.StringRelatedField(many=True)
-
+    author_name= SmallUserSerializer()
     class Meta:
         model = Paper
         fields = '__all__'
