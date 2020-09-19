@@ -13,6 +13,7 @@ from django_rest_passwordreset.signals import reset_password_token_created
 from django.conf import settings
 from django.urls import reverse
 from django.core.mail import send_mail
+from papers.permissions import IsOrgnaiser
 
 
 @receiver(reset_password_token_created)
@@ -45,3 +46,9 @@ def null_view(request):
 @api_view()
 def complete_view(request):
     return HttpResponse("Email account is activated")
+
+
+class ReviewerList(ListAPIView):
+    queryset = User.objects.filter(role='reviewer')
+    serializer_class = UserSerializer
+    permission_classes = [IsAuthenticated, IsOrgnaiser]

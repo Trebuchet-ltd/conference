@@ -40,7 +40,8 @@ COUNTRY_OPTIONS = [(country, country) for country in COUNTRIES]
 ROLES = [
     ('speaker', 'speaker'),
     ('organiser', 'organiser'),
-    ('viewer', 'viewer')
+    ('viewer', 'viewer'),
+    ('reviewer', 'reviewer'),
 ]
 
 
