@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import *
-
+from profile.serializers import  UserSerializer
 
 class PaperSerializer(serializers.ModelSerializer):
     comments = serializers.StringRelatedField(many=True)
@@ -19,7 +19,7 @@ class PaperSerializer(serializers.ModelSerializer):
 
 class OrganiserPaperSerializer(serializers.ModelSerializer):
     comments = serializers.StringRelatedField(many=True)
-
+    author=serializers.StringRelatedField()
     class Meta:
         model = Paper
         fields = '__all__'
