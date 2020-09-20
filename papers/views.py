@@ -119,6 +119,23 @@ def assign_paper(request):
 
 
 @api_view(['POST'])
+@permission_classes((permissions.IsAuthenticated, IsReviewer))
+def review_paper(request):
+    if 'paper' not in request.data:
+        raise ParseError('Fields missing. "paper" required.')
+    try:
+        paper = Paper.objects.get(pk=request.data['paper'])
+        paper.status = 'reviewed'
+        paper.save()
+        serializer = PaperSerializer(paper)
+        return Response(serializer.data)
+    except Paper.DoesNotExist as e:
+        print(e)
+        print('The Paper with this id does not exist.', request.data['paper'])
+        return Response("The Paper with this id does not exist.")
+
+
+@api_view(['POST'])
 @permission_classes((permissions.IsAuthenticated, IsOrgnaiser))
 def change_paper_status(request):
     if 'paper' not in request.data or 'status' not in request.data:
