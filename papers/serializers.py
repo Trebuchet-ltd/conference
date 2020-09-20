@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import *
 from profile.models import User
+from comments.models import Comment
 
 
 class SmallUserSerializer(serializers.ModelSerializer):
@@ -10,8 +11,16 @@ class SmallUserSerializer(serializers.ModelSerializer):
                   'highest_degree', 'subject', 'specialization']
 
 
+class SmallCommentSerializer(serializers.ModelSerializer):
+    author = serializers.StringRelatedField()
+
+    class Meta:
+        model = Comment
+        exclude = ['paper', 'id']
+
+
 class PaperSerializer(serializers.ModelSerializer):
-    comments = serializers.StringRelatedField(many=True)
+    comments = SmallCommentSerializer(many=True)
 
     class Meta:
         model = Paper
@@ -26,7 +35,8 @@ class PaperSerializer(serializers.ModelSerializer):
 
 
 class OrganiserPaperSerializer(serializers.ModelSerializer):
-    comments = serializers.StringRelatedField(many=True)
+    comments = SmallCommentSerializer(many=True)
+
     author_name = SmallUserSerializer(source='author')
     author_poster_name = SmallUserSerializer(source='author_poster')
 
@@ -49,7 +59,7 @@ class OrganiserPaperSerializer(serializers.ModelSerializer):
 
 
 class ReviewerPaperSerializer(serializers.ModelSerializer):
-    comments = serializers.StringRelatedField(many=True)
+    comments = SmallCommentSerializer(many=True)
 
     class Meta:
         model = Paper
@@ -72,7 +82,7 @@ class ReviewerPaperSerializer(serializers.ModelSerializer):
 
 
 class FileUploadPaperSerializer(serializers.ModelSerializer):
-    comments = serializers.StringRelatedField(many=True)
+    comments = SmallCommentSerializer(many=True)
 
     class Meta:
         model = Paper

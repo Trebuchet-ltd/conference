@@ -55,6 +55,7 @@ class PaperViewset(viewsets.ModelViewSet):
             serializer.save(author=self.request.user, submission_time=now(), status='submitted')
 
     def get_serializer_class(self):
+        print(self.request.user.role)
         if self.request.user.role == 'organiser':
             return OrganiserPaperSerializer
         elif self.request.user.role == 'reviewer':
@@ -125,7 +126,7 @@ def change_paper_status(request):
     try:
         paper = Paper.objects.get(pk=request.data['paper'])
         status = request.data['status']
-        if status not in ['reviewed', 'approved', 'rejected', 'corrections', 'upload paper']:
+        if status not in ['approved', 'rejected', 'corrections', 'upload paper']:
             raise ParseError(f'Cannot set status to {status}')
         paper.status = status
         paper.save()
