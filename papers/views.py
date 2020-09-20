@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from rest_framework import permissions, viewsets
 from rest_framework.response import Response
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.generics import ListAPIView
 from rest_framework.exceptions import ParseError
@@ -17,6 +18,8 @@ ACCEPTED_ABSTRACT_FILE_TYPES = ['application/pdf']
 class PaperViewset(viewsets.ModelViewSet):
     queryset = Paper.objects.all()
     serializer_class = PaperSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['is_poster']
 
     # permission_classes = [
     #     permissions.IsAuthenticated & (CreateAndIsViewer | NotCreateAndIsOrgnaiser | RetrieveAndIsAuthor)]
