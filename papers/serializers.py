@@ -20,8 +20,6 @@ class SmallCommentSerializer(serializers.ModelSerializer):
 
 
 class PaperSerializer(serializers.ModelSerializer):
-    comments = SmallCommentSerializer(many=True)
-
     class Meta:
         model = Paper
         fields = '__all__'
