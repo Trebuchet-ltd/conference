@@ -20,6 +20,7 @@ class PaperViewset(viewsets.ModelViewSet):
     serializer_class = PaperSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['is_poster']
+    permission_classes = [permissions.IsAuthenticated]
 
     # permission_classes = [
     #     permissions.IsAuthenticated & (CreateAndIsViewer | NotCreateAndIsOrgnaiser | RetrieveAndIsAuthor)]
