@@ -9,8 +9,9 @@ from django.conf import settings
 from rest_framework.response import Response
 from django.http import HttpResponse
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework import serializers
+from rest_framework import permissions
 
 ACCEPTED_ABSTRACT_FILE_TYPES = ['application/pdf']
 
@@ -94,6 +95,7 @@ def accept_invitation(request, participant_id):
 
 
 @api_view(['POST'])
+@api_view([permissions.IsAuthenticated])
 def create_session(request):
     """
     Single function to create session and participants together.
