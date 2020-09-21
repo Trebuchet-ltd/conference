@@ -95,7 +95,7 @@ def accept_invitation(request, participant_id):
 
 
 @api_view(['POST'])
-@api_view([permissions.IsAuthenticated])
+@permission_classes([permissions.IsAuthenticated])
 def create_session(request):
     """
     Single function to create session and participants together.
