@@ -13,11 +13,18 @@ TRACKS = [
     (3, 'Track 3'),
 ]
 
+SESSION_STATUS = [
+    ('submitted', 'submitted'),
+    ('accepted', 'accepted'),
+    ('rejected', 'rejected'),
+]
+
 
 class Session(models.Model):
     organiser = models.OneToOneField(to=User, on_delete=models.CASCADE, related_name='session_organising')
     title = models.CharField(max_length=256)
     desc = models.CharField(max_length=4096)
+    status = models.CharField(max_length=10, choices=SESSION_STATUS, default='submitted')
 
     def __str__(self):
         return f'{self.title} - ({self.organiser})'
