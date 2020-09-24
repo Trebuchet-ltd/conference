@@ -13,5 +13,6 @@ router.register(r'programs', views.ProgramViewSet)
 urlpatterns = [
     path('accept/<int:participant_id>', views.accept_invitation, name='accept'),
     path('create/', views.create_session, name='create'),
+    path('status/', views.change_session_status, name='change_session_status'),
     path('', include(router.urls)),
 ]
