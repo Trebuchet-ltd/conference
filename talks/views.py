@@ -3,6 +3,7 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from .models import *
 from .serializers import *
+from papers.permissions import *
 from profile.models import User
 from django.core.mail import send_mail
 from django.conf import settings
@@ -12,6 +13,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework import serializers
 from rest_framework import permissions
+from rest_framework.exceptions import ParseError, PermissionDenied
 
 ACCEPTED_ABSTRACT_FILE_TYPES = ['application/pdf']
 
@@ -146,3 +148,20 @@ def create_session(request):
     serializer = SessionSerializer(session)
     print(serializer.data)
     return Response(serializer.data)
+
+
+@api_view(['POST'])
+@permission_classes((permissions.IsAuthenticated, IsOrgnaiser))
+def change_session_status(request):
+    if 'session' not in request.data or 'status' not in request.data:
+        raise ParseError('Fields missing. "session" and "status" required.')
+    try:
+        session = Session.objects.get(pk=request.data['session'])
+        session.status = request.data['status']
+        session.save()
+        serializer = SessionSerializer(session)
+        return Response(serializer.data)
+    except Session.DoesNotExist as e:
+        print(e)
+        print('The Session with this id does not exist.', request.data['Session'])
+        return Response("The Session with this id does not exist.")

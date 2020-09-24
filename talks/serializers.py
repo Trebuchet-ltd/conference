@@ -29,6 +29,9 @@ class SessionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Session
         fields = '__all__'
+        extra_kwargs = {
+            'status': {'read_only': True},
+        }
 
 
 class ParticipantSerializer(serializers.ModelSerializer):
