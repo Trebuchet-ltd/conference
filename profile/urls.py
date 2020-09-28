@@ -8,5 +8,6 @@ app_name = 'profile'
 
 urlpatterns = [
     url('reviewers', views.ReviewerList.as_view()),
+    url('users', views.UserList.as_view()),
     url('registration/complete', views.complete_view, name='account_confirm_complete'),
 ]

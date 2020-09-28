@@ -52,3 +52,9 @@ class ReviewerList(ListAPIView):
     queryset = User.objects.filter(role='reviewer')
     serializer_class = UserSerializer
     permission_classes = [IsAuthenticated, IsOrgnaiser]
+
+
+class UserList(ListAPIView):
+    queryset = User.objects.exclude(role='reviewer').exclude(role='organiser')
+    serializer_class = UserSerializer
+    permission_classes = [IsAuthenticated, IsOrgnaiser]

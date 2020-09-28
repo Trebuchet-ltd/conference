@@ -58,6 +58,8 @@ class OrganiserPaperSerializer(serializers.ModelSerializer):
 
 class ReviewerPaperSerializer(serializers.ModelSerializer):
     comments = SmallCommentSerializer(many=True)
+    author_name = SmallUserSerializer(source='author')
+    author_poster_name = SmallUserSerializer(source='author_poster')
 
     class Meta:
         model = Paper
