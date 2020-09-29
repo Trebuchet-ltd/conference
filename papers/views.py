@@ -147,7 +147,7 @@ def change_paper_status(request):
     try:
         paper = Paper.objects.get(pk=request.data['paper'])
         status = request.data['status']
-        if status not in ['approved', 'rejected', 'corrections', 'upload paper']:
+        if status not in ['accepted', 'rejected', 'corrections', 'upload paper']:
             raise ParseError(f'Cannot set status to {status}')
         paper.status = status
         paper.save()

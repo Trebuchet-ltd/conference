@@ -6,7 +6,7 @@ REVIEW_STAGES = [
     ('reviewing', 'reviewing'),
     ('assigned', 'assigned'),
     ('reviewed', 'reviewed'),
-    ('approved', 'approved'),
+    ('accepted', 'accepted'),
     ('rejected', 'rejected'),
     ('corrections', 'corrections'),
     ('upload paper', 'upload paper'),
