@@ -92,7 +92,7 @@ class FileUploadPaperSerializer(serializers.ModelSerializer):
         # # fields = '__all__'
         # exclude = ['comments']
         fields = ['id', 'title', 'description', 'status', 'keyword', 'file', 'is_poster', 'author',
-                  'abstract']
+                  'abstract', 'author_poster']
 
         extra_kwargs = {
             'author': {'read_only': True},
