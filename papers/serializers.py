@@ -85,22 +85,27 @@ class ReviewerPaperSerializer(serializers.ModelSerializer):
 
 
 class FileUploadPaperSerializer(serializers.ModelSerializer):
+    comments = SmallCommentSerializer(many=True, required=False, read_only=True)
+    title = serializers.CharField(required=False)
+    description = serializers.CharField(required=False)
 
     class Meta:
         model = Paper
         # # fields = '__all__'
         # exclude = ['comments']
-        fields = ['id', 'title', 'description', 'status', 'keyword', 'file', 'is_poster', 'author',
+        fields = ['id', 'title', 'description', 'comments', 'status', 'keyword', 'file', 'is_poster', 'author',
                   'abstract', 'author_poster']
 
         extra_kwargs = {
-            'title': {'read_only': True},
             'author': {'read_only': True},
-            'description': {'read_only': True},
             'author_poster': {'read_only': True},
-            # 'comments': {'read_only': True},
+            'comments': {'read_only': True},
             'keyword': {'read_only': True},
             'is_poster': {'read_only': True},
             'reviewer': {'read_only': True},
             'status': {'read_only': True},
         }
+
+    def get_validation_exclusions(self):
+        exclusions = super(FileUploadPaperSerializer, self).get_validation_exclusions()
+        return exclusions + ['comments']
