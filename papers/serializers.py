@@ -21,6 +21,7 @@ class SmallCommentSerializer(serializers.ModelSerializer):
 
 class PaperSerializer(serializers.ModelSerializer):
     comments = SmallCommentSerializer(many=True)
+
     class Meta:
         model = Paper
         fields = '__all__'
@@ -30,6 +31,7 @@ class PaperSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'author': {'read_only': True},
             'author_poster': {'read_only': True},
+            'comments': {'read_only': True},
         }
 
 
