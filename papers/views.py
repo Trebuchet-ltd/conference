@@ -64,9 +64,9 @@ class PaperViewset(viewsets.ModelViewSet):
             return OrganiserPaperSerializer
         elif self.request.user.role == 'reviewer':
             return ReviewerPaperSerializer
-        elif self.action == 'update':
-            print('File Upload')
-            return FileUploadPaperSerializer
+        # elif self.action == 'update':
+        #     print('File Upload')
+        #     return FileUploadPaperSerializer
         return PaperSerializer
 
 
