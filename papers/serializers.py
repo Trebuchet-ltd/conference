@@ -85,7 +85,7 @@ class ReviewerPaperSerializer(serializers.ModelSerializer):
 
 
 class FileUploadPaperSerializer(serializers.ModelSerializer):
-    comments = SmallCommentSerializer(many=True)
+    # comments = SmallCommentSerializer(many=True)
 
     class Meta:
         model = Paper
@@ -96,7 +96,7 @@ class FileUploadPaperSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'author': {'read_only': True},
             'author_poster': {'read_only': True},
-            'comments': {'read_only': True},
+            # 'comments': {'read_only': True},
             'keyword': {'read_only': True},
             'is_poster': {'read_only': True},
             'reviewer': {'read_only': True},
