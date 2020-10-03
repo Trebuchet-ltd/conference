@@ -89,10 +89,10 @@ class FileUploadPaperSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Paper
-        # fields = '__all__'
-        exclude = ['comments']
-        # fields = ['id', 'title', 'description', 'status', 'comments', 'keyword', 'file', 'is_poster', 'author',
-        #           'abstract']
+        # # fields = '__all__'
+        # exclude = ['comments']
+        fields = ['id', 'title', 'description', 'status', 'keyword', 'file', 'is_poster', 'author',
+                  'abstract']
 
         extra_kwargs = {
             'author': {'read_only': True},
