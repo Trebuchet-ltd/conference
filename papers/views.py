@@ -28,6 +28,7 @@ class PaperViewset(viewsets.ModelViewSet):
 
     # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     def perform_update(self, serializer):
+        print(serializer.validated_data)
         if 'abstract' in serializer.validated_data:
             if serializer.validated_data['abstract'].content_type not in ACCEPTED_ABSTRACT_FILE_TYPES:
                 print(serializer.validated_data['abstract'].content_type)
@@ -64,9 +65,9 @@ class PaperViewset(viewsets.ModelViewSet):
             return OrganiserPaperSerializer
         elif self.request.user.role == 'reviewer':
             return ReviewerPaperSerializer
-        # elif self.action == 'update':
-        #     print('File Upload')
-        #     return FileUploadPaperSerializer
+        elif self.action == 'update':
+            print('File Upload')
+            return FileUploadPaperSerializer
         return PaperSerializer
 
 
