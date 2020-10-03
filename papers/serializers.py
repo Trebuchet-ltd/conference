@@ -85,7 +85,6 @@ class ReviewerPaperSerializer(serializers.ModelSerializer):
 
 
 class FileUploadPaperSerializer(serializers.ModelSerializer):
-    # comments = SmallCommentSerializer(many=True)
 
     class Meta:
         model = Paper
