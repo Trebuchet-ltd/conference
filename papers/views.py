@@ -39,8 +39,7 @@ class PaperViewset(viewsets.ModelViewSet):
                 print(serializer.validated_data['file'].content_type)
                 raise serializers.ValidationError(
                     'Filetype not supported. Supported types are: ' + str(ACCEPTED_ABSTRACT_FILE_TYPES))
-        serializer.save()
-        paper = Paper.objects.get(pk=serializer.validated_data['id'])
+        paper = serializer.save()
         paper['status'] = 'submitted'
         paper.save()
 
