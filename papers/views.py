@@ -42,6 +42,8 @@ class PaperViewset(viewsets.ModelViewSet):
         paper = serializer.save()
         paper.status = 'submitted'
         paper.save()
+        return Response(serializer.data)
+
 
     def perform_create(self, serializer):
         print(serializer.validated_data)
