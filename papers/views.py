@@ -60,6 +60,7 @@ class PaperViewset(viewsets.ModelViewSet):
             serializer.save(author_poster=self.request.user, submission_time=now(), status='submitted')
         else:
             serializer.save(author=self.request.user, submission_time=now(), status='submitted')
+        return Response(serializer.data)
 
     def get_serializer_class(self):
         print(self.request.user.role)
