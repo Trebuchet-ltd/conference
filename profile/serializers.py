@@ -14,9 +14,10 @@ class UserSerializer(serializers.ModelSerializer):
     # Just the titles.
     paper = serializers.StringRelatedField()
     poster = serializers.StringRelatedField()
-    session_organising = SessionSerializer()
 
     # Populated
+    session_organising = SessionSerializer()
+
     # papers = PaperSerializer(many=True)
 
     class Meta:
@@ -54,7 +55,7 @@ class CustomRegisterSerializer(RegisterSerializer):
     def custom_signup(self, request, user):
         user.first_name = self.validated_data.get('first_name', '')
         user.last_name = self.validated_data.get('last_name', '')
-        user.password = self.validated_data.get('passoword', '')
+        user.password = self.validated_data.get('password', '')
         user.phone = self.validated_data.get('phone', '')
         user.nationality = self.validated_data.get('nationality', '')
         # user.payment_status = self.validated_data.get('payment_status', '')
