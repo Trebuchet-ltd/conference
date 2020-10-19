@@ -56,11 +56,11 @@ class User(AbstractUser):
     payment_status = models.CharField(choices=PAYMENT_STATUSES, max_length=10, default='not paid')
     nationality = models.CharField(choices=COUNTRY_OPTIONS, max_length=25, default='India')
     profile_picture = models.FileField(upload_to=media_location, null=True, blank=True)
-    designation = models.CharField(max_length=50, default='')
-    affiliation = models.CharField(max_length=50, default='')
-    highest_degree = models.CharField(max_length=100, default='')
-    subject = models.CharField(max_length=100, default='')
-    specialization = models.CharField(max_length=100, default='')
+    designation = models.CharField(max_length=500, default='')
+    affiliation = models.CharField(max_length=500, default='')
+    highest_degree = models.CharField(max_length=500, default='')
+    subject = models.CharField(max_length=500, default='')
+    specialization = models.CharField(max_length=500, default='')
     redundant_role = models.IntegerField(default=0)
 
     USERNAME_FIELD = 'email'
