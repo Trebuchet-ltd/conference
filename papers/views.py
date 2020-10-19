@@ -19,7 +19,7 @@ class PaperViewset(viewsets.ModelViewSet):
     queryset = Paper.objects.all()
     serializer_class = PaperSerializer
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['is_poster']
+    filterset_fields = ['is_poster', 'status']
     permission_classes = [permissions.IsAuthenticated]
 
     # permission_classes = [

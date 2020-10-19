@@ -150,6 +150,64 @@ class PaymentViewSet(viewsets.ModelViewSet):
         s = json.loads(response.text)
 
         print(s)
+        if s['success']==False:
+            if val.nationality == "India":
+                payload = {
+                    'purpose': 'ISBIS Conference',
+                    'amount': 1000,
+                    'buyer_name': val.first_name,
+                    'email': val.email,
+                    'redirect_url': 'https://statconferencecusat.co.in/api/payment/redirect/redirect',
+                    'send_email': 'True',
+                    'webhook': 'https://statconferencecusat.co.in/api/payment/hook/hook/',
+                    'allow_repeated_payments': 'False',
+                }
+            else:
+                rate = Rate.objects.first()
+                date_1 = None
+                if rate != None:
+                    date_1 = rate.updated_on
+                if date_1 == datetime.date.today():
+                    payload = {
+                        'purpose': 'ISBIS Conference',
+                        'amount': round(rate.rate * 50, 2),
+                        'buyer_name': val.first_name,
+                        'email': val.email,
+                        'redirect_url': 'https://statconferencecusat.co.in/api/payment/redirect/redirect',
+                        'send_email': 'True',
+                        'webhook': 'https://statconferencecusat.co.in/api/payment/hook/hook/',
+                        'allow_repeated_payments': 'False',
+                    }
+                else:
+                    try:
+                        r = requests.get('https://api.exchangeratesapi.io/latest?base=USD&symbols=INR')
+                        rate.rate = r.json()['rates']['INR']
+                        rate.save()
+                        payload = {
+                            'purpose': 'ISBIS Conference',
+                            'amount': round(rate.rate * 50, 2),
+                            'buyer_name': val.first_name,
+                            'email': val.email,
+                            'redirect_url': 'https://statconferencecusat.co.in/api/payment/redirect/redirect',
+                            'send_email': 'True',
+                            'webhook': 'https://statconferencecusat.co.in/api/payment/hook/hook/',
+                            'allow_repeated_payments': 'False',
+                        }
+                    except:
+                        payload = {
+                            'purpose': 'ISBIS Conference',
+                            'amount': round(rate.rate * 50, 2),
+                            'buyer_name': val.first_name,
+                            'email': val.email,
+                            'redirect_url': 'https://statconferencecusat.co.in/api/payment/redirect/redirect',
+                            'send_email': 'True',
+                            'webhook': 'https://statconferencecusat.co.in/api/payment/hook/hook/',
+                            'allow_repeated_payments': 'False',
+                        }
+            response = requests.post("https://www.instamojo.com/api/1.1/payment-requests/", data=payload,
+                                     headers=headers)
+            s = json.loads(response.text)
+        print(s)
         p = Payments()
         p.p_id = s["payment_request"]['id']
         p.name = s["payment_request"]['buyer_name']
