@@ -4,13 +4,18 @@ from rest_framework import permissions, viewsets
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.decorators import api_view, permission_classes
+from django.core.files import File
+from PyPDF2 import PdfFileReader, PdfFileWriter
 from rest_framework.generics import ListAPIView
 from rest_framework.exceptions import ParseError
+import os
 from .models import *
 from .serializers import *
 from .permissions import *
 from profile.models import *
 from django.utils.timezone import now
+from pathlib import Path
+
 
 ACCEPTED_ABSTRACT_FILE_TYPES = ['application/pdf']
 
@@ -149,6 +154,7 @@ def review_paper(request):
 @api_view(['POST'])
 @permission_classes((permissions.IsAuthenticated, IsOrgnaiser))
 def change_paper_status(request):
+    print(Path(f'static/media/abstracts/{request.user.email}').absolute())
     if 'paper' not in request.data or 'status' not in request.data:
         raise ParseError('Fields missing. "paper" and "status" required.')
     try:
@@ -156,6 +162,19 @@ def change_paper_status(request):
         status = request.data['status']
         if status not in ['accepted', 'rejected', 'corrections', 'upload paper']:
             raise ParseError(f'Cannot set status to {status}')
+        if status == 'accepted':
+            filename = str(paper.file)
+            filename = filename.split('/')[-1].split('.')[0] + '_abstract.pdf'
+            pdf = PdfFileReader(paper.file)
+            first_page = pdf.getPage(0)
+            pdf_writer = PdfFileWriter()
+            pdf_writer.addPage(first_page)
+            path = f'static/media/abstracts/{filename}'
+            with Path(path).open(mode="wb") as output_file:
+                pdf_writer.write(output_file)
+            with Path(path).open(mode="rb") as input_file:
+                paper.abstract.save(filename, input_file)
+            os.remove(path)
         paper.status = status
         paper.save()
         serializer = PaperSerializer(paper)
