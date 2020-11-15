@@ -15,7 +15,7 @@ from .permissions import *
 from profile.models import *
 from django.utils.timezone import now
 from pathlib import Path
-
+from .utils import send_async_mail
 
 ACCEPTED_ABSTRACT_FILE_TYPES = ['application/pdf']
 
@@ -49,7 +49,6 @@ class PaperViewset(viewsets.ModelViewSet):
         paper.save()
         return Response(serializer.data)
 
-
     def perform_create(self, serializer):
         print(serializer.validated_data)
         if 'abstract' in serializer.validated_data:
@@ -63,10 +62,20 @@ class PaperViewset(viewsets.ModelViewSet):
                 raise serializers.ValidationError(
                     'Filetype not supported. Supported types are: ' + str(ACCEPTED_ABSTRACT_FILE_TYPES))
         serializer.save()
+        paper = 'paper'
         if serializer.validated_data['is_poster']:
+            paper = 'poster'
             serializer.save(author_poster=self.request.user, submission_time=now(), status='submitted')
         else:
             serializer.save(author=self.request.user, submission_time=now(), status='submitted')
+
+        send_async_mail(
+            f'{paper.title()} submitted successfully!',
+            f'Hello {self.request.user}, \n\nYour {paper}, "{serializer.validated_data["title"]}" has been submitted '
+            f'successfully.\n\n'
+            f'Regards,\nTeam ISBIS 2020',
+            [self.request.user.email]
+        )
         return Response(serializer.data)
 
     def get_serializer_class(self):
@@ -122,11 +131,18 @@ def assign_paper(request):
         raise ParseError('Fields missing. "paper" and "reviewer" required.')
     try:
         paper = Paper.objects.get(pk=request.data['paper'])
+        reviewer = User.objects.get(pk=request.data['reviewer'])
         print(request.data['reviewer'])
-        paper.reviewer = User.objects.get(pk=request.data['reviewer'])
+        paper.reviewer = reviewer
         paper.status = 'reviewing'
         paper.save()
         serializer = PaperSerializer(paper)
+        send_async_mail(
+            f'Paper assigned for review.',
+            f'Hello {reviewer}, \n\nThe paper, "{paper.title}" has been assigned to you for review.\n\n'
+            f'Regards,\nTeam ISBIS 2020',
+            [reviewer.email]
+        )
         return Response(serializer.data)
     except Paper.DoesNotExist as e:
         print(e)

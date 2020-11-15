@@ -14,6 +14,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework import serializers
 from rest_framework import permissions
 from rest_framework.exceptions import ParseError, PermissionDenied
+from papers.utils import send_async_mail
 
 ACCEPTED_ABSTRACT_FILE_TYPES = ['application/pdf']
 
@@ -136,15 +137,22 @@ def create_session(request):
         except IntegrityError:
             print('same email')
 
-    send_mail(
+    send_async_mail(
         f'Session Invitation',
         f'Hello , \n {session.organiser} has invited you to be part of the session, "{session.title}". '
         f'Click the link below to confirm you participation in the session.'
         f'https://statconferencecusat.co.in/profile',
-        settings.EMAIL_HOST_USER,
-        participant_emails,
-        fail_silently=False,
+        participant_emails
     )
+
+    send_async_mail(
+        f'Session created successfully!',
+        f'Hello {session.organiser}, \n\nYour session, "{session.title}" has been created successfully.\n'
+        f'Invites have been sent to the participants as per your application.\n\n'
+        f'Regards,\nTeam ISBIS 2020',
+        [request.user.email]
+    )
+
     serializer = SessionSerializer(session)
     print(serializer.data)
     return Response(serializer.data)
@@ -165,3 +173,4 @@ def change_session_status(request):
         print(e)
         print('The Session with this id does not exist.', request.data['Session'])
         return Response("The Session with this id does not exist.")
+
