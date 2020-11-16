@@ -191,6 +191,24 @@ def change_paper_status(request):
             with Path(path).open(mode="rb") as input_file:
                 paper.abstract.save(filename, input_file)
             os.remove(path)
+
+        content = {
+            'accepted': f'Your submission, "{paper.title}" has been accepted for ISBIS 2020.\n\nPlease refer the '
+                        f'website for further updates.',
+            'rejected': f'We regret to inform you that your submission, "{paper.title}", was not accepted to the '
+                        f'conference ISBIS 2020. \n\nThank you once again for your submission.',
+            'corrections': f'Your submission, "{paper.title}" has underwent review and the reviewers have asked for '
+                           f'some corrections. Please refer the website for more details.',
+            'upload paper': f'Your abstract for "{paper.title}" has been approved. Please submit the full document for '
+                            f'the final approval. '
+        }
+        body = "Dear Sir/Ma'am,\n\n" + content[status] + "\n\nRegards,\nTeam ISBIS 2020\nstatconferencecusat.co.in"
+        recipient = paper.is_poster and paper.author_poster.email or paper.author.email
+        send_async_mail(
+            f'Updates on your submission to ISBIS 2020',
+            body,
+            [recipient]
+        )
         paper.status = status
         paper.save()
         serializer = PaperSerializer(paper)
