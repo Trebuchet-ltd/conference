@@ -1,21 +1,22 @@
-from django.shortcuts import render, redirect
-from django.http import HttpResponse
-from rest_framework import permissions, viewsets
-from rest_framework.response import Response
-from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.decorators import api_view, permission_classes
-from django.core.files import File
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import permissions, viewsets
+from rest_framework.exceptions import ParseError
 from PyPDF2 import PdfFileReader, PdfFileWriter
 from rest_framework.generics import ListAPIView
-from rest_framework.exceptions import ParseError
-import os
-from .models import *
+from django.shortcuts import render, redirect
+from rest_framework.response import Response
+from notification.models import Notification
+from django.utils.timezone import now
+from django.http import HttpResponse
+from django.core.files import File
+from .utils import send_async_mail
+from profile.models import *
 from .serializers import *
 from .permissions import *
-from profile.models import *
-from django.utils.timezone import now
 from pathlib import Path
-from .utils import send_async_mail
+from .models import *
+import os
 
 ACCEPTED_ABSTRACT_FILE_TYPES = ['application/pdf']
 
@@ -206,6 +207,19 @@ def change_paper_status(request):
                 paper.abstract.save(filename, input_file)
             os.remove(path)
 
+        paper.status = status
+        paper.save()
+        serializer = PaperSerializer(paper)
+
+        notif_content = {
+            'accepted': f'Your submission, "{paper.title}" has been accepted for ISBIS 2020.',
+            'rejected': f'Your submission, "{paper.title}", was not accepted to the conference ISBIS 2020.',
+            'corrections': f'Your submission, "{paper.title}" has underwent review and the reviewers have asked for '
+                           f'some corrections.',
+            'upload paper': f'Your abstract for "{paper.title}" has been approved. Please submit the full document for '
+                            f'the final approval. '
+        }
+
         content = {
             'accepted': f'Your submission, "{paper.title}" has been accepted for ISBIS 2020.\n\nPlease refer the '
                         f'website for further updates.',
@@ -217,15 +231,14 @@ def change_paper_status(request):
                             f'the final approval. '
         }
         body = "Dear Sir/Ma'am,\n\n" + content[status] + MAIL_FOOTER
-        recipient = paper.is_poster and paper.author_poster.email or paper.author.email
+        recipient = paper.is_poster and paper.author_poster or paper.author
+        notification = Notification(user_id=recipient.id, text=notif_content[status])
+        notification.save()
         send_async_mail(
             f'Updates on your submission to ISBIS 2020',
             body,
-            [recipient]
+            [recipient.email]
         )
-        paper.status = status
-        paper.save()
-        serializer = PaperSerializer(paper)
         return Response(serializer.data)
     except Paper.DoesNotExist as e:
         print(e)
