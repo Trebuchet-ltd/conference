@@ -19,6 +19,9 @@ from .utils import send_async_mail
 
 ACCEPTED_ABSTRACT_FILE_TYPES = ['application/pdf']
 
+MAIL_FOOTER = f'\n\nFor ant technical queries mail to : sahilathrij@gmail.com\nAnd for any queries on conference ' \
+              f'organisation : asha@cusat.ac.in\n\nRegards,\nTeam ISBIS 2020\nstatconferencecusat.co.in '
+
 
 class PaperViewset(viewsets.ModelViewSet):
     queryset = Paper.objects.all()
@@ -54,11 +57,25 @@ class PaperViewset(viewsets.ModelViewSet):
         if 'abstract' in serializer.validated_data:
             if serializer.validated_data['abstract'].content_type not in ACCEPTED_ABSTRACT_FILE_TYPES:
                 print(serializer.validated_data['abstract'].content_type)
+                send_async_mail(
+                    f'Error in abstract submission.',
+                    f'Dear Sir/Madam, \n\nYour submission was erroneous. The filetype is not supported. Supported '
+                    f'filetype is pdf. Please try again with the appropriate '
+                    f'filetype.\n\nKindly ignore this mail if you have already addressed this.{MAIL_FOOTER}',
+                    [self.request.user.email]
+                )
                 raise serializers.ValidationError(
                     'Filetype not supported. Supported types are: ' + str(ACCEPTED_ABSTRACT_FILE_TYPES))
         if 'file' in serializer.validated_data:
             if serializer.validated_data['file'].content_type not in ACCEPTED_ABSTRACT_FILE_TYPES:
                 print(serializer.validated_data['file'].content_type)
+                send_async_mail(
+                    f'Error in paper/poster submission.',
+                    f'Dear Sir/Madam, \n\nYour submission was erroneous. The filetype is not supported. Supported '
+                    f'filetype is pdf. Please try again with the appropriate '
+                    f'filetype.\n\nKindly ignore this mail if you have already addressed this.{MAIL_FOOTER}',
+                    [self.request.user.email]
+                )
                 raise serializers.ValidationError(
                     'Filetype not supported. Supported types are: ' + str(ACCEPTED_ABSTRACT_FILE_TYPES))
         serializer.save()
@@ -72,8 +89,7 @@ class PaperViewset(viewsets.ModelViewSet):
         send_async_mail(
             f'{paper.title()} submitted successfully!',
             f'Hello {self.request.user}, \n\nYour {paper}, "{serializer.validated_data["title"]}" has been submitted '
-            f'successfully.\n\n'
-            f'Regards,\nTeam ISBIS 2020',
+            f'successfully.{MAIL_FOOTER}',
             [self.request.user.email]
         )
         return Response(serializer.data)
@@ -139,8 +155,7 @@ def assign_paper(request):
         serializer = PaperSerializer(paper)
         send_async_mail(
             f'Paper assigned for review.',
-            f'Hello {reviewer}, \n\nThe paper, "{paper.title}" has been assigned to you for review.\n\n'
-            f'Regards,\nTeam ISBIS 2020',
+            f'Hello {reviewer}, \n\nThe paper, "{paper.title}" has been assigned to you for review.{MAIL_FOOTER}',
             [reviewer.email]
         )
         return Response(serializer.data)
@@ -170,7 +185,6 @@ def review_paper(request):
 @api_view(['POST'])
 @permission_classes((permissions.IsAuthenticated, IsOrgnaiser))
 def change_paper_status(request):
-    print(Path(f'static/media/abstracts/{request.user.email}').absolute())
     if 'paper' not in request.data or 'status' not in request.data:
         raise ParseError('Fields missing. "paper" and "status" required.')
     try:
@@ -202,7 +216,7 @@ def change_paper_status(request):
             'upload paper': f'Your abstract for "{paper.title}" has been approved. Please submit the full document for '
                             f'the final approval. '
         }
-        body = "Dear Sir/Ma'am,\n\n" + content[status] + "\n\nRegards,\nTeam ISBIS 2020\nstatconferencecusat.co.in"
+        body = "Dear Sir/Ma'am,\n\n" + content[status] + MAIL_FOOTER
         recipient = paper.is_poster and paper.author_poster.email or paper.author.email
         send_async_mail(
             f'Updates on your submission to ISBIS 2020',
