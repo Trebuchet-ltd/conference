@@ -96,7 +96,7 @@ def accept_invitation(request, participant_id):
         send_async_mail(
             'Session invitation accepted',
             f'Dear Sir/Ma\'am,\n\n{participant.speaker_name} has accepted the invitation to your session, '
-            f'{participant.session.title}.{MAIL_FOOTER}',
+            f'"{participant.session.title}".{MAIL_FOOTER}',
             [participant.session.organiser.email]
         )
         return Response(serializer.data)
@@ -183,6 +183,8 @@ def change_session_status(request):
                       f'conference. '
         content = 'Dear Sir/Ma\'am,\n\n' + content + MAIL_FOOTER
         participants = [p.email for p in session.participants.all()]
+        participants.append(session.organiser.email)
+        print(participants)
         send_async_mail(sub, content, participants)
         return Response(serializer.data)
     except Session.DoesNotExist as e:
