@@ -41,16 +41,36 @@ class PaperViewset(viewsets.ModelViewSet):
         if 'abstract' in serializer.validated_data:
             if serializer.validated_data['abstract'].content_type not in ACCEPTED_ABSTRACT_FILE_TYPES:
                 print(serializer.validated_data['abstract'].content_type)
+                send_async_mail(
+                    f'Error in abstract submission.',
+                    f'Dear Sir/Madam, \n\nYour submission was erroneous. The filetype is not supported. Supported '
+                    f'filetype is pdf. Please try again with the appropriate '
+                    f'filetype.\n\nKindly ignore this mail if you have already addressed this.{MAIL_FOOTER}',
+                    [self.request.user.email]
+                )
                 raise serializers.ValidationError(
                     'Filetype not supported. Supported types are: ' + str(ACCEPTED_ABSTRACT_FILE_TYPES))
         if 'file' in serializer.validated_data:
             if serializer.validated_data['file'].content_type not in ACCEPTED_ABSTRACT_FILE_TYPES:
                 print(serializer.validated_data['file'].content_type)
+                send_async_mail(
+                    f'Error in paper/poster submission.',
+                    f'Dear Sir/Madam, \n\nYour submission was erroneous. The filetype is not supported. Supported '
+                    f'filetype is pdf. Please try again with the appropriate '
+                    f'filetype.\n\nKindly ignore this mail if you have already addressed this.{MAIL_FOOTER}',
+                    [self.request.user.email]
+                )
                 raise serializers.ValidationError(
                     'Filetype not supported. Supported types are: ' + str(ACCEPTED_ABSTRACT_FILE_TYPES))
         paper = serializer.save()
         paper.status = 'submitted'
         paper.save()
+        send_async_mail(
+            f'{paper.title()} updated successfully!',
+            f'Hello {self.request.user}, \n\nYour {paper}, "{serializer.validated_data["title"]}" has been updated '
+            f'successfully.{MAIL_FOOTER}',
+            [self.request.user.email]
+        )
         return Response(serializer.data)
 
     def perform_create(self, serializer):
