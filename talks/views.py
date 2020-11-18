@@ -94,7 +94,7 @@ def accept_invitation(request, participant_id):
         serializer = ParticipantSerializer(participant)
         send_async_mail(
             'Session invitation accepted',
-            f'Dear Sir/Ma\'am,\n\n{participant} has accepted the invitation to your session.{MAIL_FOOTER}',
+            f'Dear Sir/Ma\'am,\n\n{participant.speaker_name} has accepted the invitation to your session.{MAIL_FOOTER}',
             [participant.session.organiser.email]
         )
         return Response(serializer.data)
