@@ -85,17 +85,19 @@ def accept_invitation(request, participant_id):
             print('User not invited.')
             return HttpResponse("failure")
         status = request.data["status"]
+        state = 'accepted'
         if str(status) == '1':
             participant.speaker = request.user
             participant.status = 'accepted'
         else:
             participant.status = 'declined'
+            state = 'declined'
             participant.email = None
         participant.save()
         serializer = ParticipantSerializer(participant)
         send_async_mail(
-            'Session invitation accepted',
-            f'Dear Sir/Ma\'am,\n\n{participant.speaker_name} has accepted the invitation to your session, '
+            f'Session invitation {state}',
+            f'Dear Sir/Ma\'am,\n\n{participant.speaker_name} has {state} the invitation to your session, '
             f'"{participant.session.title}".{MAIL_FOOTER}',
             [participant.session.organiser.email]
         )
@@ -177,7 +179,7 @@ def change_session_status(request):
         serializer = SessionSerializer(session)
         sub = 'Session accepted'
         content = f'Your session, "{session.title}" has been accepted.'
-        if request.data['status'] == 'declined':
+        if request.data['status'] == 'rejected':
             sub = 'Session proposal rejected'
             content = f'We are sorry to inform you that your session, "{session.title}" has not been accepted to the ' \
                       f'conference. '
