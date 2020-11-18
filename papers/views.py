@@ -66,8 +66,8 @@ class PaperViewset(viewsets.ModelViewSet):
         paper.status = 'submitted'
         paper.save()
         send_async_mail(
-            f'{paper.title()} updated successfully!',
-            f'Hello {self.request.user}, \n\nYour {paper}, "{serializer.validated_data["title"]}" has been updated '
+            f'Submission updated successfully!',
+            f'Hello {self.request.user}, \n\nYour submission, "{serializer.validated_data["title"]}" has been updated '
             f'successfully.{MAIL_FOOTER}',
             [self.request.user.email]
         )
