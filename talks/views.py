@@ -18,6 +18,9 @@ from papers.utils import send_async_mail
 
 ACCEPTED_ABSTRACT_FILE_TYPES = ['application/pdf']
 
+MAIL_FOOTER = f'\n\nFor ant technical queries mail to : sahilathrij@gmail.com\nAnd for any queries on conference ' \
+              f'organisation : asha@cusat.ac.in\n\nRegards,\nTeam ISBIS 2020\nstatconferencecusat.co.in '
+
 
 class SessionViewSet(viewsets.ModelViewSet):
     queryset = Session.objects.all()
@@ -59,13 +62,11 @@ class ParticipantViewSet(viewsets.ModelViewSet):
         except User.DoesNotExist as e:
             print('The user is not register with the website.')
         session = serializer.validated_data['session']
-        send_mail(
+        send_async_mail(
             f'Session Invitation',
-            f'Hey {name}! \n {session.organiser} has invited you to be part of the session, "{session.title}". '
-            f'Click the link below to confirm you participation in the session.',
-            settings.EMAIL_HOST_USER,
-            [serializer.validated_data['email']],
-            fail_silently=False,
+            f'Dear Sir/Ma\'am, \n {session.organiser} has invited you to be part of the session, "{session.title}". '
+            f'Click the link below to confirm you participation in the session.{MAIL_FOOTER}',
+            [serializer.validated_data['email']]
         )
         serializer.save()
 
@@ -139,17 +140,16 @@ def create_session(request):
 
     send_async_mail(
         f'Session Invitation',
-        f'Hello , \n {session.organiser} has invited you to be part of the session, "{session.title}". '
+        f'Dear Sir/Ma\'am, \n{session.organiser} has invited you to be part of the session, "{session.title}". '
         f'Click the link below to confirm you participation in the session.'
-        f'https://statconferencecusat.co.in/profile',
+        f'https://statconferencecusat.co.in/profile{MAIL_FOOTER}',
         participant_emails
     )
 
     send_async_mail(
         f'Session created successfully!',
-        f'Hello {session.organiser}, \n\nYour session, "{session.title}" has been created successfully.\n'
-        f'Invites have been sent to the participants as per your application.\n\n'
-        f'Regards,\nTeam ISBIS 2020',
+        f'Dear Sir/Ma\'am, \n\nYour session, "{session.title}" has been created successfully.\n'
+        f'Invites have been sent to the participants as per your application.{MAIL_FOOTER}',
         [request.user.email]
     )
 
@@ -168,6 +168,15 @@ def change_session_status(request):
         session.status = request.data['status']
         session.save()
         serializer = SessionSerializer(session)
+        sub = 'Session accepted'
+        content = f'Your session, "{session.title}" has been accepted.'
+        if request.data['status'] == 'rejected':
+            sub = 'Session proposal rejected'
+            content = f'We are sorry to inform you that your session, "{session.title}" has not been accepted to the ' \
+                      f'conference. '
+        content = 'Dear Sir/Ma\'am,\n\n' + content + MAIL_FOOTER
+        participants = [p.email for p in session.participants.all()]
+        send_async_mail(sub, content, participants)
         return Response(serializer.data)
     except Session.DoesNotExist as e:
         print(e)
