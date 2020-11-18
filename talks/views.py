@@ -64,8 +64,9 @@ class ParticipantViewSet(viewsets.ModelViewSet):
         session = serializer.validated_data['session']
         send_async_mail(
             f'Session Invitation',
-            f'Dear Sir/Ma\'am, \n {session.organiser} has invited you to be part of the session, "{session.title}". '
-            f'Click the link below to confirm you participation in the session.{MAIL_FOOTER}',
+            f'Dear Sir/Ma\'am, \n\n{session.organiser} has invited you to be speaker of the session, "{session.title}".'
+            f' Kindly click the link below to confirm and register your participation in this session.'
+            f'https://statconferencecusat.co.in/profile{MAIL_FOOTER}',
             [serializer.validated_data['email']]
         )
         serializer.save()
@@ -187,4 +188,3 @@ def change_session_status(request):
         print(e)
         print('The Session with this id does not exist.', request.data['Session'])
         return Response("The Session with this id does not exist.")
-
