@@ -92,6 +92,11 @@ def accept_invitation(request, participant_id):
             participant.email = None
         participant.save()
         serializer = ParticipantSerializer(participant)
+        send_async_mail(
+            'Session invitation accepted',
+            f'Dear Sir/Ma\'am,\n\n{participant} has accepted the invitation to your session.{MAIL_FOOTER}',
+            [participant.session.organiser.email]
+        )
         return Response(serializer.data)
     except Participant.DoesNotExist as e:
         print('The participant id is invalid.')
@@ -140,8 +145,8 @@ def create_session(request):
 
     send_async_mail(
         f'Session Invitation',
-        f'Dear Sir/Ma\'am, \n{session.organiser} has invited you to be part of the session, "{session.title}". '
-        f'Click the link below to confirm you participation in the session.'
+        f'Dear Sir/Ma\'am, \n\n{session.organiser} has invited you to be speaker of the session, "{session.title}". '
+        f'Kindly click the link below to confirm and register your participation in this session.'
         f'https://statconferencecusat.co.in/profile{MAIL_FOOTER}',
         participant_emails
     )
