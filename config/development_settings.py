@@ -159,11 +159,6 @@ EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 ACCOUNT_EMAIL_SUBJECT_PREFIX = '[ISBIS 2020]'
 
-#
-# from django.conf import settings
-# from django.core.mail import send_mail
-# send_mail('From server', 'Test messsage', settings.EMAIL_HOST_USER, ['jyothisp52@gmail.com', 'sahilathrij@gmail.com'], fail_silently=False)
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 

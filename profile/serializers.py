@@ -8,6 +8,7 @@ from rest_auth.registration.serializers import RegisterSerializer
 from profile.models import User, COUNTRY_OPTIONS, PAYMENT_STATUSES
 from papers.serializers import PaperSerializer
 from talks.serializers import SessionSerializer
+from papers.utils import send_async_mail
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -67,3 +68,10 @@ class CustomRegisterSerializer(RegisterSerializer):
         user.save(update_fields=['first_name', 'last_name', 'payment_status', 'phone', 'nationality',
                                  'designation', 'affiliation', 'highest_degree',
                                  'subject', 'specialization'])
+        send_async_mail(
+            'Registration Complete',
+            'Dear Sir/Ma\'am, \n\nYou have successfully registered to ISBIS 2020\n\nFor ant technical queries mail to '
+            ': sahilathrij@gmail.com\nAnd for any queries on conference organisation : asha@cusat.ac.in\n\nRegards,'
+            '\nTeam ISBIS 2020\nstatconferencecusat.co.in ',
+            [user.email]
+        )
