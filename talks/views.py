@@ -177,7 +177,7 @@ def change_session_status(request):
         serializer = SessionSerializer(session)
         sub = 'Session accepted'
         content = f'Your session, "{session.title}" has been accepted.'
-        if request.data['status'] == 'rejected':
+        if request.data['status'] == 'declined':
             sub = 'Session proposal rejected'
             content = f'We are sorry to inform you that your session, "{session.title}" has not been accepted to the ' \
                       f'conference. '
