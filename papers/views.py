@@ -20,8 +20,8 @@ import os
 
 ACCEPTED_ABSTRACT_FILE_TYPES = ['application/pdf']
 
-MAIL_FOOTER = f'\n\nFor ant technical queries mail to : sahilathrij@gmail.com\nAnd for any queries on conference ' \
-              f'organisation : asha@cusat.ac.in\n\nRegards,\nTeam ISBIS 2020\nstatconferencecusat.co.in '
+MAIL_FOOTER = f'\n\nFor any queries please contact isbis2020@gmail.com\n\nRegards,\nTeam ISBIS ' \
+              f'2020\nstatconferencecusat.co.in '
 
 
 class PaperViewset(viewsets.ModelViewSet):
@@ -67,7 +67,7 @@ class PaperViewset(viewsets.ModelViewSet):
         paper.save()
         send_async_mail(
             f'Submission updated successfully!',
-            f'Hello {self.request.user}, \n\nYour submission, "{paper.title}" has been updated '
+            f'Dear {self.request.user}, \n\nYour submission, "{paper.title}" has been updated '
             f'successfully.{MAIL_FOOTER}',
             [self.request.user.email]
         )
@@ -109,7 +109,7 @@ class PaperViewset(viewsets.ModelViewSet):
 
         send_async_mail(
             f'{paper.title()} submitted successfully!',
-            f'Hello {self.request.user}, \n\nYour {paper}, "{serializer.validated_data["title"]}" has been submitted '
+            f'Dear {self.request.user}, \n\nYour {paper}, "{serializer.validated_data["title"]}" has been submitted '
             f'successfully.{MAIL_FOOTER}',
             [self.request.user.email]
         )
@@ -241,17 +241,23 @@ def change_paper_status(request):
         }
 
         content = {
-            'accepted': f'Your submission, "{paper.title}" has been accepted for ISBIS 2020.\n\nPlease refer the '
-                        f'website for further updates.',
-            'rejected': f'We regret to inform you that your submission, "{paper.title}", was not accepted to the '
-                        f'conference ISBIS 2020. \n\nThank you once again for your submission.',
-            'corrections': f'Your submission, "{paper.title}" has underwent review and the reviewers have asked for '
-                           f'some corrections. Please refer the website for more details.',
+            'accepted': f'Your submission, "{paper.title}" has been accepted for presentation at the International '
+                        f'Virtual Conference on Advanced Statistical Techniques in Business and Industry.\nPlease '
+                        f'visit https://statconferencecusat.co.in for further updates.',
+            'rejected': f'We regret to inform you that your submission, "{paper.title}", was not accepted for '
+                        f'presentation at the International Virtual Conference on Advanced Statistical Techniques in '
+                        f'Business and Industry.\nYou are welcome to participate in the conference.\nPlease visit '
+                        f'https://statconferencecusat.co.in for further updates.\n\nThank you once again for your '
+                        f'submission.',
+            'corrections': f'Your submission, "{paper.title}" has undergone review and the reviewers have asked for '
+                           f'some corrections. Please login to your account for the comments.posted in your '
+                           f'dashboard.\nPlease visit https://statconferencecusat.co.in for  submission of revised '
+                           f'paper and further updates.\n\nThank you for your submission.',
             'upload paper': f'Your abstract for "{paper.title}" has been approved. Please submit the full document for '
                             f'the final approval. '
         }
-        body = "Dear Sir/Ma'am,\n\n" + content[status] + MAIL_FOOTER
         recipient = paper.is_poster and paper.author_poster or paper.author
+        body = f'Dear {recipient},\n\n' + content[status] + MAIL_FOOTER
         notification = Notification(user_id=recipient.id, text=notif_content[status])
         notification.save()
         send_async_mail(

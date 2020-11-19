@@ -15,11 +15,9 @@ from rest_framework import serializers
 from rest_framework import permissions
 from rest_framework.exceptions import ParseError, PermissionDenied
 from papers.utils import send_async_mail
+from papers.views import MAIL_FOOTER
 
 ACCEPTED_ABSTRACT_FILE_TYPES = ['application/pdf']
-
-MAIL_FOOTER = f'\n\nFor ant technical queries mail to : sahilathrij@gmail.com\nAnd for any queries on conference ' \
-              f'organisation : asha@cusat.ac.in\n\nRegards,\nTeam ISBIS 2020\nstatconferencecusat.co.in '
 
 
 class SessionViewSet(viewsets.ModelViewSet):
@@ -149,16 +147,18 @@ def create_session(request):
 
     send_async_mail(
         f'Session Invitation',
-        f'Dear Sir/Ma\'am, \n\n{session.organiser} has invited you to be speaker of the session, "{session.title}". '
-        f'Kindly click the link below to confirm and register your participation in this session.'
-        f'https://statconferencecusat.co.in/profile{MAIL_FOOTER}',
+        f'Dear Sir/Ma\'am, \n\n{session.organiser} has invited you to be a speaker in the session, “{session.title}". '
+        f'Kindly visit https://statconferencecusat.co.in/profile to register and confirm your participation in this '
+        f'session by clicking on the accept tab.\n\nThank you for your submission. Please visit '
+        f'https://statconferencecusat.co.in for  further updates.{MAIL_FOOTER}',
         participant_emails
     )
 
     send_async_mail(
         f'Session created successfully!',
         f'Dear Sir/Ma\'am, \n\nYour session, "{session.title}" has been created successfully.\n'
-        f'Invites have been sent to the participants as per your application.{MAIL_FOOTER}',
+        f'\nThank you for your submission. Please visit https://statconferencecusat.co.in for  further updates.'
+        f'{MAIL_FOOTER}',
         [request.user.email]
     )
 
@@ -178,7 +178,9 @@ def change_session_status(request):
         session.save()
         serializer = SessionSerializer(session)
         sub = 'Session accepted'
-        content = f'Your session, "{session.title}" has been accepted.'
+        content = f'Your session, "{session.title}" has been accepted.\n\nInvites have been sent to all the ' \
+                  f'participants. Kindly prompt them to register and accept the invitation.\n\nThank you for your ' \
+                  f'submission. Please visit https://statconferencecusat.co.in for  further updates. '
         if request.data['status'] == 'rejected':
             sub = 'Session proposal rejected'
             content = f'We are sorry to inform you that your session, "{session.title}" has not been accepted to the ' \

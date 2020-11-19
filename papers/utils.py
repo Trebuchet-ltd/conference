@@ -17,4 +17,5 @@ class EmailThread(threading.Thread):
 
 
 def send_async_mail(subject, content, recipient_list):
+    print(content)
     EmailThread(subject, content, recipient_list).start()

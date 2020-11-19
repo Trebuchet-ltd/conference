@@ -23,7 +23,7 @@ SESSION_STATUS = [
 class Session(models.Model):
     organiser = models.OneToOneField(to=User, on_delete=models.CASCADE, related_name='session_organising')
     title = models.CharField(max_length=256)
-    desc = models.CharField(max_length=4096)
+    desc = models.CharField(max_length=4096, null=True, blank=True, default='')
     status = models.CharField(max_length=10, choices=SESSION_STATUS, default='submitted')
 
     def __str__(self):
