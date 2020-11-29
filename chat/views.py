@@ -34,6 +34,7 @@ class ChatViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         timestamp = self.request.query_params.get('timestamp')
-        if timestamp!=None:
-            queryset = Chat.objects.filter(timestamp__gte=timestamp).values('timestamp','user_name','message')
+        stream = self.request.query_params.get('stream')
+        if timestamp!=None and stream!=None:
+            queryset = Chat.objects.filter(timestamp__gte=timestamp,stream=stream).values('timestamp','user_name','message')
             return queryset
