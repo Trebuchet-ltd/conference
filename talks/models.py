@@ -1,5 +1,6 @@
 from django.db import models
 from profile.models import User
+from chunked_upload.models import ChunkedUpload
 
 INVITE_STATES = [
     ('invited', 'invited'),
@@ -55,3 +56,6 @@ class Program(models.Model):
     end_time = models.DateTimeField()
     name = models.CharField(max_length=255)
     track = models.IntegerField(choices=TRACKS, default=1)
+
+
+MyChunkedUpload = ChunkedUpload

@@ -15,4 +15,6 @@ urlpatterns = [
     path('create/', views.create_session, name='create'),
     path('status/', views.change_session_status, name='change_session_status'),
     path('', include(router.urls)),
+    path('chunked_upload_complete/', views.MyChunkedUploadCompleteView.as_view(), name='api_chunked_upload_complete'),
+    path('chunked_upload/', views.MyChunkedUploadView.as_view(), name='api_chunked_upload'),
 ]

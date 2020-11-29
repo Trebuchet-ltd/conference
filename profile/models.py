@@ -49,6 +49,10 @@ def media_location(instance, filename):
     return f'static/media/dp/{filename}'
 
 
+def video_location(instance, filename):
+    return f'static/media/sessions/{filename}'
+
+
 class User(AbstractUser):
     username = None
     email = models.EmailField(_('email address'), unique=True)
@@ -62,6 +66,7 @@ class User(AbstractUser):
     subject = models.CharField(max_length=500, default='')
     specialization = models.CharField(max_length=500, default='')
     redundant_role = models.IntegerField(default=0)
+    recording = models.FileField(upload_to=video_location, null=True, blank=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['phone']

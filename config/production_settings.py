@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'django_filters',
     'django_rest_passwordreset',
+    'chunked_upload',
 
     # Project Apps.
     'profile',

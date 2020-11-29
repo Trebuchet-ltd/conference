@@ -16,8 +16,20 @@ from rest_framework import permissions
 from rest_framework.exceptions import ParseError, PermissionDenied
 from papers.utils import send_async_mail
 from papers.views import MAIL_FOOTER
+from django.views.generic.base import TemplateView
+from chunked_upload.views import ChunkedUploadView, ChunkedUploadCompleteView
+from django.views.decorators.csrf import csrf_exempt
+from .models import MyChunkedUpload
+from django.utils.decorators import method_decorator
+import os
+import string
+import random
 
 ACCEPTED_ABSTRACT_FILE_TYPES = ['application/pdf']
+
+
+def random_string(size=6, chars=string.ascii_uppercase + string.digits):
+    return ''.join(random.choice(chars) for _ in range(size))
 
 
 class SessionViewSet(viewsets.ModelViewSet):
@@ -195,3 +207,39 @@ def change_session_status(request):
         print(e)
         print('The Session with this id does not exist.', request.data['Session'])
         return Response("The Session with this id does not exist.")
+
+
+class MyChunkedUploadView(ChunkedUploadView):
+    model = MyChunkedUpload
+    field_name = 'the_file'
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super(MyChunkedUploadView, self).dispatch(request, *args, **kwargs)
+
+    def check_permissions(self, request):
+        # Allow non authenticated users to make uploads
+        pass
+
+
+class MyChunkedUploadCompleteView(ChunkedUploadCompleteView):
+    model = MyChunkedUpload
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super(MyChunkedUploadCompleteView, self).dispatch(request, *args, **kwargs)
+
+    def check_permissions(self, request):
+        # Allow non authenticated users to make uploads
+        pass
+
+    def on_completion(self, uploaded_file, request):
+        print(request.user)
+        user = User.objects.get(pk=1)
+        user.recording = uploaded_file
+        user.save()
+        pass
+
+    def get_response_data(self, chunked_upload, request):
+        return {'message': ("You successfully uploaded '%s' (%s bytes)!" %
+                            (chunked_upload.filename, chunked_upload.offset))}
