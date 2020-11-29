@@ -61,7 +61,7 @@ INSTALLED_APPS = [
     'comments',
     'talks',
     'notification',
-    'chat.apps.ChatConfig',
+    'chat',
 ]
 
 MIDDLEWARE = [
