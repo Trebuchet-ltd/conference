@@ -70,7 +70,7 @@ class CustomRegisterSerializer(RegisterSerializer):
                                  'subject', 'specialization'])
         send_async_mail(
             'Registration Complete',
-            'Dear Sir/Ma\'am, \n\nYou have successfully registered to ISBIS 2020\n\nFor ant technical queries mail to '
+            'Dear Sir/Ma\'am, \n\nYou have successfully registered to ISBIS 2020\n\nFor any technical queries mail to '
             ': sahilathrij@gmail.com\nAnd for any queries on conference organisation : asha@cusat.ac.in\n\nRegards,'
             '\nTeam ISBIS 2020\nstatconferencecusat.co.in ',
             [user.email]
