@@ -21,7 +21,6 @@ class ChatViewSet(viewsets.ModelViewSet):
     # serializer_class = InChatSerializer
 
     def get_serializer_class(self):
-        print(self.action)
         if self.action == 'list':
             return OutChatSerializer
         if self.action == 'create':
