@@ -227,6 +227,7 @@ class MyChunkedUploadCompleteView(ChunkedUploadCompleteView):
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
+        print('CSRF_Exempted.')
         return super(MyChunkedUploadCompleteView, self).dispatch(request, *args, **kwargs)
 
     def check_permissions(self, request):
