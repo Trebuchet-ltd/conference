@@ -24,6 +24,7 @@ from django.utils.decorators import method_decorator
 import os
 import string
 import random
+from rest_framework.views import APIView
 
 ACCEPTED_ABSTRACT_FILE_TYPES = ['application/pdf']
 
@@ -209,7 +210,7 @@ def change_session_status(request):
         return Response("The Session with this id does not exist.")
 
 
-class MyChunkedUploadView(ChunkedUploadView):
+class MyChunkedUploadView(ChunkedUploadView, APIView):
     model = MyChunkedUpload
     field_name = 'the_file'
 
