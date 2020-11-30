@@ -30,6 +30,7 @@ urlpatterns = [
     path('api/talks/', include(('talks.urls', 'talks'), namespace='talks')),
     path('api/account/', include('allauth.urls')),
     path('api/notification/', include('notification.urls')),
+    path('api/chat/', include('chat.urls')),
 ]
 #
 # url(r'^accounts-rest/registration/account-confirm-email/(?P<key>.+)/$', confirm_email,
