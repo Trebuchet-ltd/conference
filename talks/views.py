@@ -215,6 +215,17 @@ class MyChunkedUploadView(ChunkedUploadView):
     model = MyChunkedUpload
     field_name = 'the_file'
 
+
+    @classmethod
+    def as_view(cls, **initkwargs):
+        view = super().as_view(**initkwargs)
+        view.cls = cls
+        view.initkwargs = initkwargs
+
+        # Note: session based authentication is explicitly CSRF validated,
+        # all other authentication is CSRF exempt.
+        return csrf_exempt(view)
+
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         print('CSRF_Exempted.')
