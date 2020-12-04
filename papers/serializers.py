@@ -27,12 +27,13 @@ class PaperSerializer(serializers.ModelSerializer):
         model = Paper
         # fields = '__all__'
         fields = ['id', 'title', 'description', 'author_poster', 'status', 'comments', 'keyword', 'file', 'is_poster',
-                  'author', 'abstract']
+                  'author', 'abstract','author_name','author_poster_name']
 
         extra_kwargs = {
             'author': {'read_only': True},
             'author_poster': {'read_only': True},
             'comments': {'read_only': True, 'required': False},
+
         }
 
 
