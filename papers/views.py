@@ -126,6 +126,12 @@ class PaperViewset(viewsets.ModelViewSet):
             return FileUploadPaperSerializer
         return PaperSerializer
 
+class AnonPaperList(ListAPIView):
+    queryset =  Paper.objects.all()
+    serializer_class = PaperSerializer
+    permission_classes = [permissions.AllowAny]
+    http_method_names = ["get"]
+
 
 class PaperList(ListAPIView):
     queryset = Paper.objects.all()
