@@ -3,9 +3,11 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.http import HttpResponse
 from .models import User
+from papers.models import Paper
 from .serializers import UserSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.generics import ListAPIView
+from rest_framework.views import APIView
 from string import ascii_lowercase, ascii_uppercase, digits
 import random
 from django.dispatch import receiver
@@ -14,6 +16,7 @@ from django.conf import settings
 from django.urls import reverse
 from django.core.mail import send_mail
 from papers.permissions import IsOrgnaiser
+from papers.utils import send_async_mail
 
 
 @receiver(reset_password_token_created)
@@ -58,3 +61,16 @@ class UserList(ListAPIView):
     queryset = User.objects.exclude(role='reviewer').exclude(role='organiser')
     serializer_class = UserSerializer
     permission_classes = [IsAuthenticated, IsOrgnaiser]
+
+class SendMail(APIView):
+    def post(self,request,format=None):
+        mail_addresses = Paper.objects.all().values_list('author', flat=True)
+        print(mail_addresses)
+        data = request.data
+        mail_addresses = []
+        if data['recipient']=='all':
+            mail_addresses = User.objects.all().values_list('email',flat=True)
+        elif data['recipient']=='paper_all':
+            mail_addresses = Paper.objects.all().values_list('User.email',flat=True)
+        print(mail_addresses)
+        return Response(status.HTTP_200_OK)
