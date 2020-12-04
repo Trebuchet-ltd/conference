@@ -18,7 +18,7 @@ from django.core.mail import send_mail
 from papers.permissions import IsOrgnaiser
 from papers.utils import send_async_mail
 
-from talks.models import Participant , Session
+from talks.models import Participant, Session
 
 
 @receiver(reset_password_token_created)
@@ -64,113 +64,62 @@ class UserList(ListAPIView):
     serializer_class = UserSerializer
     permission_classes = [IsAuthenticated, IsOrgnaiser]
 
+
 class SendMail(APIView):
-    def post(self,request,format=None):
+    def post(self, request, format=None):
         data = request.data
         subject = data['subject']
         content = data['content']
         mail_addresses = []
-        content_data=[]
-        if data['recipient']=='all':
-            mail_addresses = User.objects.all().values_list('email',flat=True)
-            names = list(User.objects.all().values_list('first_name',flat=True))
-            print(names)
-            content_data = [names]
-        elif data['recipient']=='paper_all':
-            mail_set = Paper.objects.all().values_list('author',flat=True)
-            names = []
-            paper = []
-            for i in mail_set:
-                x=User.objects.get(id=i).email
-                mail_addresses.append(x)
-                names.append(User.objects.get(id=i).first_name)
-                paper.append(Paper.objects.get(author_id=i).title)
-            content_data = [names,paper]
-        elif data['recipient']=='paper_acc':
-            mail_set = Paper.objects.filter(status='accepted').values_list('author',flat=True)
-            names = []
-            paper = []
-            for i in mail_set:
-                x=User.objects.get(id=i).email
-                mail_addresses.append(x)
-                names.append(User.objects.get(id=i).first_name)
-                paper.append(Paper.objects.get(author_id=i).title)
-            content_data = [names,paper]
-        elif data['recipient']=='session_all':
-            mail_set = Session.objects.all().values_list('organiser',flat=True)
-            names = []
-            for i in mail_set:
-                x=User.objects.get(id=i).email
-                mail_addresses.append(x)
-                names.append(User.objects.get(id=i).first_name)
-            for j in Participant.objects.all().values_list('email',flat=True):
-                mail_addresses.append(j)
-            for j in Participant.objects.all().values_list('speaker_name', flat=True):
-                names.append(j)
-            content_data = [names]
-        elif data['recipient']=='session_org':
-            mail_set = Session.objects.all().values_list('organiser',flat=True)
-            names = []
-            for i in mail_set:
-                x=User.objects.get(id=i).email
-                mail_addresses.append(x)
-                names.append(User.objects.get(id=i).first_name)
-            session_set = list(Session.objects.all().values_list('title',flat=True))
-            content_data = [names,session_set]
+        content_data = []
+        if data['recipient'] == 'all':
+            users = User.objects.all()
+            for i in users:
+                _name = f"{i.first_name} {i.last_name}"
+                _content = content.replace('{name}', _name)
+                send_async_mail(subject, _content, [i.email])
 
-        elif data['recipient']=='session_part':
-            names = Participant.objects.all().values_list('speaker_name',flat=True)
-            for j in Participant.objects.all().values_list('email',flat=True):
-                mail_addresses.append(j)
+        elif data['recipient'] == 'paper_all' or data['recipient'] == 'paper_acc':
+            users = User.objects.all().filter(paper__isnull=False)
+            if data['recipient'] == 'paper_acc':
+                users = users.filter(paper__status='accepted')
+            for i in users:
+                _name = f"{i.first_name} {i.last_name}"
+                _content = content.replace('{name}', _name)
+                _content = _content.replace('{paper}', i.paper.title)
+                send_async_mail(subject, _content, [i.email])
 
-            session_set = Participant.objects.all().values_list('session',flat=True)
-            session = []
-            for i in session_set:
-                x=Session.objects.get(id=i).title
-                session.append(x)
-            title = Participant.objects.all().values_list('title',flat=True)
-            content_data = [names,session,title]
-        elif data['recipient']=='session_part_notacc':
-            names = Participant.objects.filter(status='invited').values_list('speaker_name',flat=True)
-            for j in Participant.objects.filter(status='invited').values_list('email',flat=True):
-                mail_addresses.append(j)
+        elif data['recipient'] == 'session_all':
+            users = User.objects.all().filter(session_organising__isnull=False) |\
+                    User.objects.all().filter(session_participating__isnull=False)
+            for i in users:
+                _name = f"{i.first_name} {i.last_name}"
+                _content = content.replace('{name}', _name)
+                send_async_mail(subject, _content, [i.email])
 
-            session_set = Participant.objects.filter(status='invited').values_list('session',flat=True)
-            session = []
-            for i in session_set:
-                x=Session.objects.get(id=i).title
-                session.append(x)
-            title = list(Participant.objects.filter(status='invited').values_list('title',flat=True))
-            content_data = [names,session,title]
-        mail_addresses=list(set(mail_addresses))
-        print(mail_addresses)
+        elif data['recipient'] == 'session_org':
+            users = User.objects.all().filter(session_organising__isnull=False)
+            for i in users:
+                _name = f"{i.first_name} {i.last_name}"
+                _content = content.replace('{name}', _name)
+                _content = _content.replace('{session}', i.session_organising.title)
+                send_async_mail(subject, _content, [i.email])
 
-        og_content = content
-        if mail_addresses!=[]:
-            for i in range(len(mail_addresses)):
-                if data['recipient']=='all':
-                    content = og_content.replace('{name}',content_data[0][i])
-                elif data['recipient']=='paper_all':
-                    content = og_content.replace('{name}',content_data[0][i])
-                    content = content.replace('{paper}',content_data[1][i])
-                elif data['recipient']=='paper_acc':
-                    content = og_content.replace('{name}',content_data[0][i])
-                    content = content.replace('{paper}',content_data[1][i])
-                elif data['recipient']=='session_all':
-                    content = og_content.replace('{name}',content_data[0][i])
-                elif data['recipient'] == 'session_org':
-                    content = og_content.replace('{name}', content_data[0][i])
-                    content = content.replace('{session}', content_data[1][i])
-                elif data['recipient'] == 'session_part':
-                    content = og_content.replace('{name}', content_data[0][i])
-                    content = content.replace('{session}', content_data[1][i])
-                    content = content.replace('{participant_presentation}' , content_data[2][i])
-                elif data['recipient'] == 'session_part_notacc':
-                    content = og_content.replace('{name}', content_data[0][i])
-                    content = content.replace('{session}', content_data[1][i])
-                    content = content.replace('{participant_presentation}', content_data[2][i])
-                send_async_mail(subject,content,[mail_addresses[i]])
-                print(content)
-            return Response(status.HTTP_200_OK)
-        else:
-            return Response(status.HTTP_400_BAD_REQUEST)
+        elif data['recipient'] == 'session_part':
+            users = User.objects.all().filter(session_participating__isnull=False)
+            for i in users:
+                _name = f"{i.first_name} {i.last_name}"
+                _content = content.replace('{name}', _name)
+                _content = _content.replace('{session}', i.session_participating.session.title)
+                _content = _content.replace('{participant_presentation}', i.session_participating.title)
+                send_async_mail(subject, _content, [i.email])
+
+        elif data['recipient'] == 'session_part_notacc':
+            participants = Participant.objects.filter(status='invited')
+            for i in participants:
+                _content = content.replace('{name}', i.speaker_name)
+                _content = content.replace('{session}', i.session.title)
+                _content = content.replace('{participant_presentation}', i.title)
+                send_async_mail(subject, _content, [i.email])
+
+        return Response(status.HTTP_200_OK)
