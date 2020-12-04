@@ -18,6 +18,12 @@ class SmallCommentSerializer(serializers.ModelSerializer):
         model = Comment
         exclude = ['paper', 'id']
 
+class SmallPaperSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Paper
+        # fields = '__all__'
+        fields = ['id', 'title', 'description', 'author_poster', 'status', 'comments', 'keyword', 'file', 'is_poster',
+                  'author', 'abstract']
 
 class PaperSerializer(serializers.ModelSerializer):
     comments = SmallCommentSerializer(many=True, required=False)
