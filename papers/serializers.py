@@ -21,17 +21,19 @@ class SmallCommentSerializer(serializers.ModelSerializer):
 
 class PaperSerializer(serializers.ModelSerializer):
     comments = SmallCommentSerializer(many=True, required=False)
-
+    author_name = SmallUserSerializer(source='author')
+    author_poster_name = SmallUserSerializer(source='author_poster')
     class Meta:
         model = Paper
         # fields = '__all__'
         fields = ['id', 'title', 'description', 'author_poster', 'status', 'comments', 'keyword', 'file', 'is_poster',
-                  'author', 'abstract']
+                  'author', 'abstract','author_name','author_poster_name']
 
         extra_kwargs = {
             'author': {'read_only': True},
             'author_poster': {'read_only': True},
             'comments': {'read_only': True, 'required': False},
+
         }
 
 

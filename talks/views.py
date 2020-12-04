@@ -11,6 +11,7 @@ from rest_framework.response import Response
 from django.http import HttpResponse
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.decorators import api_view, permission_classes
+from rest_framework.request import Request
 from rest_framework import serializers
 from rest_framework import permissions
 from rest_framework.exceptions import ParseError, PermissionDenied
@@ -26,6 +27,8 @@ import string
 import random
 from rest_framework.views import APIView
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework.settings import api_settings
+from rest_framework.authentication import TokenAuthentication
 
 ACCEPTED_ABSTRACT_FILE_TYPES = ['application/pdf']
 
@@ -37,6 +40,8 @@ def random_string(size=6, chars=string.ascii_uppercase + string.digits):
 class SessionViewSet(viewsets.ModelViewSet):
     queryset = Session.objects.all()
     serializer_class = SessionSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['status']
 
 
 class ProgramViewSet(viewsets.ModelViewSet):
@@ -48,7 +53,7 @@ class ParticipantViewSet(viewsets.ModelViewSet):
     queryset = Participant.objects.all()
     serializer_class = ParticipantSerializer
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['email']
+    filterset_fields = ['email', 'status']
 
     def get_serializer_class(self):
         if self.action == 'list':
@@ -215,23 +220,17 @@ class MyChunkedUploadView(ChunkedUploadView):
     model = MyChunkedUpload
     field_name = 'the_file'
 
-
-    @classmethod
-    def as_view(cls, **initkwargs):
-        view = super().as_view(**initkwargs)
-        view.cls = cls
-        view.initkwargs = initkwargs
-
-        # Note: session based authentication is explicitly CSRF validated,
-        # all other authentication is CSRF exempt.
-        return csrf_exempt(view)
-
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         print('CSRF_Exempted.')
         return super(MyChunkedUploadView, self).dispatch(request, *args, **kwargs)
 
     def check_permissions(self, request):
+        chunk = request.FILES.get(self.field_name)
+        print(chunk)
+        print(self.field_name)
+        print('FILES:', request.FILES)
+        print('POST:', request.POST)
         # Allow non authenticated users to make uploads
         pass
 
@@ -259,8 +258,11 @@ class MyChunkedUploadCompleteView(ChunkedUploadCompleteView):
         pass
 
     def on_completion(self, uploaded_file, request):
-        print(request.user)
-        user = User.objects.get(pk=1)
+        print('Headers', request.headers)
+        auth = TokenAuthentication()
+        user, token = auth.authenticate(request)
+        print('User:', user, user.id)
+        user = User.objects.get(pk=user.id)
         user.recording = uploaded_file
         user.save()
         pass
