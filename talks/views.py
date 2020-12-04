@@ -29,6 +29,8 @@ from rest_framework.views import APIView
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.settings import api_settings
 from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.generics import ListAPIView
 
 ACCEPTED_ABSTRACT_FILE_TYPES = ['application/pdf']
 
@@ -37,11 +39,18 @@ def random_string(size=6, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
 
 
+# TODO: Security.
 class SessionViewSet(viewsets.ModelViewSet):
     queryset = Session.objects.all()
     serializer_class = SessionSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['status']
+    permission_classes = [IsAuthenticated]
+
+
+class SessionList(ListAPIView):
+    queryset = Session.objects.all()
+    serializer_class = SmallSessionSerializer
 
 
 class ProgramViewSet(viewsets.ModelViewSet):

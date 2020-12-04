@@ -48,7 +48,7 @@ class Participant(models.Model):
     status = models.CharField(choices=INVITE_STATES, default='invited', max_length=20)
 
     def __str__(self):
-        return f'{self.title} - [{str(self.speaker)}]'
+        return f'{self.title} - [{str(self.speaker_name)}]'
 
 
 class Program(models.Model):

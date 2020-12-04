@@ -14,7 +14,8 @@ urlpatterns = [
     path('accept/<int:participant_id>', views.accept_invitation, name='accept'),
     path('create/', views.create_session, name='create'),
     path('status/', views.change_session_status, name='change_session_status'),
-    path('', include(router.urls)),
+    path('session_anon/', views.SessionList.as_view(), name='session_anonymous'),
     path('chunked_upload_complete/', views.MyChunkedUploadCompleteView.as_view(), name='api_chunked_upload_complete'),
     path('chunked_upload/', views.MyChunkedUploadView.as_view(), name='api_chunked_upload'),
+    path('', include(router.urls)),
 ]
