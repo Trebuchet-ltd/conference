@@ -53,7 +53,7 @@ class ParticipantViewSet(viewsets.ModelViewSet):
     queryset = Participant.objects.all()
     serializer_class = ParticipantSerializer
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['email', 'speaker']
+    filterset_fields = ['email', 'status']
 
     def get_serializer_class(self):
         if self.action == 'list':
