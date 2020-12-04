@@ -169,7 +169,7 @@ class SendMail(APIView):
                     content = og_content.replace('{name}', content_data[0][i])
                     content = content.replace('{session}', content_data[1][i])
                     content = content.replace('{participant_presentation}', content_data[2][i])
-                send_async_mail(subject,content,mail_addresses[i])
+                send_async_mail(subject,content,[mail_addresses[i]])
                 print(content)
             return Response(status.HTTP_200_OK)
         else:
