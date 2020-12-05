@@ -6,7 +6,7 @@ from allauth.account.utils import setup_user_email
 from rest_auth.registration.serializers import RegisterSerializer
 
 from profile.models import User, COUNTRY_OPTIONS, PAYMENT_STATUSES
-from papers.serializers import PaperSerializer
+from papers.serializers import PaperSerializer,SmallPaperSerializer
 from talks.serializers import SessionSerializer
 from papers.utils import send_async_mail
 
@@ -20,6 +20,29 @@ class UserSerializer(serializers.ModelSerializer):
     session_organising = SessionSerializer()
 
     # papers = PaperSerializer(many=True)
+
+    class Meta:
+        model = User
+        exclude = ['password', 'last_login', 'is_superuser', 'is_staff', 'is_active', 'date_joined', 'groups',
+                   'user_permissions']
+        extra_kwargs = {
+            'payment_status': {'read_only': True},
+            'role': {'read_only': True},
+        }
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        if not data['session_organising']:
+            data['session_organising'] = ''
+        return data
+
+
+class SmallUserSerializer(serializers.ModelSerializer):
+    paper = SmallPaperSerializer()
+    poster = SmallPaperSerializer()
+
+    # Populated
+    session_organising = SessionSerializer()
 
     class Meta:
         model = User
