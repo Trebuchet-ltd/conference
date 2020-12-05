@@ -80,6 +80,7 @@ INSTALLED_APPS = [
     'talks',
     'notification',
     'chat',
+    'uploads',
 ]
 
 MIDDLEWARE = [

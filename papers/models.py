@@ -19,6 +19,10 @@ def media_location(instance, filename):
     return f'static/media/papers/{filename}'
 
 
+def video_location(instance, filename):
+    return f'static/media/paper_recordings/{filename}'
+
+
 class Paper(models.Model):
     title = models.CharField(max_length=255)
     description = models.CharField(max_length=1000)
@@ -32,6 +36,7 @@ class Paper(models.Model):
     author_poster = models.OneToOneField(User, on_delete=models.CASCADE, related_name='poster', null=True, blank=True)
     submission_time = models.DateTimeField(auto_now=True)
     display = models.BooleanField(default=True)
+    recording = models.FileField(upload_to=video_location, null=True, blank=True)
 
     def __str__(self):
         return self.title

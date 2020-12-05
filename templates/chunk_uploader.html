@@ -43,10 +43,10 @@
 
 
     const chunkSize = 100 * 1024;
-    {#const BASE_API_URL = 'http://127.0.0.1:8000/api'#}
-    const BASE_API_URL = 'https://test.trebuchet.one/api'
-    {#const TOKEN = "2d29b8483c6ba6eb76c1ff720a3a498a5802647b";#}
-    const TOKEN = "0ed2f20c19d0331b099c762473dced6e2ff34ec4";
+    const BASE_API_URL = 'http://127.0.0.1:8000/api'
+    {#const BASE_API_URL = 'https://test.trebuchet.one/api'#}
+    const TOKEN = "2d29b8483c6ba6eb76c1ff720a3a498a5802647b";
+    {#const TOKEN = "0ed2f20c19d0331b099c762473dced6e2ff34ec4";#}
 
     let pauseBtn = document.getElementById("pause");
     let resumeBtn = document.getElementById("resume");
@@ -112,7 +112,7 @@
             data.append('the_file', firstBlob, filename);
 
             try {
-                let response = await axios.post(BASE_API_URL + '/talks/chunked_upload/', data, {
+                let response = await axios.post(BASE_API_URL + '/uploads/chunks/', data, {
                     headers: {
                         'Content-Type': `multipart/form-data;`,
                         'Authorization': 'Token ' + TOKEN
@@ -144,7 +144,7 @@
                 let size = blob.size;
                 let end = latest_offset + size - 1;
                 let contentRange = `bytes ${latest_offset}-${end}/${size}`;
-                let resp = await axios.post(BASE_API_URL + '/talks/chunked_upload/', data, {
+                let resp = await axios.post(BASE_API_URL + '/uploads/chunks/', data, {
                     headers: {
                         'Content-Type': `multipart/form-data;`,
                         'Content-Range': contentRange,
@@ -165,8 +165,8 @@
             let formData = new FormData();
             formData.append('upload_id', upload_id);
             formData.append('md5', md5)
-            let completeResp = await axios.post(BASE_API_URL + '/talks/chunked_upload_complete/',
-                formData,
+            formData.append('type', 'paper');
+            let completeResp = await axios.post(BASE_API_URL + '/uploads/complete/', formData,
                 {
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',

@@ -20,7 +20,6 @@ from papers.views import MAIL_FOOTER
 from django.views.generic.base import TemplateView
 from chunked_upload.views import ChunkedUploadView, ChunkedUploadCompleteView
 from django.views.decorators.csrf import csrf_exempt
-from .models import MyChunkedUpload
 from django.utils.decorators import method_decorator
 import os
 import string
@@ -230,67 +229,3 @@ def change_session_status(request):
         print('The Session with this id does not exist.', request.data['Session'])
         return Response("The Session with this id does not exist.")
 
-
-class MyChunkedUploadView(ChunkedUploadView):
-    model = MyChunkedUpload
-    field_name = 'the_file'
-
-    @classmethod
-    def as_view(cls, **initkwargs):
-        view = super().as_view(**initkwargs)
-        view.cls = cls
-        view.initkwargs = initkwargs
-        return csrf_exempt(view)
-
-    def check_permissions(self, request):
-        try:
-            auth = TokenAuthentication().authenticate(request)
-            if auth is None:
-                raise AuthenticationFailed
-        except AuthenticationFailed as e:
-            raise ChunkedUploadError(
-                status=http_status.HTTP_403_FORBIDDEN,
-                detail='Authentication credentials were not provided'
-            )
-
-
-class MyChunkedUploadCompleteView(ChunkedUploadCompleteView):
-    model = MyChunkedUpload
-
-    @classmethod
-    def as_view(cls, **initkwargs):
-        view = super().as_view(**initkwargs)
-        view.cls = cls
-        view.initkwargs = initkwargs
-        return csrf_exempt(view)
-
-    def check_permissions(self, request):
-        try:
-            TokenAuthentication().authenticate(request)
-        except AuthenticationFailed as e:
-            raise ChunkedUploadError(
-                status=http_status.HTTP_403_FORBIDDEN,
-                detail='Authentication credentials were not provided'
-            )
-
-    def on_completion(self, uploaded_file, request):
-        auth = TokenAuthentication()
-        user, token = auth.authenticate(request)
-        print('User:', user, user.id)
-        participant = Participant.objects.get(speaker=user)
-        participant.recording = uploaded_file
-        participant.save()
-        # participant = user.session_participating
-        # user = User.objects.get(pk=user.id)
-        # user.session_participating.recording = uploaded_file
-        # user.recording = uploaded_file
-        # user.save()
-        pass
-
-    def get_response_data(self, chunked_upload, request):
-        return {'message': ("You successfully uploaded '%s' (%s bytes)!" %
-                            (chunked_upload.filename, chunked_upload.offset))}
-
-
-class ChunkedUploadDemo(TemplateView):
-    template_name = 'chunk_uploader.html'
