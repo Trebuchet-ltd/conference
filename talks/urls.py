@@ -17,5 +17,6 @@ urlpatterns = [
     path('session_anon/', views.SessionList.as_view(), name='session_anonymous'),
     path('chunked_upload_complete/', views.MyChunkedUploadCompleteView.as_view(), name='api_chunked_upload_complete'),
     path('chunked_upload/', views.MyChunkedUploadView.as_view(), name='api_chunked_upload'),
+    path('chunked_test/', views.ChunkedUploadDemo.as_view(), name='chunked_upload_test'),
     path('', include(router.urls)),
 ]
