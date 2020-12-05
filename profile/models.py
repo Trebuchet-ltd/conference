@@ -76,4 +76,4 @@ class User(AbstractUser):
     objects = UserManager()
 
     def __str__(self):
-        return f'{self.first_name.capitalize()} {self.last_name.capitalize()}, {self.affiliation.capitalize()}'
+        return f'{self.first_name.title()} {self.last_name.title()}, {self.affiliation.title()}'
