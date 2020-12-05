@@ -48,7 +48,7 @@ class Participant(models.Model):
     status = models.CharField(choices=INVITE_STATES, default='invited', max_length=20)
 
     def __str__(self):
-        return f'{self.title.capitalize()} by {str(self.speaker_name).capitalize()}, {self.affiliation.capitalize()}'
+        return f'{self.title.title()} by {str(self.speaker_name).title()}, {self.affiliation.title()}'
 
 
 class Program(models.Model):
