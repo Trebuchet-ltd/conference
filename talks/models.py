@@ -31,6 +31,10 @@ class Session(models.Model):
         return f'{self.title} - ({self.organiser})'
 
 
+def video_location(instance, filename):
+    return f'static/media/sessions/{filename}'
+
+
 class Participant(models.Model):
     title = models.CharField(max_length=255, null=True)
     speaker_name = models.CharField(max_length=255, null=True)
@@ -46,6 +50,7 @@ class Participant(models.Model):
     email = models.EmailField(unique=True, null=True)
     session = models.ForeignKey(to=Session, on_delete=models.CASCADE, related_name='participants', null=True)
     status = models.CharField(choices=INVITE_STATES, default='invited', max_length=20)
+    recording = models.FileField(upload_to=video_location, null=True, blank=True)
 
     def __str__(self):
         return f'{str(self.speaker_name).title()}, {self.affiliation.title()}'

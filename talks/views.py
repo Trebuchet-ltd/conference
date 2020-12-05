@@ -277,9 +277,14 @@ class MyChunkedUploadCompleteView(ChunkedUploadCompleteView):
         auth = TokenAuthentication()
         user, token = auth.authenticate(request)
         print('User:', user, user.id)
-        user = User.objects.get(pk=user.id)
-        user.recording = uploaded_file
-        user.save()
+        participant = Participant.objects.get(speaker=user)
+        participant.recording = uploaded_file
+        participant.save()
+        # participant = user.session_participating
+        # user = User.objects.get(pk=user.id)
+        # user.session_participating.recording = uploaded_file
+        # user.recording = uploaded_file
+        # user.save()
         pass
 
     def get_response_data(self, chunked_upload, request):
