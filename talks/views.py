@@ -31,6 +31,12 @@ from rest_framework.settings import api_settings
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.generics import ListAPIView
+import re
+from django.shortcuts import get_object_or_404
+from chunked_upload.exceptions import ChunkedUploadError
+from chunked_upload.constants import http_status
+from rest_framework.exceptions import AuthenticationFailed
+from django.views.generic.base import TemplateView
 
 ACCEPTED_ABSTRACT_FILE_TYPES = ['application/pdf']
 
@@ -229,19 +235,23 @@ class MyChunkedUploadView(ChunkedUploadView):
     model = MyChunkedUpload
     field_name = 'the_file'
 
-    @method_decorator(csrf_exempt)
-    def dispatch(self, request, *args, **kwargs):
-        print('CSRF_Exempted.')
-        return super(MyChunkedUploadView, self).dispatch(request, *args, **kwargs)
+    @classmethod
+    def as_view(cls, **initkwargs):
+        view = super().as_view(**initkwargs)
+        view.cls = cls
+        view.initkwargs = initkwargs
+        return csrf_exempt(view)
 
     def check_permissions(self, request):
-        chunk = request.FILES.get(self.field_name)
-        print(chunk)
-        print(self.field_name)
-        print('FILES:', request.FILES)
-        print('POST:', request.POST)
-        # Allow non authenticated users to make uploads
-        pass
+        try:
+            auth = TokenAuthentication().authenticate(request)
+            if auth is None:
+                raise AuthenticationFailed
+        except AuthenticationFailed as e:
+            raise ChunkedUploadError(
+                status=http_status.HTTP_403_FORBIDDEN,
+                detail='Authentication credentials were not provided'
+            )
 
 
 class MyChunkedUploadCompleteView(ChunkedUploadCompleteView):
@@ -252,22 +262,18 @@ class MyChunkedUploadCompleteView(ChunkedUploadCompleteView):
         view = super().as_view(**initkwargs)
         view.cls = cls
         view.initkwargs = initkwargs
-
-        # Note: session based authentication is explicitly CSRF validated,
-        # all other authentication is CSRF exempt.
         return csrf_exempt(view)
 
-    @method_decorator(csrf_exempt)
-    def dispatch(self, request, *args, **kwargs):
-        print('CSRF_Exempted.')
-        return super(MyChunkedUploadCompleteView, self).dispatch(request, *args, **kwargs)
-
     def check_permissions(self, request):
-        # Allow non authenticated users to make uploads
-        pass
+        try:
+            TokenAuthentication().authenticate(request)
+        except AuthenticationFailed as e:
+            raise ChunkedUploadError(
+                status=http_status.HTTP_403_FORBIDDEN,
+                detail='Authentication credentials were not provided'
+            )
 
     def on_completion(self, uploaded_file, request):
-        print('Headers', request.headers)
         auth = TokenAuthentication()
         user, token = auth.authenticate(request)
         print('User:', user, user.id)
@@ -279,3 +285,7 @@ class MyChunkedUploadCompleteView(ChunkedUploadCompleteView):
     def get_response_data(self, chunked_upload, request):
         return {'message': ("You successfully uploaded '%s' (%s bytes)!" %
                             (chunked_upload.filename, chunked_upload.offset))}
+
+
+class ChunkedUploadDemo(TemplateView):
+    template_name = 'chunk_uploader.html'

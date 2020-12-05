@@ -1,0 +1,214 @@
+<html>
+
+<head>
+    <title>django-chunked-upload demo</title>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <meta http-equiv="content-language" content="en">
+    <meta http-equiv="content-language" content="en-us">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- Calculate md5 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/spark-md5/3.0.0/spark-md5.min.js"
+            integrity="sha512-5Cmi5XQym+beE9VUPBgqQnDiUhiY8iJU+uCUbZIdWFmDNI+9u3A7ntfO8fRkigdZCRrbM+DSpSHSXAuOn5Ajbg=="
+            crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+<h1 class="title">
+    better-django-chunked-upload-with-vanilla-js
+</h1>
+<p>
+    Replace the TOKEN in the code if there's auth error.
+</p>
+<input id="chunked_upload" type="file" name="the_file">
+
+<br>
+<br>
+<br>
+<button id="resume">Start / Resume</button>
+<button id="pause">Pause</button>
+
+<p id="progress"></p>
+<div id="messages"></div>
+
+<script type="text/javascript">
+    var md5 = "",
+        form_data = [],
+        latest_offset = 0,
+        pause = true;
+
+    let upload_id = '';
+
+
+    const chunkSize = 100 * 1024;
+    {#const BASE_API_URL = 'http://127.0.0.1:8000/api'#}
+    const BASE_API_URL = 'https://test.trebuchet.one/api'
+    {#const TOKEN = "2d29b8483c6ba6eb76c1ff720a3a498a5802647b";#}
+    const TOKEN = "41f75e7f26941d9be8cf1f68b55a39c2dd573e0b";
+
+    let pauseBtn = document.getElementById("pause");
+    let resumeBtn = document.getElementById("resume");
+    let file_input = document.getElementById("chunked_upload");
+    let progress_element = document.getElementById('progress');
+    let info_element = document.getElementById('messages');
+
+    let progress_bar = '';
+    let chunks = [];
+    let file;
+
+
+    function calculate_md5(file, chunk_size) {
+        var slice = File.prototype.slice || File.prototype.mozSlice || File.prototype.webkitSlice,
+            chunks = chunks = Math.ceil(file.size / chunk_size),
+            current_chunk = 0,
+            spark = new SparkMD5.ArrayBuffer();
+
+        function onload(e) {
+            spark.append(e.target.result);  // append chunk
+            current_chunk++;
+            if (current_chunk < chunks) {
+                read_next_chunk();
+            } else {
+                md5 = spark.end();
+            }
+        }
+
+        function read_next_chunk() {
+            let reader = new FileReader();
+            reader.onload = onload;
+            let start = current_chunk * chunk_size,
+                end = Math.min(start + chunk_size, file.size);
+            reader.readAsArrayBuffer(slice.call(file, start, end));
+        }
+
+        read_next_chunk();
+    }
+
+    function createChunks(file) {
+        let start = 0;
+        let end = file.size;
+        let chunks = [];
+        while (start < end) {
+            let newStart = start + chunkSize;
+            let chunk = new Blob([file.slice(start, newStart)], {'type': file.type});
+            chunks.push(chunk);
+            start = newStart;
+        }
+        console.log("File size:", file.size);
+        console.log("Chunks:", chunks.length);
+        return chunks;
+    }
+
+
+    async function resumeSending(chunks, filename) {
+        console.log("Resuming transmission.")
+        pause = false;
+
+        if (latest_offset === 0) {
+            let firstBlob = chunks[0];
+            let data = new FormData()
+            data.append('the_file', firstBlob, filename);
+
+            try {
+                let response = await axios.post(BASE_API_URL + '/talks/chunked_upload/', data, {
+                    headers: {
+                        'Content-Type': `multipart/form-data;`,
+                        'Authorization': 'Token ' + TOKEN
+                    }
+                })
+                console.log('First response:', response.data)
+                upload_id = response.data['upload_id']
+
+                latest_offset = response.data['offset'];
+                progress_bar = `1/${chunks.length} | =>`
+                progress_element.innerText = progress_bar;
+                console.log(progress_bar)
+            } catch
+                (err) {
+                console.error(err)
+            }
+
+        }
+
+        let index = Math.round(latest_offset / chunkSize);
+
+        try {
+            while (index < chunks.length && !pause) {
+                console.log(latest_offset, index, chunks.length)
+                let blob = chunks[index];
+                let data = new FormData();
+                data.append('the_file', blob, filename);
+                data.append('upload_id', upload_id);
+                let size = blob.size;
+                let end = latest_offset + size - 1;
+                let contentRange = `bytes ${latest_offset}-${end}/${size}`;
+                let resp = await axios.post(BASE_API_URL + '/talks/chunked_upload/', data, {
+                    headers: {
+                        'Content-Type': `multipart/form-data;`,
+                        'Content-Range': contentRange,
+                        'Authorization': 'Token ' + TOKEN
+                    }
+                })
+                latest_offset = resp.data['offset']
+                let progress = '='.repeat(index) + '=>';
+                progress_bar = `${index + 1}/${chunks.length} | ${progress}`;
+                progress_element.innerText = progress_bar;
+                console.log(progress_bar)
+                index++;
+            }
+
+            if (pause)
+                return;
+
+            let formData = new FormData();
+            formData.append('upload_id', upload_id);
+            formData.append('md5', md5)
+            let completeResp = await axios.post(BASE_API_URL + '/talks/chunked_upload_complete/',
+                formData,
+                {
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'Authorization': 'Token ' + TOKEN
+                    }
+                })
+            latest_offset = 0;
+            upload_id = '';
+            info_element.innerText = completeResp.data['message'];
+            progress_bar = progress_bar.replace('>', ' |');
+            progress_element.innerText = progress_bar;
+            console.log(completeResp.data)
+        } catch
+            (err) {
+            console.error(err)
+        }
+
+    }
+
+
+    pauseBtn.onclick = function () {
+        info_element.innerText = 'Upload paused.';
+        pause = true;
+    }
+
+    resumeBtn.onclick = function () {
+        if (chunks.length > 0 && file === file_input.files[0]) {
+            info_element.innerText = `Resuming upload of ${file.name}.`
+            resumeSending(chunks, file_input.files[0].name);
+        } else {
+            latest_offset = 0;
+            file = file_input.files[0]
+            calculate_md5(file, chunkSize);
+            chunks = createChunks(file);
+            info_element.innerText = `Starting upload of ${file.name}.`
+            resumeSending(chunks, file.name);
+        }
+    }
+
+
+</script>
+
+</body>
+
+</html>
