@@ -127,4 +127,11 @@ class SendMail(APIView):
                 _content = content.replace('{participant_presentation}', i.title)
                 send_async_mail(subject, _content, [i.email])
 
+        elif data['recipient'] == 'plenary':
+            users = User.objects.all().filter(is_plenary=True)
+            for i in users:
+                _name = f"{i.first_name} {i.last_name}"
+                _content = content.replace('{name}', _name)
+                send_async_mail(subject, _content, [i.email])
+
         return Response(status.HTTP_200_OK)
