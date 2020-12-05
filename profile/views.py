@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from .models import User
 from papers.models import Paper
 from .serializers import UserSerializer
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.generics import ListAPIView
 from rest_framework.views import APIView
 from string import ascii_lowercase, ascii_uppercase, digits
@@ -52,6 +52,11 @@ def null_view(request):
 def complete_view(request):
     return HttpResponse("Email account is activated")
 
+class AnonPlenaryList(ListAPIView):
+    queryset =  User.objects.all().filter(is_plenary=True)
+    serializer_class = UserSerializer
+    permission_classes = [AllowAny]
+    http_method_names = ["get"]
 
 class ReviewerList(ListAPIView):
     queryset = User.objects.filter(role='reviewer')
@@ -120,6 +125,13 @@ class SendMail(APIView):
                 _content = content.replace('{name}', i.speaker_name)
                 _content = content.replace('{session}', i.session.title)
                 _content = content.replace('{participant_presentation}', i.title)
+                send_async_mail(subject, _content, [i.email])
+
+        elif data['recipient'] == 'plenary':
+            users = User.objects.all().filter(is_plenary=True)
+            for i in users:
+                _name = f"{i.first_name} {i.last_name}"
+                _content = content.replace('{name}', _name)
                 send_async_mail(subject, _content, [i.email])
 
         return Response(status.HTTP_200_OK)
