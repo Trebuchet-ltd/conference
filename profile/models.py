@@ -67,6 +67,7 @@ class User(AbstractUser):
     specialization = models.CharField(max_length=500, default='')
     redundant_role = models.IntegerField(default=0)
     recording = models.FileField(upload_to=video_location, null=True, blank=True)
+    is_plenary = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['phone']
