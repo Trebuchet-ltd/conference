@@ -31,6 +31,7 @@ class Paper(models.Model):
     author = models.OneToOneField(User, on_delete=models.CASCADE, related_name='paper', null=True, blank=True)
     author_poster = models.OneToOneField(User, on_delete=models.CASCADE, related_name='poster', null=True, blank=True)
     submission_time = models.DateTimeField(auto_now=True)
+    display = models.BooleanField(default=True)
 
     def __str__(self):
         return self.title
