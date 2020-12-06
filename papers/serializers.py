@@ -39,8 +39,8 @@ class SmallPaperSerializer(serializers.ModelSerializer):
 
 class PaperSerializer(serializers.ModelSerializer):
     comments = SmallCommentSerializer(many=True, required=False)
-    author_name = SmallUserSerializer(source='author')
-    author_poster_name = SmallUserSerializer(source='author_poster')
+    author_name = SmallUserSerializer(source='author', required=False)
+    author_poster_name = SmallUserSerializer(source='author_poster', required=False)
 
     class Meta:
         model = Paper
