@@ -29,6 +29,12 @@ class SmallPaperSerializer(serializers.ModelSerializer):
         fields = ['id', 'title', 'description', 'author_poster', 'status', 'comments', 'keyword', 'file', 'is_poster',
                   'author', 'abstract']
 
+        extra_kwargs = {
+            'author': {'read_only': True},
+            'author_poster': {'read_only': True},
+            'comments': {'read_only': True, 'required': False},
+
+        }
 
 class PaperSerializer(serializers.ModelSerializer):
     comments = SmallCommentSerializer(many=True, required=False)
