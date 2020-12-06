@@ -68,6 +68,7 @@ class User(AbstractUser):
     redundant_role = models.IntegerField(default=0)
     recording = models.FileField(upload_to=video_location, null=True, blank=True)
     is_plenary = models.BooleanField(default=False)
+    give_exception = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['phone']
