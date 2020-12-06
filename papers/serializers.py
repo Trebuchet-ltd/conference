@@ -36,6 +36,7 @@ class SmallPaperSerializer(serializers.ModelSerializer):
 
         }
 
+
 class PaperSerializer(serializers.ModelSerializer):
     comments = SmallCommentSerializer(many=True, required=False)
     author_name = SmallUserSerializer(source='author')
