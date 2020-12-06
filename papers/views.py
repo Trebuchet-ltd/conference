@@ -116,7 +116,7 @@ class PaperViewset(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     def get_serializer_class(self):
-        print('Paper get serializer:', self.request.user.role, self.action)
+        print('Paper get_serializer_class:', self.request.user.role, self.action)
         if self.request.user.role == 'organiser':
             return OrganiserPaperSerializer
         elif self.request.user.role == 'reviewer':
