@@ -52,7 +52,7 @@ class Participant(models.Model):
     recording = models.FileField(upload_to=video_location, null=True, blank=True)
 
     def __str__(self):
-        return f'{str(self.speaker_name).title()}, {self.affiliation.title()}'
+        return f'{str(self.speaker_name).title()}, {self.affiliation}'
 
 
 class Program(models.Model):
