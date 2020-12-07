@@ -134,6 +134,13 @@ class AnonPaperList(ListAPIView):
     http_method_names = ["get"]
 
 
+class AnonPlenaryList(ListAPIView):
+    queryset = Paper.objects.all().filter(author__is_plenary=True)
+    serializer_class = SmallPaperSerializer
+    permission_classes = [permissions.AllowAny]
+    http_method_names = ["get"]
+
+
 class PaperList(ListAPIView):
     queryset = Paper.objects.all()
     serializer_class = PaperSerializer

@@ -54,7 +54,7 @@ class SessionViewSet(viewsets.ModelViewSet):
 
 
 class SessionList(ListAPIView):
-    queryset = Session.objects.all()
+    queryset = Session.objects.all().filter(status='accepted')
     serializer_class = SmallSessionSerializer
 
 
