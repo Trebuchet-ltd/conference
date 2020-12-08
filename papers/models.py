@@ -12,6 +12,12 @@ REVIEW_STAGES = [
     ('upload paper', 'upload paper'),
 ]
 
+TRACKS = [
+    (1, 1),
+    (2, 2),
+    (3, 3)
+]
+
 
 def media_location(instance, filename):
     if instance.is_poster:
@@ -37,6 +43,8 @@ class Paper(models.Model):
     submission_time = models.DateTimeField(auto_now=True)
     display = models.BooleanField(default=True)
     recording = models.FileField(upload_to=video_location, null=True, blank=True)
+    track = models.IntegerField(choices=TRACKS, null=True, blank=True)
+    time = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return self.title

@@ -52,11 +52,13 @@ def null_view(request):
 def complete_view(request):
     return HttpResponse("Email account is activated")
 
+
 class AnonPlenaryList(ListAPIView):
-    queryset =  User.objects.all().filter(is_plenary=True)
+    queryset = User.objects.all().filter(is_plenary=True)
     serializer_class = UserSerializer
     permission_classes = [AllowAny]
     http_method_names = ["get"]
+
 
 class ReviewerList(ListAPIView):
     queryset = User.objects.filter(role='reviewer')
@@ -95,7 +97,7 @@ class SendMail(APIView):
                 send_async_mail(subject, _content, [i.email])
 
         elif data['recipient'] == 'session_all':
-            users = User.objects.all().filter(session_organising__isnull=False) |\
+            users = User.objects.all().filter(session_organising__isnull=False) | \
                     User.objects.all().filter(session_participating__isnull=False)
             for i in users:
                 _name = f"{i.first_name} {i.last_name}"
