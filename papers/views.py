@@ -135,7 +135,7 @@ class PublicPlenarySpeakersList(ListAPIView):
 
 
 class PublicPaperList(ListAPIView):
-    queryset = Paper.objects.all()
+    queryset = Paper.objects.all().filter(status='accepted', display=True)
     serializer_class = SmallPaperSerializer
     permission_classes = [permissions.AllowAny]
     http_method_names = ["get"]
