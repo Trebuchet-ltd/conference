@@ -131,7 +131,7 @@ class PaperViewset(viewsets.ModelViewSet):
 
 class AnonPaperList(ListAPIView):
     queryset = Paper.objects.all()
-    print('Queryset length:', len(queryset))
+    print('Queryset length [AnonPaperList]:', len(queryset))
     serializer_class = SmallPaperSerializer
     permission_classes = [permissions.AllowAny]
     http_method_names = ["get"]
@@ -139,10 +139,8 @@ class AnonPaperList(ListAPIView):
 
 class AnonPlenaryList(ListAPIView):
     queryset = Paper.objects.filter(author__is_plenary__exact=True)
-    print('Queryset length:', len(queryset))
+    print('Queryset length [AnonPlenaryList]:', len(queryset))
     serializer_class = SmallPaperSerializer
-    permission_classes = [permissions.AllowAny]
-    http_method_names = ["get"]
 
 
 class PaperList(ListAPIView):
