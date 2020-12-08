@@ -140,7 +140,6 @@ class AnonPaperList(ListAPIView):
 class PublicPlenarySpeakersList(ListAPIView):
     queryset = Paper.objects.filter(author__is_plenary__exact=True)
     print('Queryset length [AnonPlenaryList]:', len(queryset))
-    raise Exception('Error')
     serializer_class = SmallPaperSerializer
 
 
