@@ -137,7 +137,7 @@ class AnonPaperList(ListAPIView):
     http_method_names = ["get"]
 
 
-class AnonPlenaryList(ListAPIView):
+class PublicPlenarySpeakersList(ListAPIView):
     queryset = Paper.objects.filter(author__is_plenary__exact=True)
     print('Queryset length [AnonPlenaryList]:', len(queryset))
     serializer_class = SmallPaperSerializer
