@@ -27,7 +27,7 @@ class SmallPaperSerializer(serializers.ModelSerializer):
         model = Paper
         # fields = '__all__'
         fields = ['id', 'title', 'description', 'author_poster', 'status', 'comments', 'keyword', 'file', 'is_poster',
-                  'author', 'abstract','recording']
+                  'author', 'abstract', 'recording', 'is_plenary']
 
         extra_kwargs = {
             'author': {'read_only': True},
@@ -46,7 +46,7 @@ class PaperSerializer(serializers.ModelSerializer):
         model = Paper
         # fields = '__all__'
         fields = ['id', 'title', 'description', 'author_poster', 'status', 'comments', 'keyword', 'file', 'is_poster',
-                  'author', 'abstract', 'author_name', 'author_poster_name','recording']
+                  'author', 'abstract', 'author_name', 'author_poster_name', 'recording']
 
         extra_kwargs = {
             'author': {'read_only': True},
