@@ -128,7 +128,7 @@ class PaperViewset(viewsets.ModelViewSet):
 
 
 class AnonPaperList(ListAPIView):
-    queryset = Paper.objects.all().filter(status='accepted')
+    queryset = Paper.objects.all()
     serializer_class = SmallPaperSerializer
     permission_classes = [permissions.AllowAny]
     http_method_names = ["get"]
