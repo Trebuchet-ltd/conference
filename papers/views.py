@@ -63,7 +63,7 @@ class PaperViewset(viewsets.ModelViewSet):
                 raise serializers.ValidationError(
                     'Filetype not supported. Supported types are: ' + str(ACCEPTED_ABSTRACT_FILE_TYPES))
         paper = serializer.save()
-        paper.status = 'submitted'
+        # paper.status = 'submitted'
         paper.save()
         send_async_mail(
             f'Submission updated successfully!',
