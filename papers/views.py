@@ -134,7 +134,7 @@ class PublicPlenarySpeakersList(ListAPIView):
     serializer_class = SmallPaperSerializer
 
 
-class AnonPaperList(ListAPIView):
+class PublicPaperList(ListAPIView):
     queryset = Paper.objects.all()
     serializer_class = SmallPaperSerializer
     permission_classes = [permissions.AllowAny]
