@@ -63,6 +63,7 @@ class PaperViewset(viewsets.ModelViewSet):
                 raise serializers.ValidationError(
                     'Filetype not supported. Supported types are: ' + str(ACCEPTED_ABSTRACT_FILE_TYPES))
         paper = serializer.save()
+        print(self.request.user.role, 'updating the paper', paper.title)
         if self.request.user.role != 'organiser':
             paper.status = 'submitted'
         paper.save()
@@ -130,6 +131,7 @@ class PaperViewset(viewsets.ModelViewSet):
 
 class AnonPaperList(ListAPIView):
     queryset = Paper.objects.all()
+    print('Queryset length:', len(queryset))
     serializer_class = SmallPaperSerializer
     permission_classes = [permissions.AllowAny]
     http_method_names = ["get"]
@@ -137,6 +139,7 @@ class AnonPaperList(ListAPIView):
 
 class AnonPlenaryList(ListAPIView):
     queryset = Paper.objects.filter(author__is_plenary__exact=True)
+    print('Queryset length:', len(queryset))
     serializer_class = SmallPaperSerializer
     permission_classes = [permissions.AllowAny]
     http_method_names = ["get"]
