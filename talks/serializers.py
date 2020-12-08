@@ -40,7 +40,7 @@ class SmallSessionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Session
-        fields = ["organiser", "title", "desc", "status", "participants"]
+        fields = ['id',"organiser", "title", "desc", "status", "participants"]
         extra_kwargs = {
             'status': {'read_only': True},
         }
