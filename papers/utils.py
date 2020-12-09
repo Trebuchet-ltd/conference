@@ -42,6 +42,6 @@ class BulkEmail(threading.Thread):
 
 def send_bulk_async_mail(objects):
     print(len(objects))
-    BulkEmail.start(objects)
+    BulkEmail(objects).start()
 
 
