@@ -34,13 +34,28 @@ class SessionSerializer(serializers.ModelSerializer):
         }
 
 
+class OrganiserSessionSerializer(serializers.ModelSerializer):
+    participants = serializers.StringRelatedField(many=True, required=False)
+    organiser = serializers.StringRelatedField(required=False)
+
+    class Meta:
+        model = Session
+        fields = '__all__'
+        extra_kwargs = {
+            'status': {'read_only': True},
+            'organiser': {'read_only': True},
+            'participants': {'read_only': True},
+            'title': {'read_only': True},
+        }
+
+
 class SmallSessionSerializer(serializers.ModelSerializer):
     participants = serializers.StringRelatedField(many=True)
     organiser = serializers.StringRelatedField()
 
     class Meta:
         model = Session
-        fields = ['id',"organiser", "title", "desc", "status", "participants"]
+        fields = ['id', "organiser", "title", "desc", "status", "participants"]
         extra_kwargs = {
             'status': {'read_only': True},
         }
