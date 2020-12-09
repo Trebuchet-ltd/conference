@@ -1,4 +1,5 @@
 import threading
+import time
 from threading import Thread
 from django.core.mail import send_mail
 from django.conf import settings
@@ -19,3 +20,28 @@ class EmailThread(threading.Thread):
 def send_async_mail(subject, content, recipient_list):
     print(content)
     EmailThread(subject, content, recipient_list).start()
+
+
+class BulkEmail(threading.Thread):
+    def __init__(self, objects):
+        self.objects = objects
+        threading.Thread.__init__(self)
+
+    def run(self):
+        count = 0
+        for i in self.objects:
+            print(i[1])
+            thre = EmailThread(i[0], i[1], i[2])
+            thre.start()
+            thre.join()
+            time.sleep(3)
+            if count > 50:
+                time.sleep(200)
+            count += 1
+            print(f'Mail to all')
+
+def send_bulk_async_mail(objects):
+    print(len(objects))
+    BulkEmail.start(objects)
+
+
