@@ -16,7 +16,7 @@ from django.conf import settings
 from django.urls import reverse
 from django.core.mail import send_mail
 from papers.permissions import IsOrgnaiser
-from papers.utils import send_async_mail
+from papers.utils import send_async_mail, send_bulk_async_mail
 
 from talks.models import Participant, Session
 
@@ -79,12 +79,15 @@ class SendMail(APIView):
         content = data['content']
         mail_addresses = []
         content_data = []
+        lst=[]
         if data['recipient'] == 'all':
             users = User.objects.all()
             for i in users:
                 _name = f"{i.first_name} {i.last_name}"
                 _content = content.replace('{name}', _name)
-                send_async_mail(subject, _content, [i.email])
+                lst.append([subject, _content, [i.email]])
+            send_bulk_async_mail(lst)
+
 
         elif data['recipient'] == 'paper_all' or data['recipient'] == 'paper_acc':
             users = User.objects.all().filter(paper__isnull=False)
@@ -94,7 +97,8 @@ class SendMail(APIView):
                 _name = f"{i.first_name} {i.last_name}"
                 _content = content.replace('{name}', _name)
                 _content = _content.replace('{paper}', i.paper.title)
-                send_async_mail(subject, _content, [i.email])
+                lst.append([subject, _content, [i.email]])
+            send_bulk_async_mail(lst)
 
         elif data['recipient'] == 'session_all':
             users = User.objects.all().filter(session_organising__isnull=False) | \
@@ -102,7 +106,8 @@ class SendMail(APIView):
             for i in users:
                 _name = f"{i.first_name} {i.last_name}"
                 _content = content.replace('{name}', _name)
-                send_async_mail(subject, _content, [i.email])
+                lst.append([subject, _content, [i.email]])
+            send_bulk_async_mail(lst)
 
         elif data['recipient'] == 'session_org':
             users = User.objects.all().filter(session_organising__isnull=False)
@@ -110,7 +115,8 @@ class SendMail(APIView):
                 _name = f"{i.first_name} {i.last_name}"
                 _content = content.replace('{name}', _name)
                 _content = _content.replace('{session}', i.session_organising.title)
-                send_async_mail(subject, _content, [i.email])
+                lst.append([subject, _content, [i.email]])
+            send_bulk_async_mail(lst)
 
         elif data['recipient'] == 'session_part':
             users = User.objects.all().filter(session_participating__isnull=False)
@@ -119,7 +125,8 @@ class SendMail(APIView):
                 _content = content.replace('{name}', _name)
                 _content = _content.replace('{session}', i.session_participating.session.title)
                 _content = _content.replace('{participant_presentation}', i.session_participating.title)
-                send_async_mail(subject, _content, [i.email])
+                lst.append([subject, _content, [i.email]])
+            send_bulk_async_mail(lst)
 
         elif data['recipient'] == 'session_part_notacc':
             participants = Participant.objects.filter(status='invited')
@@ -127,13 +134,15 @@ class SendMail(APIView):
                 _content = content.replace('{name}', i.speaker_name)
                 _content = content.replace('{session}', i.session.title)
                 _content = content.replace('{participant_presentation}', i.title)
-                send_async_mail(subject, _content, [i.email])
+                lst.append([subject, _content, [i.email]])
+            send_bulk_async_mail(lst)
 
         elif data['recipient'] == 'plenary':
             users = User.objects.all().filter(is_plenary=True)
             for i in users:
                 _name = f"{i.first_name} {i.last_name}"
                 _content = content.replace('{name}', _name)
-                send_async_mail(subject, _content, [i.email])
+                lst.append([subject, _content, [i.email]])
+            send_bulk_async_mail(lst)
 
         return Response(status.HTTP_200_OK)
