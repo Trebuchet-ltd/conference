@@ -25,6 +25,8 @@ class Session(models.Model):
     title = models.CharField(max_length=256)
     desc = models.CharField(max_length=4096, null=True, blank=True, default='')
     status = models.CharField(max_length=10, choices=SESSION_STATUS, default='submitted')
+    track = models.IntegerField(choices=TRACKS, null=True, blank=True)
+    time = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return f'{self.title} - ({self.organiser})'

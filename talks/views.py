@@ -52,6 +52,12 @@ class SessionViewSet(viewsets.ModelViewSet):
     filterset_fields = ['status']
     permission_classes = [IsAuthenticated]
 
+    def get_serializer_class(self):
+        print('Session get_serializer_class:', self.request.user.role, self.action)
+        if self.request.user.role == 'organiser' and self.action == 'update':
+            return OrganiserSessionSerializer
+        return SessionSerializer
+
 
 class SessionList(ListAPIView):
     queryset = Session.objects.all().filter(status='accepted')
@@ -229,3 +235,6 @@ def change_session_status(request):
         print('The Session with this id does not exist.', request.data['Session'])
         return Response("The Session with this id does not exist.")
 
+#
+# @api_view(['GET'])
+# def program_list(request):
