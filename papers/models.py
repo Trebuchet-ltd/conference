@@ -45,6 +45,7 @@ class Paper(models.Model):
     recording = models.FileField(upload_to=video_location, null=True, blank=True)
     track = models.IntegerField(choices=TRACKS, null=True, blank=True)
     time = models.DateTimeField(null=True, blank=True)
+    duration = models.IntegerField(default=0, blank=True)
 
     def __str__(self):
         return self.title
