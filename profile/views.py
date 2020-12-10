@@ -132,8 +132,8 @@ class SendMail(APIView):
             participants = Participant.objects.filter(status='invited')
             for i in participants:
                 _content = content.replace('{name}', i.speaker_name)
-                _content = content.replace('{session}', i.session.title)
-                _content = content.replace('{participant_presentation}', i.title)
+                _content = _content.replace('{session}', i.session.title)
+                _content = _content.replace('{participant_presentation}', i.title)
                 lst.append([subject, _content, [i.email]])
             send_bulk_async_mail(lst)
 
