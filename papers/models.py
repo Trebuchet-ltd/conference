@@ -42,6 +42,7 @@ class Paper(models.Model):
     author_poster = models.OneToOneField(User, on_delete=models.CASCADE, related_name='poster', null=True, blank=True)
     submission_time = models.DateTimeField(auto_now=True)
     display = models.BooleanField(default=True)
+    display_front = models.BooleanField(default=False)
     recording = models.FileField(upload_to=video_location, null=True, blank=True)
     track = models.IntegerField(choices=TRACKS, null=True, blank=True)
     time = models.DateTimeField(null=True, blank=True)
