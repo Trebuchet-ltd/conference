@@ -282,3 +282,30 @@ def change_paper_status(request):
         print(e)
         print('Paper id', request.data['paper'])
         return Response("Paper with this id does not exist.")
+
+@api_view(['POST'])
+@permission_classes((permissions.IsAuthenticated, IsOrgnaiser))
+def paper_to_poster(request):
+    if 'paper' not in request.data:
+        raise ParseError('Fields missing. "paper" required.')
+    try:
+        paper = Paper.objects.get(pk=request.data['paper'])
+        paper.is_poster=True
+        paper.author_poster = paper.author
+        paper.author = None
+        author = paper.author_poster
+        email = author.email
+        name = author.first_name + ' ' + author.first_name
+        paper.save()
+        content = f'Your paper has been accepted as a poster.\nPlease visit https://statconferencecusat.co.in for further updates.'
+        # print(content,email)
+        send_async_mail(f'Updates on your submission to ISBIS 2020',
+                f'Dear {name},\n\n' + content + MAIL_FOOTER,
+                [email]
+        )
+        serializer = PaperSerializer(paper)
+        return Response(serializer.data)
+    except Paper.DoesNotExist as e:
+        print(e)
+        print('The Paper with this id does not exist.', request.data['paper'])
+        return Response("The Paper with this id does not exist.")

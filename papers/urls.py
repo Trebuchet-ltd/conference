@@ -16,5 +16,6 @@ urlpatterns = [
     url('review/', views.review_paper, name='review'),
     url('change/', views.change_paper_status, name='change'),
     url('posters/', views.PosterList.as_view()),
+    url('change_paper/', views.paper_to_poster, name='change paper'),
     path('', include(router.urls)),
 ]

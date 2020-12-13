@@ -32,6 +32,8 @@ urlpatterns = [
     path('api/notification/', include('notification.urls')),
     path('api/chat/', include('chat.urls')),
     path('api/uploads/', include('uploads.urls')),
+    path('api/stream/', include('stream.urls')),
+
 ]
 #
 # url(r'^accounts-rest/registration/account-confirm-email/(?P<key>.+)/$', confirm_email,
