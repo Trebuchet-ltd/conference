@@ -8,6 +8,7 @@ INVITE_STATES = [
 ]
 
 TRACKS = [
+    (0, 'Track 0'),
     (1, 'Track 1'),
     (2, 'Track 2'),
     (3, 'Track 3'),
