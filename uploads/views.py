@@ -52,7 +52,7 @@ class FileChunkedUploadCompleteView(ChunkedUploadCompleteView):
         print(chunked_upload.md5)
         if chunked_upload.md5 != md5:
             raise ChunkedUploadError(status=http_status.HTTP_400_BAD_REQUEST,
-                                     detail='md5 checksum does not match')
+                                     detail=f'md5 checksum does not match. Venda saanam: {chunked_upload.md5}')
 
     def check_permissions(self, request):
         try:
