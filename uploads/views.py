@@ -45,6 +45,15 @@ class FileChunkedUploadCompleteView(ChunkedUploadCompleteView):
         view.initkwargs = initkwargs
         return csrf_exempt(view)
 
+    def md5_check(self, chunked_upload, md5):
+        """
+        Verify if md5 checksum sent by client matches generated md5.
+        """
+        print(chunked_upload.md5)
+        if chunked_upload.md5 != md5:
+            raise ChunkedUploadError(status=http_status.HTTP_400_BAD_REQUEST,
+                                     detail='md5 checksum does not match')
+
     def check_permissions(self, request):
         try:
             TokenAuthentication().authenticate(request)
