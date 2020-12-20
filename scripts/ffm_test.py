@@ -18,8 +18,8 @@ convert = conv.convert('test.mp4', '.output.mp4', {
     },
     'video': {
         'codec': 'hevc',
-        'width': 720,
-        'height': 400,
+        'width': 640,
+        'height': 480,
         'fps': 60
     }})
 
