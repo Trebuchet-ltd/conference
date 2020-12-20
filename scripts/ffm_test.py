@@ -9,7 +9,7 @@ conv = Converter()
 
 info = conv.probe('test.mp4')
 
-convert = conv.convert('test.mp4', '.output.mp4', {
+convert = conv.convert('test.mp4', 'output.mp4', {
     'format': 'mp4',
     'audio': {
         'codec': 'aac',
