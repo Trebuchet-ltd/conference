@@ -29,9 +29,10 @@ prev = 0
 print(info)
 print('Starting conversion.')
 i = 0
+progress = ['-', '\\', '|', '/']
 for timecode in convert:
     if timecode - prev >= 0.01:
-        print(f'\rConverting {timecode * 100:.0f}%{"." * (i % 3 + 1)}    ', end='', flush=True)
+        print(f'\rConverting {timecode * 100:.0f}% * {progress[i % 4]} *   ', end='', flush=True)
     prev = timecode
     i += 1
 
