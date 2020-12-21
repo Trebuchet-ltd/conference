@@ -31,7 +31,7 @@ print('Starting conversion.')
 i = 0
 for timecode in convert:
     if timecode - prev >= 0.01:
-        print(f'\rConverting {timecode * 100:.0f}%{"." * (i % 3)} ', end='', flush=True)
+        print(f'\rConverting {timecode * 100:.0f}%{"." * (i % 3)}    ', end='', flush=True)
     prev = timecode
     i += 1
 
