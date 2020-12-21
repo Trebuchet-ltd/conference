@@ -25,5 +25,8 @@ convert = conv.convert(file_name, 'output.mp4', {
         'fps': 60
     }})
 
+prev = 0
 for timecode in convert:
-    print(f'\rConverting ({timecode:.2f}) ...')
+    if timecode - prev >= 0.01:
+        print(f'\rConverting ({timecode:.2f}) ...')
+    prev = timecode
