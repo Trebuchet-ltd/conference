@@ -30,7 +30,7 @@ print(info)
 print('Starting conversion.')
 for timecode in convert:
     if timecode - prev >= 0.01:
-        print(f'\rConverting ({timecode:.2f}) ... ', flush=True)
+        print(f'\rConverting ({timecode:.2f}) ... ', end='', flush=True)
     prev = timecode
 
 print('Completed.')
