@@ -7,9 +7,11 @@ from converter import Converter
 
 conv = Converter()
 
-info = conv.probe('test.mp4')
+file_name = 'test.mkv'
 
-convert = conv.convert('test.mp4', 'output.mp4', {
+info = conv.probe(file_name)
+
+convert = conv.convert(file_name, 'output.mp4', {
     'format': 'mp4',
     'audio': {
         'codec': 'aac',
