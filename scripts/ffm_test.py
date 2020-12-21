@@ -26,7 +26,11 @@ convert = conv.convert(file_name, 'output.mp4', {
     }})
 
 prev = 0
+print(info)
+print('Starting conversion.')
 for timecode in convert:
     if timecode - prev >= 0.01:
-        print(f'\rConverting ({timecode:.2f}) ...')
+        print(f'\rConverting ({timecode:.2f}) ... \r')
     prev = timecode
+
+print('Completed.')
