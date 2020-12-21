@@ -30,7 +30,7 @@ print(info)
 print('Starting conversion.')
 i = 0
 progress = ['-', '\\', '|', '/']
-emotes = ['└|∵|┐ ( ͡°ᴥ ͡° ʋ)', '┌|∵|┘ (ʋ  ͡°ᴥ ͡° )']
+emotes = ['└|∵|┐ ( ͡°ᴥ ͡° ʋ)', '┌|∵|┘ (ʋ  ͡°ᴥ ͡°)']
 for timecode in convert:
     if timecode - prev >= 0.01:
         print(f'\rConverting {timecode * 100:.0f}% * {progress[i % 4]} * {emotes[i%2]}  ', end='', flush=True)
