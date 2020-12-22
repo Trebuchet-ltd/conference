@@ -32,8 +32,10 @@ class StreamViewSet(viewsets.ModelViewSet):
         data = Stream.objects.get(track=track)
         if (data.current_stream==data.link):
             payload = {'Stream': data.current_stream, 'Title': data.title , 'Type':"Link"}
-        else:
+        elif (data.current_stream==data.live_server1 or data.current_stream==data.live_server2 ):
             payload = {'Stream': data.current_stream, 'Title': data.title , 'Type':"Live"}
+        else:
+            payload = {'Stream': "", 'Title': "", 'Type': "Poster"}
         return Response(payload)
 
     @action(detail=True, methods=['post'])
