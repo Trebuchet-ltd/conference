@@ -30,7 +30,10 @@ class StreamViewSet(viewsets.ModelViewSet):
     def current_stream(self, request, pk=None):
         track = request.query_params.get('track')
         data = Stream.objects.get(track=track)
-        payload = {'Stream': data.current_stream, 'Title': data.title}
+        if (data.current_stream==data.link):
+            payload = {'Stream': data.current_stream, 'Title': data.title , 'Type':"Link"}
+        else:
+            payload = {'Stream': data.current_stream, 'Title': data.title , 'Type':"Live"}
         return Response(payload)
 
     @action(detail=True, methods=['post'])
@@ -42,6 +45,7 @@ class StreamViewSet(viewsets.ModelViewSet):
         if 'title' in request.data:
             title = request.data['title']
             stream_model.title = title
+            stream_model.save()
         try:
             type = request.data['type']
             if type == "live":
