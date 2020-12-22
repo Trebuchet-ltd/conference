@@ -36,6 +36,7 @@ class StreamViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['post'])
     def set_stream(self, request, pk=None):
         print(request.data)
+        print(request.POST)
         track = request.data['track']
         stream_model = Stream.objects.get(track=track)
         if 'title' in request.data:
@@ -61,3 +62,4 @@ class StreamViewSet(viewsets.ModelViewSet):
         except Exception as e:
             print(e)
             print("No data")
+            return Response(status.HTTP_200_OK)
