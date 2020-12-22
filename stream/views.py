@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
-from rest_framework.decorators import action, api_view
+from rest_framework.decorators import action, api_view , permission_classes
 import requests
 from rest_framework.response import Response
 from rest_framework import viewsets
@@ -14,6 +14,8 @@ import hmac
 import hashlib
 import codecs
 from django.shortcuts import redirect
+from rest_framework import permissions, viewsets
+import json
 
 # Create your views here.
 class StreamViewSet(viewsets.ModelViewSet):
@@ -27,13 +29,19 @@ class StreamViewSet(viewsets.ModelViewSet):
     def current_stream(self, request, pk=None):
         track = request.query_params.get('track')
         data = Stream.objects.get(track=track)
-        return Response(data.current_stream)
+        payload  = {'Stream':data.current_stream,'Title':data.title}
+        return Response(payload)
 
     @action(detail=True, methods=['post'])
     def set_stream(self, request, pk=None):
         type = request.data['type']
         track = request.data['track']
         stream_model = Stream.objects.get(track=track)
+        try:
+            title = request.data['title']
+            stream_model.title = title
+        except Exception as e:
+            print("No title")
         if type=="live":
             live_server = int(request.data['server'])
             if live_server==1:
@@ -46,6 +54,7 @@ class StreamViewSet(viewsets.ModelViewSet):
         elif type=="link":
             stream_model.link = request.data['link']
             stream_model.current_stream = request.data['link']
+            stream_model.title=title
             stream_model.save()
             return Response(status.HTTP_200_OK)
         return Response(status.HTTP_400_BAD_REQUEST)

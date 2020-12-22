@@ -7,4 +7,5 @@ class Stream(models.Model):
     live_server1 = models.CharField(max_length=255)
     live_server2 = models.CharField(max_length=255)
     link = models.CharField(max_length=255)
+    title = models.CharField(max_length=255)
     current_stream = models.CharField(max_length=255)
