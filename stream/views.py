@@ -35,6 +35,7 @@ class StreamViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['post'])
     def set_stream(self, request, pk=None):
+        print(request.data)
         track = request.data['track']
         stream_model = Stream.objects.get(track=track)
         if 'title' in request.data:
