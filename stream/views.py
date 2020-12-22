@@ -31,9 +31,9 @@ class StreamViewSet(viewsets.ModelViewSet):
         track = request.query_params.get('track')
         data = Stream.objects.get(track=track)
         if (data.current_stream == data.link):
-            payload = {'Stream': data.current_stream, 'Title': data.title, 'Type': "Link"}
+            payload = {'Stream': data.current_stream, 'Title': data.title, 'Type': "Link",'Seek':data.seek}
         elif (data.current_stream == data.live_server1 or data.current_stream == data.live_server2):
-            payload = {'Stream': data.current_stream, 'Title': data.title, 'Type': "Live"}
+            payload = {'Stream': data.current_stream, 'Title': data.title, 'Type': "Live",'Seek':data.seek}
         else:
             payload = {'Stream': "", 'Title': "", 'Type': "Poster"}
         return Response(payload)
