@@ -1,34 +1,59 @@
-import cv2
+from converter import Converter
 
-cap = cv2.VideoCapture('test.mp4')
+PROGRESS_LOADER = ['-', '\\', '|', '/']
+EMOTES = ['└|∵|┐ ( ͡°ᴥ ͡° ʋ)', '┌|∵|┘ (ʋ  ͡°ᴥ ͡°)']
 
-OUTPUT_SIZE = (640, 480)
+VIDEO_OUTPUT_CONFIG = {
+    '144p': {
+        'codec': 'hevc',
+        'width': 256,
+        'height': 144,
+        'fps': 60
+    },
+    '360p': {
+        'codec': 'hevc',
+        'width': 640,
+        'height': 360,
+        'fps': 60
+    },
+    '720p': {
+        'codec': 'hevc',
+        'width': 1280,
+        'height': 720,
+        'fps': 60
+    },
 
-VIDEO_FORMAT_CODEC = {
-    'mp4': 'mp4v',
-    'avi': 'XVID'
 }
 
-OUTPUT_FORMAT = 'mp4'
+OUTPUT_CONFIG = {
+    'format': 'mp4',
+    'audio': {
+        'codec': 'aac',
+        'samplerate': 11025,
+        'channels': 2
+    },
+}
 
-fourcc = cv2.VideoWriter_fourcc(*VIDEO_FORMAT_CODEC[OUTPUT_FORMAT])
-out = cv2.VideoWriter(f'output.{OUTPUT_FORMAT}', fourcc, 60, OUTPUT_SIZE)
 
-# dims = []
-# if cap.isOpened():
-#     width = cap.get(cv2.CAP_PROP_FRAME_WIDTH)  # float
-#     height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)  # float
-#     dims.append((width, height))
-#
-# print(dims)
-while True:
-    ret, frame = cap.read()
-    if ret:
-        b = cv2.resize(frame, OUTPUT_SIZE, fx=0, fy=0, interpolation=cv2.INTER_CUBIC)
-        out.write(b)
-    else:
-        break
+def get_resolutions(file_name):
+    print('Converting file:', file_name)
+    for res in VIDEO_OUTPUT_CONFIG:
+        prev = 0
+        i = 0
+        conv = Converter()
+        output_file_name = file_name.split('.')[0] + '_' + res + '.mp4'
+        OUTPUT_CONFIG['video'] = VIDEO_OUTPUT_CONFIG[res]
+        convert = conv.convert(file_name, output_file_name, OUTPUT_CONFIG)
+        print('Converting to resolution:', res)
+        for timecode in convert:
+            if timecode - prev >= 0.01:
+                print(f'\rConverting {timecode * 100:.0f}% * {PROGRESS_LOADER[i % 4]} * {EMOTES[i % 2]}  ', end='',
+                      flush=True)
+            prev = timecode
+            i += 1
+        print('Writing to file:', output_file_name)
+        print('Completed.')
 
-cap.release()
-out.release()
-cv2.destroyAllWindows()
+
+if __name__ == '__main__':
+    get_resolutions('test.mkv')
