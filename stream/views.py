@@ -63,6 +63,7 @@ class StreamViewSet(viewsets.ModelViewSet):
                 return Response(status.HTTP_200_OK)
             elif type == "link":
                 stream_model.link = request.data['link']
+                stream_model.seek = int(seek)
                 stream_model.current_stream = request.data['link']
                 stream_model.save()
                 return Response(status.HTTP_200_OK)
