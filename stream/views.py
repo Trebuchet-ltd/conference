@@ -54,10 +54,10 @@ class StreamViewSet(viewsets.ModelViewSet):
             if type == "live":
                 live_server = int(request.data['server'])
                 stream_model.seek = int(seek)
-                if live_server == 1:
+                if live_server == "1":
                     stream_model.current_stream = stream_model.live_server1
                     stream_model.save()
-                elif live_server == 2:
+                elif live_server == "2":
                     stream_model.current_stream = stream_model.live_server2
                     stream_model.save()
                 return Response(status.HTTP_200_OK)
