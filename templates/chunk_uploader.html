@@ -132,7 +132,7 @@
 
         }
 
-        let index = Math.round(latest_offset / chunkSize);
+        let index = Math.max(1, Math.round(latest_offset / chunkSize));
 
         try {
             while (index < chunks.length && !pause) {
