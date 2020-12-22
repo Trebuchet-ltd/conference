@@ -50,8 +50,8 @@ def get_resolutions(file_name):
                       flush=True)
             prev = timecode
             i += 1
-        print('Completed.                                   ')
-        print('\rWriting to file:', output_file_name)
+        print('\rCompleted.                                   ')
+        print('Writing to file:', output_file_name)
 
 
 if __name__ == '__main__':
