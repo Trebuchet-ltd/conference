@@ -5,19 +5,19 @@ EMOTES = ['└|∵|┐ ( ͡°ᴥ ͡° ʋ)', '┌|∵|┘ (ʋ  ͡°ᴥ ͡°)']
 
 VIDEO_OUTPUT_CONFIG = {
     '144p': {
-        'codec': 'hevc',
+        'codec': 'h264',
         'width': 256,
         'height': 144,
         'fps': 60
     },
     '360p': {
-        'codec': 'hevc',
+        'codec': 'h264',
         'width': 640,
         'height': 360,
         'fps': 60
     },
     '720p': {
-        'codec': 'hevc',
+        'codec': 'h264',
         'width': 1280,
         'height': 720,
         'fps': 60
@@ -51,7 +51,7 @@ def get_resolutions(file_name):
                       flush=True)
             prev = timecode
             i += 1
-        print('Writing to file:', output_file_name)
+        print('\rWriting to file:', output_file_name)
         print('Completed.')
 
 
