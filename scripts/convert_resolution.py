@@ -46,7 +46,7 @@ def get_resolutions(file_name):
         convert = conv.convert(file_name, output_file_name, OUTPUT_CONFIG)
         print('Converting to resolution:', res)
         for timecode in convert:
-            print(f'\rConverting {timecode * 100:.0f}% * {PROGRESS_LOADER[i % 4]} * {EMOTES[i % 2]}  ', end='',
+            print(f'\rConverting {timecode * 100:.1f}% * {PROGRESS_LOADER[i % 4]} * {EMOTES[i % 2]}  ', end='',
                       flush=True)
             prev = timecode
             i += 1
