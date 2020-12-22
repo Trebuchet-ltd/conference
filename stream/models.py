@@ -9,3 +9,4 @@ class Stream(models.Model):
     link = models.CharField(max_length=255)
     title = models.CharField(max_length=255)
     current_stream = models.CharField(max_length=255)
+    seek=models.IntegerField(default=0)

@@ -30,10 +30,10 @@ class StreamViewSet(viewsets.ModelViewSet):
     def current_stream(self, request, pk=None):
         track = request.query_params.get('track')
         data = Stream.objects.get(track=track)
-        if (data.current_stream==data.link):
-            payload = {'Stream': data.current_stream, 'Title': data.title , 'Type':"Link"}
-        elif (data.current_stream==data.live_server1 or data.current_stream==data.live_server2 ):
-            payload = {'Stream': data.current_stream, 'Title': data.title , 'Type':"Live"}
+        if (data.current_stream == data.link):
+            payload = {'Stream': data.current_stream, 'Title': data.title, 'Type': "Link"}
+        elif (data.current_stream == data.live_server1 or data.current_stream == data.live_server2):
+            payload = {'Stream': data.current_stream, 'Title': data.title, 'Type': "Live"}
         else:
             payload = {'Stream': "", 'Title': "", 'Type': "Poster"}
         return Response(payload)
@@ -50,8 +50,10 @@ class StreamViewSet(viewsets.ModelViewSet):
             stream_model.save()
         try:
             type = request.data['type']
+            seek = request.data['seek']
             if type == "live":
                 live_server = int(request.data['server'])
+                stream_model.seek = int(seek)
                 if live_server == 1:
                     stream_model.current_stream = stream_model.live_server1
                     stream_model.save()
