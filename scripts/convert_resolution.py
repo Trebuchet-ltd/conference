@@ -1,4 +1,5 @@
 from converter import Converter
+import sys
 
 PROGRESS_LOADER = ['-', '\\', '|', '/']
 EMOTES = ['└|∵|┐ ( ͡°ᴥ ͡° ʋ)', '┌|∵|┘ (ʋ  ͡°ᴥ ͡°)']
@@ -47,12 +48,21 @@ def get_resolutions(file_name):
         print('Converting to resolution:', res)
         for timecode in convert:
             print(f'\rConverting {timecode * 100:.1f}% * {PROGRESS_LOADER[i % 4]} * {EMOTES[i % 2]}  ', end='',
-                      flush=True)
+                  flush=True)
             prev = timecode
             i += 1
-        print('\rCompleted.                                   ')
+        print('\rConversion completed.                                   ')
         print('Writing to file:', output_file_name)
 
 
 if __name__ == '__main__':
-    get_resolutions('test.mkv')
+    file = 'test.mkv'
+
+    if len(sys.argv) > 1:
+        file = sys.argv[1]
+
+    ext = file.split('.')[-1]
+    if ext not in ['mkv', 'mp4']:
+        print(file, 'does not seem to be a video. Skipping.')
+    else:
+        get_resolutions(file)
