@@ -26,8 +26,6 @@ VIDEO_OUTPUT_CONFIG = {
 
 }
 
-
-
 OUTPUT_CONFIG = {
     'format': 'mp4',
     'audio': {
@@ -47,7 +45,7 @@ def get_info(conv, file_name):
         return info.video.video_width / info.video.video_height
     else:
         for stream in info.streams:
-            if stream.width is not None:
+            if stream.type == 'video':
                 print('2')
                 print(stream.width, stream.height)
                 return stream.width / stream.height
