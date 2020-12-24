@@ -45,7 +45,6 @@ def get_resolutions(file_name):
         print(f'Input resolution of {info.video.video_width}x{info.video.video_height} is not 16:9. Skipping.')
         return
 
-    print('Converting file:', file_name)
     for res in VIDEO_OUTPUT_CONFIG:
         i = 0
         output_file_name = file_name.split('.')[0] + '_' + res + '.mp4'
@@ -65,6 +64,7 @@ if __name__ == '__main__':
 
     if len(sys.argv) > 1:
         file = sys.argv[1]
+    print('Current file:', file_name)
 
     ext = file.split('.')[-1]
     if ext not in ['mkv', 'mp4']:
