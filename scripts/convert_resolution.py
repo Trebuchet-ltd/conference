@@ -40,6 +40,7 @@ OUTPUT_CONFIG = {
 
 def get_info(conv, file_name):
     info = conv.probe(file_name)
+    print(info)
     if info.video.video_width is not None:
         print('1')
         print(info.video.video_width, info.video.video_height)
