@@ -11,18 +11,18 @@ VIDEO_OUTPUT_CONFIG = {
         'height': 144,
         'fps': 60
     },
-    'mid': {
-        'codec': 'h264',
-        'width': 640,
-        'height': 360,
-        'fps': 60
-    },
-    'high': {
-        'codec': 'h264',
-        'width': 1280,
-        'height': 720,
-        'fps': 60
-    },
+    # 'mid': {
+    #     'codec': 'h264',
+    #     'width': 640,
+    #     'height': 360,
+    #     'fps': 60
+    # },
+    # 'high': {
+    #     'codec': 'h264',
+    #     'width': 1280,
+    #     'height': 720,
+    #     'fps': 60
+    # },
 
 }
 
