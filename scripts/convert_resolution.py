@@ -47,7 +47,7 @@ def get_resolutions(file_name):
 
     for res in VIDEO_OUTPUT_CONFIG:
         i = 0
-        output_file_name = file_name.split('.')[0] + '_' + res + '.mp4'
+        output_file_name = '.'.join(file_name.split('.')[:-1]) + '_' + res + '.mp4'
         OUTPUT_CONFIG['video'] = VIDEO_OUTPUT_CONFIG[res]
         convert = conv.convert(file_name, output_file_name, OUTPUT_CONFIG)
         print('Converting to', res, 'res.')
