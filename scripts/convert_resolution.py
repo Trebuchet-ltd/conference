@@ -5,19 +5,19 @@ PROGRESS_LOADER = ['-', '\\', '|', '/']
 EMOTES = ['└|∵|┐ ( ͡°ᴥ ͡° ʋ)', '┌|∵|┘ (ʋ  ͡°ᴥ ͡°)']
 
 VIDEO_OUTPUT_CONFIG = {
-    '144p': {
+    'low': {
         'codec': 'h264',
         'width': 256,
         'height': 144,
         'fps': 60
     },
-    '360p': {
+    'mid': {
         'codec': 'h264',
         'width': 640,
         'height': 360,
         'fps': 60
     },
-    '720p': {
+    'high': {
         'codec': 'h264',
         'width': 1280,
         'height': 720,
@@ -37,19 +37,24 @@ OUTPUT_CONFIG = {
 
 
 def get_resolutions(file_name):
+    conv = Converter()
+    print('Checking input video aspect ratio.')
+    info = conv.probe(file_name)
+    asp_ratio = info.video.video_width / info.video.video_height
+    if asp_ratio != (16 / 9):
+        print(f'Input resolution of {info.video.video_width}x{info.video.video_height} is not 16:9. Skipping.')
+        return
+
     print('Converting file:', file_name)
     for res in VIDEO_OUTPUT_CONFIG:
-        prev = 0
         i = 0
-        conv = Converter()
         output_file_name = file_name.split('.')[0] + '_' + res + '.mp4'
         OUTPUT_CONFIG['video'] = VIDEO_OUTPUT_CONFIG[res]
         convert = conv.convert(file_name, output_file_name, OUTPUT_CONFIG)
-        print('Converting to resolution:', res)
+        print('Converting to', res, 'res.')
         for timecode in convert:
             print(f'\rConverting {timecode * 100:.1f}% * {PROGRESS_LOADER[i % 4]} * {EMOTES[i % 2]}  ', end='',
                   flush=True)
-            prev = timecode
             i += 1
         print('\rConversion completed.                                   ')
         print('Writing to file:', output_file_name)
