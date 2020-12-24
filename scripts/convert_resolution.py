@@ -40,7 +40,8 @@ def get_resolutions(file_name):
     conv = Converter()
     print('Checking input video aspect ratio.')
     info = conv.probe(file_name)
-    asp_ratio = info.video.video_width / info.video.video_height
+    print(info)
+    # asp_ratio = info.video.video_width / info.video.video_height
     # if asp_ratio != (16 / 9):
     #     print(f'Input resolution of {info.video.video_width}x{info.video.video_height} is not 16:9. Skipping.')
     #     return
