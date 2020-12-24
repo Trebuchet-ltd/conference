@@ -5,18 +5,18 @@ PROGRESS_LOADER = ['-', '\\', '|', '/']
 EMOTES = ['└|∵|┐ ( ͡°ᴥ ͡° ʋ)', '┌|∵|┘ (ʋ  ͡°ᴥ ͡°)']
 
 VIDEO_OUTPUT_CONFIG = {
-    'low': {
-        'codec': 'h264',
-        'width': 256,
-        'height': 144,
-        'fps': 60
-    },
-    # 'mid': {
+    # 'low': {
     #     'codec': 'h264',
-    #     'width': 640,
-    #     'height': 360,
+    #     'width': 256,
+    #     'height': 144,
     #     'fps': 60
     # },
+    'mid': {
+        'codec': 'h264',
+        'width': 640,
+        'height': 360,
+        'fps': 60
+    },
     # 'high': {
     #     'codec': 'h264',
     #     'width': 1280,
