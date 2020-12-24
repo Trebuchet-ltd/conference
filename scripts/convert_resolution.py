@@ -47,8 +47,8 @@ def get_info(conv, file_name):
         for stream in info.streams:
             if stream.type == 'video':
                 print('2')
-                print(stream.width, stream.height)
-                return stream.width / stream.height
+                print(stream.video_width, stream.video_height)
+                return stream.video_width / stream.video_height
 
 
 # def get_resolutions(file_name):
