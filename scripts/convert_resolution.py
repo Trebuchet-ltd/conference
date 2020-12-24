@@ -40,13 +40,13 @@ OUTPUT_CONFIG = {
 
 def get_info(conv, file_name):
     info = conv.probe(file_name)
-    if info.video:
+    if info.video.video_width is not None:
         print('1')
         print(info.video.video_width, info.video.video_height)
         return info.video.video_width / info.video.video_height
     else:
         for stream in info.streams:
-            if stream.width:
+            if stream.width is not None:
                 print('2')
                 print(stream.width, stream.height)
                 return stream.width / stream.height
