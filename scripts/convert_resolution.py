@@ -38,15 +38,14 @@ OUTPUT_CONFIG = {
 
 def get_info(conv, file_name):
     info = conv.probe(file_name)
-    print(info)
     if info.video.video_width is not None:
-        print('1')
+        # print('1')
         print(info.video.video_width, info.video.video_height)
         return info.video.video_width / info.video.video_height
     else:
         for stream in info.streams:
             if stream.type == 'video':
-                print('2')
+                # print('2')
                 print(stream.video_width, stream.video_height)
                 return stream.video_width / stream.video_height
 
@@ -89,5 +88,4 @@ if __name__ == '__main__':
     else:
         conv = Converter()
         asp = get_info(conv, file)
-        print('Aspect:', asp)
         # get_resolutions(file)
