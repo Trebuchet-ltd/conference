@@ -64,7 +64,8 @@ if __name__ == '__main__':
 
     if len(sys.argv) > 1:
         file = sys.argv[1]
-    print('Current file:', file_name)
+
+    print('\nCurrent file:', file_name)
 
     ext = file.split('.')[-1]
     if ext not in ['mkv', 'mp4']:
