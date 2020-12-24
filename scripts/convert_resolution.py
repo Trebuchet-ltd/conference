@@ -68,7 +68,7 @@ if __name__ == '__main__':
     print('\nCurrent file:', file)
 
     ext = file.split('.')[-1]
-    if ext not in ['mkv', 'mp4']:
+    if ext.lower() not in ['mkv', 'mp4']:
         print(file, 'does not seem to be a video. Skipping.')
     else:
         get_resolutions(file)
