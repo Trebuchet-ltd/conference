@@ -8,7 +8,7 @@ class SmallUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'first_name', 'last_name', 'payment_status', 'nationality', 'designation', 'affiliation',
-                  'highest_degree', 'subject', 'specialization']
+                  'highest_degree', 'subject', 'specialization','is_plenary']
 
 
 class SmallCommentSerializer(serializers.ModelSerializer):
