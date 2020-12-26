@@ -5,6 +5,7 @@ import logging
 
 logging.basicConfig(filename='logs.txt', filemode='w', format='%(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
+logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
 logging.info('Admin logged in')
 
 PROGRESS_LOADER = ['-', '\\', '|', '/']
