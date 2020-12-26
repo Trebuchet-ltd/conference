@@ -82,11 +82,11 @@ def get_resolutions(file_name):
         logging.info(config[res])
         # convert = conv.convert(file_name, output_file_name, OUTPUT_CONFIG)
         # for time_code in convert:
-        #     logging.info(f'\rConverting {time_code * 100:.1f}% * {PROGRESS_LOADER[i % 4]} * {EMOTES[i % 2]}  ', end='',
+        #     print(f'\rConverting {time_code * 100:.1f}% * {PROGRESS_LOADER[i % 4]} * {EMOTES[i % 2]}  ', end='',
         #           flush=True)
         #     i += 1
         logging.info('\rConversion completed.                                   ')
-        logging.info('Writing to file:', output_file_name)
+        logging.info(f'Writing to file: {output_file_name}')
 
 
 if __name__ == '__main__':
@@ -95,10 +95,10 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         file = sys.argv[1]
 
-    logging.info('\nCurrent file:', file)
+    logging.info(f'\nCurrent file: {file}')
 
     ext = file.split('.')[-1]
     if ext.lower() not in ['mkv', 'mp4']:
-        logging.info(file, 'does not seem to be a video. Skipping.')
+        logging.info(f'{file} does not seem to be a video. Skipping.')
     else:
         get_resolutions(file)
