@@ -24,13 +24,13 @@ def get_info(conv, file_name):
     info = conv.probe(file_name)
     if info.video.video_width is not None:
         logging.info(f'Resolution: {info.video.video_width}x{info.video.video_height} '
-              f'\tAspect Ratio: {Fraction(info.video.video_width, info.video.video_height)}')
+                     f'\tAspect Ratio: {Fraction(info.video.video_width, info.video.video_height)}')
         return info.video.video_width / info.video.video_height
     else:
         for stream in info.streams:
             if stream.type == 'video':
                 logging.info(f'Resolution: {stream.video_width}x{stream.video_height} '
-                      f'\tAspect Ratio: {Fraction(stream.video_width, stream.video_height)}')
+                             f'\tAspect Ratio: {Fraction(stream.video_width, stream.video_height)}')
                 return stream.video_width / stream.video_height
 
 
@@ -75,6 +75,7 @@ def get_resolutions(file_name):
     config = get_output_config(asp_ratio)
     for res in config:
         i = 0
+        last_log_progress = 0
         output_file_name = '.'.join(file_name.split('.')[:-1]) + '_' + res + '.mp4'
         OUTPUT_CONFIG['video'] = config[res]
         logging.info(f'Converting to {res}, res. [{config[res]["width"]}x{config[res]["height"]}]')
@@ -82,6 +83,9 @@ def get_resolutions(file_name):
         for time_code in convert:
             print(f'\rConverting {time_code * 100:.1f}% * {PROGRESS_LOADER[i % 4]} * {EMOTES[i % 2]}  ', end='',
                   flush=True)
+            if time_code - last_log_progress >= 5:
+                logging.info(f'Progress: {time_code * 100:.1f}%')
+                last_log_progress = time_code
             i += 1
         logging.info('\rConversion completed.                                   ')
         logging.info(f'Writing to file: {output_file_name}')
