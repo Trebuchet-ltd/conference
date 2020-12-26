@@ -1,6 +1,11 @@
 from converter import Converter
 from fractions import Fraction
 import sys
+import logging
+
+logging.basicConfig(filename='logs.txt', filemode='w', format='%(name)s - %(levelname)s - %(message)s',
+                    level=logging.INFO)
+logging.info('Admin logged in')
 
 PROGRESS_LOADER = ['-', '\\', '|', '/']
 EMOTES = ['└|∵|┐ ( ͡°ᴥ ͡° ʋ)', '┌|∵|┘ (ʋ  ͡°ᴥ ͡°)']
