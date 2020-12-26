@@ -98,7 +98,7 @@ if __name__ == '__main__':
     logging.info(f'Current file: {file}')
 
     ext = file.split('.')[-1]
-    if ext.lower() not in ['mkv', 'mp4']:
+    if ext.lower() not in ['mkv', 'mp4', 'mov']:
         logging.info(f'{file} does not seem to be a video. Skipping.')
     else:
         get_resolutions(file)
