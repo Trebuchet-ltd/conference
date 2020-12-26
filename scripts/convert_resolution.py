@@ -3,10 +3,9 @@ from fractions import Fraction
 import sys
 import logging
 
-logging.basicConfig(filename='logs.txt', filemode='w', format='%(name)s - %(levelname)s - %(message)s',
+logging.basicConfig(filename='logs.txt', filemode='a', format='%(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
 logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
-logging.info('Admin logged in')
 
 PROGRESS_LOADER = ['-', '\\', '|', '/']
 EMOTES = ['└|∵|┐ ( ͡°ᴥ ͡° ʋ)', '┌|∵|┘ (ʋ  ͡°ᴥ ͡°)']
@@ -94,7 +93,9 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         file = sys.argv[1]
 
-    logging.info(f'\n\nCurrent file: {file}')
+    logging.info()
+    logging.info('---------------------------------------------')
+    logging.info(f'Current file: {file}')
 
     ext = file.split('.')[-1]
     if ext.lower() not in ['mkv', 'mp4']:
