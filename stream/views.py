@@ -48,22 +48,25 @@ class StreamViewSet(viewsets.ModelViewSet):
             title = request.data['title']
             stream_model.title = title
             stream_model.save()
-        type = request.data['type']
         seek = request.data['seek']
-        if type == "live":
-            live_server = int(request.data['server'])
-            stream_model.seek = int(seek)
-            if live_server == 1:
-                stream_model.current_stream = stream_model.live_server1
+        if 'type' in request.data:
+            type = request.data['type']
+            if type == "live":
+                live_server = int(request.data['server'])
+                stream_model.seek = int(seek)
+                if live_server == 1:
+                    stream_model.current_stream = stream_model.live_server1
+                    stream_model.save()
+                elif live_server == 2:
+                    stream_model.current_stream = stream_model.live_server2
+                    stream_model.save()
+                return Response(status.HTTP_200_OK)
+            elif type == "link":
+                stream_model.link = request.data['link']
+                stream_model.seek = int(seek)
+                stream_model.current_stream = request.data['link']
                 stream_model.save()
-            elif live_server == 2:
-                stream_model.current_stream = stream_model.live_server2
-                stream_model.save()
+                return Response(status.HTTP_200_OK)
+            return Response(status.HTTP_400_BAD_REQUEST)
+        else:
             return Response(status.HTTP_200_OK)
-        elif type == "link":
-            stream_model.link = request.data['link']
-            stream_model.seek = int(seek)
-            stream_model.current_stream = request.data['link']
-            stream_model.save()
-            return Response(status.HTTP_200_OK)
-        return Response(status.HTTP_400_BAD_REQUEST)

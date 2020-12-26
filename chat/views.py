@@ -23,7 +23,7 @@ class ChatViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self):
         if self.action == 'list':
             return OutChatSerializer
-        if self.action == 'create':
+        else:
             return InChatSerializer
 
     def perform_create(self, serializer):
@@ -35,5 +35,13 @@ class ChatViewSet(viewsets.ModelViewSet):
         timestamp = self.request.query_params.get('timestamp')
         stream = self.request.query_params.get('stream')
         if timestamp!=None and stream!=None:
-            queryset = Chat.objects.filter(timestamp__gte=timestamp,stream=stream).values('timestamp','user_name','message')
+            queryset = Chat.objects.filter(timestamp__gte=timestamp,stream=stream,display=True).values('timestamp','user_name','message')
             return queryset
+
+    @action(detail=True, methods=['post'])
+    def clear_chat(self,request,pk=None):
+        if 'track' in request.data:
+            track = request.data['track']
+            Chat.objects.filter(stream=track).update(display=False)
+            return Response(status.HTTP_200_OK)
+        return Response(status.HTTP_400_BAD_REQUEST)

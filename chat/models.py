@@ -10,4 +10,4 @@ class Chat(models.Model):
     user_name = models.CharField(max_length=255)
     message = models.CharField(max_length=2048)
     stream = models.IntegerField(null=False,blank=False)
-
+    display = models.BooleanField(default=True)
