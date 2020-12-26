@@ -79,7 +79,6 @@ def get_resolutions(file_name):
         output_file_name = '.'.join(file_name.split('.')[:-1]) + '_' + res + '.mp4'
         OUTPUT_CONFIG['video'] = config[res]
         logging.info(f'Converting to {res}, res. [{config[res]["width"]}x{config[res]["height"]}]')
-        logging.info(config[res])
         convert = conv.convert(file_name, output_file_name, OUTPUT_CONFIG)
         for time_code in convert:
             print(f'\rConverting {time_code * 100:.1f}% * {PROGRESS_LOADER[i % 4]} * {EMOTES[i % 2]}  ', end='',
