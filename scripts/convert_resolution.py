@@ -51,14 +51,14 @@ def get_output_config(aspect_ratio):
         },
 
     }
-
-    if 1.7 > aspect_ratio > 1.4:
-        video_output_config['low']['width'] = int(200 * aspect_ratio)
-        video_output_config['low']['height'] = 200
-        video_output_config['mid']['width'] = int(400 * aspect_ratio)
-        video_output_config['mid']['height'] = 400
-        video_output_config['high']['width'] = int(800 * aspect_ratio)
-        video_output_config['high']['height'] = 800
+    #
+    # if 1.7 > aspect_ratio > 1.4:
+    #     video_output_config['low']['width'] = int(200 * aspect_ratio)
+    #     video_output_config['low']['height'] = 200
+    #     video_output_config['mid']['width'] = int(400 * aspect_ratio)
+    #     video_output_config['mid']['height'] = 400
+    #     video_output_config['high']['width'] = int(800 * aspect_ratio)
+    #     video_output_config['high']['height'] = 800
 
     return video_output_config
 
@@ -72,12 +72,13 @@ def get_resolutions(file_name):
         i = 0
         output_file_name = '.'.join(file_name.split('.')[:-1]) + '_' + res + '.mp4'
         OUTPUT_CONFIG['video'] = config[res]
-        convert = conv.convert(file_name, output_file_name, OUTPUT_CONFIG)
         print(f'Converting to {res}, res. [{config[res].width}x{config[res].height}]')
-        for time_code in convert:
-            print(f'\rConverting {time_code * 100:.1f}% * {PROGRESS_LOADER[i % 4]} * {EMOTES[i % 2]}  ', end='',
-                  flush=True)
-            i += 1
+        print(config[res])
+        # convert = conv.convert(file_name, output_file_name, OUTPUT_CONFIG)
+        # for time_code in convert:
+        #     print(f'\rConverting {time_code * 100:.1f}% * {PROGRESS_LOADER[i % 4]} * {EMOTES[i % 2]}  ', end='',
+        #           flush=True)
+        #     i += 1
         print('\rConversion completed.                                   ')
         print('Writing to file:', output_file_name)
 
