@@ -83,9 +83,9 @@ def get_resolutions(file_name):
         for time_code in convert:
             print(f'\rConverting {time_code * 100:.1f}% * {PROGRESS_LOADER[i % 4]} * {EMOTES[i % 2]}  ', end='',
                   flush=True)
-            if time_code - last_log_progress >= 5:
+            if time_code * 100 - last_log_progress >= 5:
                 logging.info(f'Progress: {time_code * 100:.1f}%')
-                last_log_progress = time_code
+                last_log_progress = time_code * 100
             i += 1
         logging.info('\rConversion completed.                                   ')
         logging.info(f'Writing to file: {output_file_name}')
