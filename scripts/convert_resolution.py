@@ -72,7 +72,7 @@ def get_resolutions(file_name):
         i = 0
         output_file_name = '.'.join(file_name.split('.')[:-1]) + '_' + res + '.mp4'
         OUTPUT_CONFIG['video'] = config[res]
-        print(f'Converting to {res}, res. [{config[res].width}x{config[res].height}]')
+        print(f'Converting to {res}, res. [{config[res]["width"]}x{config[res]["height"]}]')
         print(config[res])
         # convert = conv.convert(file_name, output_file_name, OUTPUT_CONFIG)
         # for time_code in convert:
