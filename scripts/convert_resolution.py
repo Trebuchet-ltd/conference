@@ -80,11 +80,11 @@ def get_resolutions(file_name):
         OUTPUT_CONFIG['video'] = config[res]
         logging.info(f'Converting to {res}, res. [{config[res]["width"]}x{config[res]["height"]}]')
         logging.info(config[res])
-        # convert = conv.convert(file_name, output_file_name, OUTPUT_CONFIG)
-        # for time_code in convert:
-        #     print(f'\rConverting {time_code * 100:.1f}% * {PROGRESS_LOADER[i % 4]} * {EMOTES[i % 2]}  ', end='',
-        #           flush=True)
-        #     i += 1
+        convert = conv.convert(file_name, output_file_name, OUTPUT_CONFIG)
+        for time_code in convert:
+            print(f'\rConverting {time_code * 100:.1f}% * {PROGRESS_LOADER[i % 4]} * {EMOTES[i % 2]}  ', end='',
+                  flush=True)
+            i += 1
         logging.info('\rConversion completed.                                   ')
         logging.info(f'Writing to file: {output_file_name}')
 
@@ -95,7 +95,7 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         file = sys.argv[1]
 
-    logging.info(f'\nCurrent file: {file}')
+    logging.info(f'\n\nCurrent file: {file}')
 
     ext = file.split('.')[-1]
     if ext.lower() not in ['mkv', 'mp4']:
