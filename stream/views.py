@@ -40,8 +40,6 @@ class StreamViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['post'])
     def set_stream(self, request, pk=None):
-        print(request.data)
-        print(request.POST)
         track = request.data['track']
         stream_model = Stream.objects.get(track=track)
         if 'title' in request.data:
@@ -60,11 +58,19 @@ class StreamViewSet(viewsets.ModelViewSet):
                 elif live_server == 2:
                     stream_model.current_stream = stream_model.live_server2
                     stream_model.save()
+                elif live_server == 3:
+                    Stream.objects.update(current_stream=Stream.objects.get(track=1).live_server1)
+                elif live_server == 4:
+                    Stream.objects.update(current_stream=Stream.objects.get(track=1).live_server2)
                 return Response(status.HTTP_200_OK)
             elif type == "link":
                 stream_model.link = request.data['link']
                 stream_model.seek = int(seek)
                 stream_model.current_stream = request.data['link']
+                stream_model.save()
+                return Response(status.HTTP_200_OK)
+            elif type == "break":
+                stream_model.current_stream = "https://statconferencecusat.co.in/static/media/basevid.58a05bad.mp4"
                 stream_model.save()
                 return Response(status.HTTP_200_OK)
             return Response(status.HTTP_400_BAD_REQUEST)
