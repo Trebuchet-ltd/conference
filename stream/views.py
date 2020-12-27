@@ -34,8 +34,8 @@ class StreamViewSet(viewsets.ModelViewSet):
             payload = {'Stream': data.current_stream, 'Title': data.title, 'Type': "Link",'Seek':data.seek}
         elif (data.current_stream == data.live_server1 or data.current_stream == data.live_server2):
             payload = {'Stream': data.current_stream, 'Title': data.title, 'Type': "Live",'Seek':data.seek}
-        elif data.current_stream == "https://statconferencecusat.co.in/static/media/basevid.58a05bad.mp4":
-            payload = {'Stream': "https://statconferencecusat.co.in/static/media/basevid.58a05bad.mp4", 'Title': "Break", 'Type': "Link" , 'Seek':data.seek}
+        elif data.current_stream == "https://statconferencecusat.co.in/media/isbis.mp4":
+            payload = {'Stream': "https://statconferencecusat.co.in/media/isbis.mp4", 'Title': "Break", 'Type': "Link" , 'Seek':data.seek}
         elif data.current_stream == Stream.objects.get(track=1).live_server1:
             payload = {'Stream': Stream.objects.get(track=1).live_server1, 'Title': data.title, 'Type': "Live", 'Seek':data.seek}
         elif data.current_stream == Stream.objects.get(track=1).live_server2:
