@@ -1,5 +1,5 @@
-from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework import status, permissions
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from django.http import HttpResponse
 from .models import User
@@ -17,7 +17,8 @@ from django.urls import reverse
 from django.core.mail import send_mail
 from papers.permissions import IsOrgnaiser
 from papers.utils import send_async_mail, send_bulk_async_mail
-
+from scripts.create_certificate import create_page
+from PyPDF2 import PdfFileWriter
 from talks.models import Participant, Session
 
 
@@ -79,7 +80,7 @@ class SendMail(APIView):
         content = data['content']
         mail_addresses = []
         content_data = []
-        lst=[]
+        lst = []
         if data['recipient'] == 'all':
             users = User.objects.all()
             for i in users:
@@ -146,3 +147,48 @@ class SendMail(APIView):
             send_bulk_async_mail(lst)
 
         return Response(status.HTTP_200_OK)
+
+
+@api_view()
+@permission_classes([permissions.IsAuthenticated])
+def get_participation_certificate(request):
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment;filename="certificate.pdf"'
+    output = PdfFileWriter()
+
+    name = f'{request.user.first_name} {request.user.last_name}'
+    page = create_page(name, "participation_base.pdf")
+
+    output.addPage(page)
+    output.write(response)
+    return response
+
+
+@api_view()
+@permission_classes([permissions.IsAuthenticated])
+def get_paper_certificate(request):
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment;filename="certificate.pdf"'
+    output = PdfFileWriter()
+
+    name = f'{request.user.first_name} {request.user.last_name}'
+    page = create_page(name, "paper_base.pdf")
+
+    output.addPage(page)
+    output.write(response)
+    return response
+
+
+@api_view()
+@permission_classes([permissions.IsAuthenticated])
+def get_session_certificate(request):
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment;filename="certificate.pdf"'
+    output = PdfFileWriter()
+
+    name = f'{request.user.first_name} {request.user.last_name}'
+    page = create_page(name, "session_base.pdf")
+
+    output.addPage(page)
+    output.write(response)
+    return response
