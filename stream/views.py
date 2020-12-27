@@ -76,7 +76,7 @@ class StreamViewSet(viewsets.ModelViewSet):
                 stream_model.save()
                 return Response(status.HTTP_200_OK)
             elif type == "break":
-                stream_model.current_stream = "https://statconferencecusat.co.in/static/media/basevid.58a05bad.mp4"
+                stream_model.current_stream = "https://statconferencecusat.co.in/media/isbis.mp4"
                 stream_model.save()
                 return Response(status.HTTP_200_OK)
             return Response(status.HTTP_400_BAD_REQUEST)

@@ -37,6 +37,7 @@ class BulkEmail(threading.Thread):
             time.sleep(3)
             if count > 50:
                 time.sleep(200)
+                count=0
             count += 1
             print(f'Mail to all')
 
