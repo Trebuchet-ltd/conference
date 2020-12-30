@@ -69,6 +69,7 @@ class User(AbstractUser):
     recording = models.FileField(upload_to=video_location, null=True, blank=True)
     is_plenary = models.BooleanField(default=False)
     give_exception = models.BooleanField(default=False)
+    feedback_submitted = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['phone']
@@ -78,3 +79,4 @@ class User(AbstractUser):
 
     def __str__(self):
         return f'{self.first_name.title()} {self.last_name.title()}, {self.affiliation}'
+

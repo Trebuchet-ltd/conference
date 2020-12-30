@@ -152,6 +152,8 @@ class SendMail(APIView):
 @api_view()
 @permission_classes([permissions.IsAuthenticated])
 def get_participation_certificate(request):
+    if not request.user.feedback_submitted:
+        return Response(status=402)
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment;filename="certificate.pdf"'
     output = PdfFileWriter()
@@ -167,6 +169,8 @@ def get_participation_certificate(request):
 @api_view()
 @permission_classes([permissions.IsAuthenticated])
 def get_paper_certificate(request):
+    if not request.user.feedback_submitted:
+        return Response(status=402)
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment;filename="certificate.pdf"'
     output = PdfFileWriter()
@@ -182,6 +186,8 @@ def get_paper_certificate(request):
 @api_view()
 @permission_classes([permissions.IsAuthenticated])
 def get_session_certificate(request):
+    if not request.user.feedback_submitted:
+        return Response(status=402)
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment;filename="certificate.pdf"'
     output = PdfFileWriter()
@@ -192,3 +198,11 @@ def get_session_certificate(request):
     output.addPage(page)
     output.write(response)
     return response
+
+
+@api_view()
+def give_feedback(request):
+    user = User.objects.get(pk=request.user.id)
+    user.feedback_submitted = True
+    user.save()
+    return Response(status=200, data='https://forms.gle/Ey1g8rzhvrPosvPh9')

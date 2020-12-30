@@ -7,6 +7,7 @@ from . import views
 app_name = 'profile'
 
 urlpatterns = [
+    url('feedback', views.give_feedback, name='feedback'),
     url('participation_certificate', views.get_participation_certificate, name='get_participation_certificate'),
     url('paper_certificate', views.get_paper_certificate, name='get_paper_certificate'),
     url('session_certificate', views.get_session_certificate, name='get_session_certificate'),
