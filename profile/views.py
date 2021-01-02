@@ -1,10 +1,10 @@
-from rest_framework import status, permissions
+from rest_framework import status, permissions, viewsets
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from django.http import HttpResponse
-from .models import User
+from .models import User, Feedback
 from papers.models import Paper
-from .serializers import UserSerializer
+from .serializers import UserSerializer, FeedbackSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.generics import ListAPIView
 from rest_framework.views import APIView
@@ -206,3 +206,16 @@ def give_feedback(request):
     user.feedback_submitted = True
     user.save()
     return Response(status=200, data='https://forms.gle/Ey1g8rzhvrPosvPh9')
+
+
+class FeedbackViewset(viewsets.ModelViewSet):
+    queryset = Feedback.objects.all()
+    serializer_class = FeedbackSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def perform_create(self, serializer):
+        print(serializer.validated_data)
+        user = User.objects.get(pk=serializer.validated_data['user'])
+        user.feedback_submitted = True
+        user.save()
+        return Response(serializer.data)

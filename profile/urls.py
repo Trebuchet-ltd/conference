@@ -5,6 +5,8 @@ from rest_framework.routers import DefaultRouter
 from . import views
 
 app_name = 'profile'
+router = DefaultRouter()
+router.register(r'', views.FeedbackViewset)
 
 urlpatterns = [
     url('feedback', views.give_feedback, name='feedback'),
@@ -15,5 +17,6 @@ urlpatterns = [
     url('users', views.UserList.as_view()),
     url('registration/complete', views.complete_view, name='account_confirm_complete'),
     url('send_mail', views.SendMail.as_view()),
-    url('anon_users', views.AnonPlenaryList.as_view())
+    url('anon_users', views.AnonPlenaryList.as_view()),
+    url('', include(router.urls))
 ]

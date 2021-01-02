@@ -44,6 +44,11 @@ ROLES = [
     ('reviewer', 'reviewer'),
 ]
 
+ANSWERS = [
+    ('yes', 'Yes'),
+    ('no', 'No'),
+    ('maybe', 'Maybe'),
+]
 
 def media_location(instance, filename):
     return f'static/media/dp/{filename}'
@@ -80,3 +85,18 @@ class User(AbstractUser):
     def __str__(self):
         return f'{self.first_name.title()} {self.last_name.title()}, {self.affiliation}'
 
+
+class Feedback(models.Model):
+    user = models.OneToOneField(to=User, related_name='feedback', on_delete=models.CASCADE)
+    email = models.CharField(max_length=255)
+    name = models.CharField(max_length=255)
+    designation = models.CharField(max_length=255)
+    affiliation = models.CharField(max_length=255)
+    participation = models.CharField(max_length=255)
+    title = models.CharField(max_length=255)
+    content = models.IntegerField()
+    satisfaction = models.IntegerField()
+    expectation = models.CharField(max_length=255, choices=ANSWERS)
+    interactive = models.CharField(max_length=255, choices=ANSWERS)
+    knowledge = models.CharField(max_length=255, choices=ANSWERS)
+    comments = models.CharField(max_length=512)
