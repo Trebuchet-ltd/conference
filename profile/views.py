@@ -168,10 +168,10 @@ def get_participation_certificate(request):
 
     output.addPage(page)
     # output.write(response)
-    # output.write(os.path.join(settings.BASE_DIR, 'static/media', str(request.user.id) + 'viewer.pdf'))
-    return HttpResponse(
-        json.dumps({'link': os.path.join(settings.BASE_DIR, 'static/media', str(request.user.id) + 'viewer.pdf')}),
-        content_type="application/json")
+    outputStream = open(os.path.join(settings.BASE_DIR, 'static/media', str(request.user.id) + 'viewer.pdf'), "wb")
+    output.write(outputStream)
+    return HttpResponse(json.dumps({'link': 'media/' + str(request.user.id) + 'viewer.pdf'}),
+                        content_type="application/json")
 
 
 @api_view()
