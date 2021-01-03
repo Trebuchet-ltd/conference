@@ -18,6 +18,7 @@ from django.core.mail import send_mail
 from papers.permissions import IsOrgnaiser
 from papers.utils import send_async_mail, send_bulk_async_mail
 from scripts.create_certificate import create_page
+from scripts.create_paper_certificate import create_page as create_paper
 from PyPDF2 import PdfFileWriter
 from talks.models import Participant, Session
 
@@ -176,8 +177,8 @@ def get_paper_certificate(request):
     response['Content-Disposition'] = 'attachment;filename="certificate.pdf"'
     output = PdfFileWriter()
 
-    name = f'{request.user.first_name} {request.user.last_name}'
-    page = create_page(name, "paper_base.pdf")
+    feedback = Feedback.objects.get(user=request.user.id)
+    page = create_paper(feedback.name, feedback.affiliation, feedback.title)
 
     output.addPage(page)
     output.write(response)
