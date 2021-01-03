@@ -194,6 +194,7 @@ def get_session_certificate(request):
     response['Content-Disposition'] = 'attachment;filename="certificate.pdf"'
     output = PdfFileWriter()
 
+    feedback = Feedback.objects.get(user=request.user.id)
     name = f'{request.user.first_name} {request.user.last_name}'
     page = create_page(name, "session_base.pdf")
 

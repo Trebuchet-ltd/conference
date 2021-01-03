@@ -6,8 +6,10 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 
 # Adding custom fonts. 1st parm is the name of the font and 2nd is the path to the ttf font file.
-pdfmetrics.registerFont(TTFont('Roboto', 'RobotoMono-Medium.ttf'))
-pdfmetrics.registerFont(TTFont('RobotoL', 'RobotoMono-Light.ttf'))
+path = os.path.join(settings.BASE_DIR, 'scripts/RobotoMono-Medium.ttf')
+pdfmetrics.registerFont(TTFont('Roboto', path))
+path = os.path.join(settings.BASE_DIR, 'scripts/RobotoMono-Light.ttf')
+pdfmetrics.registerFont(TTFont('RobotoL', path))
 
 
 # Function to return a pdf page with the parameters added into it.
@@ -80,7 +82,8 @@ def create_page(name, affiliation, paper):
     new_pdf = PdfFileReader(packet)
 
     # Read your existing PDF (ticket.pdf)
-    existing_pdf = PdfFileReader(open("paper_base.pdf", "rb"))
+    path = os.path.join(settings.BASE_DIR, 'scripts/paper_base.pdf')
+    existing_pdf = PdfFileReader(open(path, "rb"))
     # Add the canvas on the existing page
     page = existing_pdf.getPage(0)
     page2 = new_pdf.getPage(0)
