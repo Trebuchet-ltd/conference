@@ -152,14 +152,15 @@ class SendMail(APIView):
 @api_view()
 @permission_classes([permissions.IsAuthenticated])
 def get_participation_certificate(request):
+    print(request.user.id)
     if not request.user.feedback_submitted:
         return Response(status=402)
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment;filename="certificate.pdf"'
     output = PdfFileWriter()
 
-    name = f'{request.user.first_name} {request.user.last_name}'
-    page = create_page(name, "participation_base.pdf")
+    feedback = Feedback.objects.get(user=request.user.id)
+    page = create_page(feedback.name, feedback.affiliation)
 
     output.addPage(page)
     output.write(response)
@@ -200,21 +201,12 @@ def get_session_certificate(request):
     return response
 
 
-@api_view()
-def give_feedback(request):
-    user = User.objects.get(pk=request.user.id)
-    user.feedback_submitted = True
-    user.save()
-    return Response(status=200, data='https://forms.gle/Ey1g8rzhvrPosvPh9')
-
-
 class FeedbackViewset(viewsets.ModelViewSet):
     queryset = Feedback.objects.all()
     serializer_class = FeedbackSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):
-        print(serializer.validated_data)
         user = User.objects.get(pk=serializer.validated_data['user'].id)
         user.feedback_submitted = True
         user.save()
