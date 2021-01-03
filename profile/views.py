@@ -215,7 +215,7 @@ class FeedbackViewset(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         print(serializer.validated_data)
-        user = User.objects.get(pk=serializer.validated_data['user'])
+        user = User.objects.get(pk=serializer.validated_data['user'].id)
         user.feedback_submitted = True
         user.save()
         return Response(serializer.data)
