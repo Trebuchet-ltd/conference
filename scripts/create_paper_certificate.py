@@ -1,6 +1,7 @@
 from PyPDF2 import PdfFileWriter, PdfFileReader
 import io
 import os
+from django.conf import settings
 from reportlab.pdfgen import canvas
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
