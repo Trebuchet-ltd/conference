@@ -183,10 +183,12 @@ def get_paper_certificate(request):
     feedback = Feedback.objects.get(user=request.user.id)
     page = create_paper(feedback.name, feedback.affiliation, feedback.title)
 
+    output.addPage(page)
     outputStream = open(os.path.join(settings.BASE_DIR, 'static/media', str(request.user.id) + 'paper.pdf'), "wb")
     output.write(outputStream)
     return HttpResponse(json.dumps({'link': 'media/' + str(request.user.id) + 'paper.pdf'}),
                         content_type="application/json")
+
 
 @api_view()
 @permission_classes([permissions.IsAuthenticated])
