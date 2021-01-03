@@ -1,6 +1,6 @@
 from PyPDF2 import PdfFileWriter, PdfFileReader
 import io
-
+import os
 from reportlab.pdfgen import canvas
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
@@ -21,7 +21,6 @@ def create_page(name, affiliation, paper):
     # can.setFont('Roboto', 17)
     # can.drawString(345, 265, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ')
 
-
     # =======================================================================================================
     # Code to centre a string between a starting and ending coordinates.
     font_size = 15
@@ -39,7 +38,6 @@ def create_page(name, affiliation, paper):
     can.drawString(x, y, name)
     # =======================================================================================================
 
-
     # =======================================================================================================
     # Code to centre a string between a starting and ending coordinates.
     font_size = 17
@@ -56,7 +54,6 @@ def create_page(name, affiliation, paper):
     x = mid - half_string_size
     can.drawString(x, y, affiliation)
     # =======================================================================================================
-
 
     # =======================================================================================================
     # Code to centre a string between a starting and ending coordinates.
@@ -96,7 +93,8 @@ if __name__ == "__main__":
     output = PdfFileWriter()
 
     participant = "Jacobo de Uña-Álvarez"
-    page = create_page(participant, "Universidade de Vigo, Spain", "Recent advances for the statistical analysis of doubly truncated data")
+    page = create_page(participant, "Universidade de Vigo, Spain",
+                       "Recent advances for the statistical analysis of doubly truncated data")
     output.addPage(page)  # Adding that page to the pdf.
 
     # Writing it to a file.
