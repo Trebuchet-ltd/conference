@@ -19,6 +19,7 @@ from papers.permissions import IsOrgnaiser
 from papers.utils import send_async_mail, send_bulk_async_mail
 from scripts.create_certificate import create_page
 from scripts.create_paper_certificate import create_page as create_paper
+from scripts.create_session_certificate import create_page as create_session
 from PyPDF2 import PdfFileWriter
 from talks.models import Participant, Session
 
@@ -195,8 +196,7 @@ def get_session_certificate(request):
     output = PdfFileWriter()
 
     feedback = Feedback.objects.get(user=request.user.id)
-    name = f'{request.user.first_name} {request.user.last_name}'
-    page = create_page(name, "session_base.pdf")
+    page = create_session(feedback.name, feedback.affiliation, feedback.session)
 
     output.addPage(page)
     output.write(response)
