@@ -1,3 +1,6 @@
+import json
+import os
+
 from rest_framework import status, permissions, viewsets
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
@@ -157,16 +160,17 @@ def get_participation_certificate(request):
     print(request.user.id)
     if not request.user.feedback_submitted:
         return Response(status=402)
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment;filename="certificate.pdf"'
     output = PdfFileWriter()
 
     feedback = Feedback.objects.get(user=request.user.id)
     page = create_page(feedback.name, feedback.affiliation)
 
     output.addPage(page)
-    output.write(response)
-    return response
+    # output.write(response)
+    outputStream = open(os.path.join(settings.BASE_DIR, 'static/media', str(request.user.id) + 'viewer.pdf'), "wb")
+    output.write(outputStream)
+    return HttpResponse(json.dumps({'link': 'media/' + str(request.user.id) + 'viewer.pdf'}),
+                        content_type="application/json")
 
 
 @api_view()
@@ -174,16 +178,17 @@ def get_participation_certificate(request):
 def get_paper_certificate(request):
     if not request.user.feedback_submitted:
         return Response(status=402)
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment;filename="certificate.pdf"'
+
     output = PdfFileWriter()
 
     feedback = Feedback.objects.get(user=request.user.id)
     page = create_paper(feedback.name, feedback.affiliation, feedback.title)
 
     output.addPage(page)
-    output.write(response)
-    return response
+    outputStream = open(os.path.join(settings.BASE_DIR, 'static/media', str(request.user.id) + 'paper.pdf'), "wb")
+    output.write(outputStream)
+    return HttpResponse(json.dumps({'link': 'media/' + str(request.user.id) + 'paper.pdf'}),
+                        content_type="application/json")
 
 
 @api_view()
