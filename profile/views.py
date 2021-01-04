@@ -204,8 +204,10 @@ def get_session_certificate(request):
     page = create_session(feedback.name, feedback.affiliation, feedback.session)
 
     output.addPage(page)
-    output.write(response)
-    return response
+    outputStream = open(os.path.join(settings.BASE_DIR, 'static/media', str(request.user.id) + 'paper.pdf'), "wb")
+    output.write(outputStream)
+    return HttpResponse(json.dumps({'link': 'media/' + str(request.user.id) + 'session.pdf'}),
+                        content_type="application/json")
 
 
 class FeedbackViewset(viewsets.ModelViewSet):
