@@ -1,6 +1,6 @@
 import json
 import os
-
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status, permissions, viewsets
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
@@ -210,10 +210,24 @@ def get_session_certificate(request):
                         content_type="application/json")
 
 
+@api_view()
+@permission_classes([permissions.IsAuthenticated])
+def delete_feedback(request):
+    print(request.user.id)
+    print(request.user)
+    feedback = Feedback.objects.get(user=request.user.id)
+    feedback.delete()
+    request.user.feedback_submitted = False
+    request.user.save()
+    return Response(200)
+
+
 class FeedbackViewset(viewsets.ModelViewSet):
     queryset = Feedback.objects.all()
     serializer_class = FeedbackSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['user']
+    # permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):
         user = User.objects.get(pk=serializer.validated_data['user'].id)
