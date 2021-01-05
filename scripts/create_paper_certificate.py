@@ -56,6 +56,17 @@ def create_page(name, affiliation, paper):
     can.drawString(x, y, affiliation)
     # =======================================================================================================
 
+    paper_beg = paper
+    paper_end = ''
+
+    if len(paper) > 70:
+        r = [i.start() for i in re.finditer(' ', paper)]
+        for i in r:
+            if i > 70:
+                break
+            p = i
+        paper_beg = paper[:p]
+        paper_end = paper[p+1:]
     # =======================================================================================================
     # Code to centre a string between a starting and ending coordinates.
     font_size = 15
@@ -68,9 +79,26 @@ def create_page(name, affiliation, paper):
     y = 230
 
     mid = start + (end - start) / 2
-    half_string_size = (len(paper) / 2) * length_of_one_letter
+    half_string_size = (len(paper_beg) / 2) * length_of_one_letter
     x = mid - half_string_size
-    can.drawString(x, y, paper)
+    can.drawString(x, y, paper_beg)
+    # =======================================================================================================
+
+    # =======================================================================================================
+    # Code to centre a string between a starting and ending coordinates.
+    font_size = 15
+    can.setFont('Roboto', font_size)
+
+    # You'll have to determine the following values with the help of the helper file, get_pdf_coordinates.py
+    start = 120
+    end = 750
+    length_of_one_letter = 9  # Use some 'monospaced' font so that each letter will have the same length.
+    y = 203
+
+    mid = start + (end - start) / 2
+    half_string_size = (len(paper_end) / 2) * length_of_one_letter
+    x = mid - half_string_size
+    can.drawString(x, y, paper_end)
     # =======================================================================================================
 
     can.save()  # Save the canvas
