@@ -154,59 +154,64 @@ class SendMail(APIView):
         return Response(status.HTTP_200_OK)
 
 
-@api_view()
+@api_view(['GET', 'POST'])
 @permission_classes([permissions.IsAuthenticated])
 def get_participation_certificate(request):
-    print(request.user.id)
-    if not request.user.feedback_submitted:
-        return Response(status=402)
+    if request.method == 'POST':
+        feedback = Feedback.objects.get(user=request.data['user'])
+    else:
+        if not request.user.feedback_submitted:
+            return Response(status=402)
+        feedback = Feedback.objects.get(user=request.user.id)
     output = PdfFileWriter()
 
-    feedback = Feedback.objects.get(user=request.user.id)
     page = create_page(feedback.name, feedback.affiliation)
 
     output.addPage(page)
     # output.write(response)
-    outputStream = open(os.path.join(settings.BASE_DIR, 'static/media', str(request.user.id) + 'viewer.pdf'), "wb")
+    outputStream = open(os.path.join(settings.BASE_DIR, 'static/media', str(feedback.user.id) + 'viewer.pdf'), "wb")
     output.write(outputStream)
-    return HttpResponse(json.dumps({'link': 'media/' + str(request.user.id) + 'viewer.pdf'}),
+    return HttpResponse(json.dumps({'link': 'media/' + str(feedback.user.id) + 'viewer.pdf'}),
                         content_type="application/json")
 
 
-@api_view()
+@api_view(['GET', 'POST'])
 @permission_classes([permissions.IsAuthenticated])
 def get_paper_certificate(request):
-    if not request.user.feedback_submitted:
-        return Response(status=402)
-
+    if request.method == 'POST':
+        feedback = Feedback.objects.get(user=request.data['user'])
+    else:
+        if not request.user.feedback_submitted:
+            return Response(status=402)
+        feedback = Feedback.objects.get(user=request.user.id)
     output = PdfFileWriter()
 
-    feedback = Feedback.objects.get(user=request.user.id)
     page = create_paper(feedback.name, feedback.affiliation, feedback.title)
 
     output.addPage(page)
-    outputStream = open(os.path.join(settings.BASE_DIR, 'static/media', str(request.user.id) + 'paper.pdf'), "wb")
+    outputStream = open(os.path.join(settings.BASE_DIR, 'static/media', str(feedback.user.id) + 'paper.pdf'), "wb")
     output.write(outputStream)
-    return HttpResponse(json.dumps({'link': 'media/' + str(request.user.id) + 'paper.pdf'}),
+    return HttpResponse(json.dumps({'link': 'media/' + str(feedback.user.id) + 'paper.pdf'}),
                         content_type="application/json")
 
 
-@api_view()
+@api_view(['GET', 'POST'])
 @permission_classes([permissions.IsAuthenticated])
 def get_session_certificate(request):
-    if not request.user.feedback_submitted:
-        return Response(status=402)
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment;filename="certificate.pdf"'
+    if request.method == 'POST':
+        feedback = Feedback.objects.get(user=request.data['user'])
+    else:
+        if not request.user.feedback_submitted:
+            return Response(status=402)
+        feedback = Feedback.objects.get(user=request.user.id)
     output = PdfFileWriter()
 
-    feedback = Feedback.objects.get(user=request.user.id)
     page = create_session(feedback.name, feedback.affiliation, feedback.session)
 
     output.addPage(page)
-    outputStream = open(os.path.join(settings.BASE_DIR, 'static/media', str(request.user.id) + 'paper.pdf'), "wb")
+    outputStream = open(os.path.join(settings.BASE_DIR, 'static/media', str(feedback.user.id) + 'session.pdf'), "wb")
     output.write(outputStream)
-    return HttpResponse(json.dumps({'link': 'media/' + str(request.user.id) + 'session.pdf'}),
+    return HttpResponse(json.dumps({'link': 'media/' + str(feedback.user.id) + 'session.pdf'}),
                         content_type="application/json")
 
 
@@ -227,6 +232,7 @@ class FeedbackViewset(viewsets.ModelViewSet):
     serializer_class = FeedbackSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['user']
+
     # permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):
