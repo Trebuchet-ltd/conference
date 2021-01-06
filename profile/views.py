@@ -190,6 +190,7 @@ def get_paper_certificate(request):
 
 
     page = create_paper(feedback.name, feedback.affiliation, feedback.title)
+    print(feedback.title)
     output.addPage(page)
     outputStream = open(os.path.join(settings.BASE_DIR, 'static/media', str(feedback.user.id) + 'paper.pdf'), "wb")
     output.write(outputStream)

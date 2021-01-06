@@ -1,3 +1,5 @@
+import re
+
 from PyPDF2 import PdfFileWriter, PdfFileReader
 import io
 import os
