@@ -47,7 +47,7 @@ def create_page(name, affiliation, paper):
     can.setFont('Roboto', font_size)
 
     # You'll have to determine the following values with the help of the helper file, get_pdf_coordinates.py
-    start = 160
+    start = 170
     end = 500
     length_of_one_letter = 10  # Use some 'monospaced' font so that each letter will have the same length.
     y = 258
