@@ -32,7 +32,7 @@ def create_page(name, affiliation, paper):
     # You'll have to determine the following values with the help of the helper file, get_pdf_coordinates.py
     start = 375
     end = 590
-    length_of_one_letter = 9  # Use some 'monospaced' font so that each letter will have the same length.
+    length_of_one_letter = 8  # Use some 'monospaced' font so that each letter will have the same length.
     y = 285
 
     mid = start + (end - start) / 2
