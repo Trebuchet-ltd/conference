@@ -42,7 +42,7 @@ def create_page(name, affiliation):
 
     # =======================================================================================================
     # Code to centre a string between a starting and ending coordinates.
-    font_size = 17
+    font_size = 15
     can.setFont('Roboto', font_size)
 
     # You'll have to determine the following values with the help of the helper file, get_pdf_coordinates.py
