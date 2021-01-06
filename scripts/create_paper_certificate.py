@@ -26,11 +26,11 @@ def create_page(name, affiliation, paper):
 
     # =======================================================================================================
     # Code to centre a string between a starting and ending coordinates.
-    font_size = 15
+    font_size = 13
     can.setFont('Roboto', font_size)
 
     # You'll have to determine the following values with the help of the helper file, get_pdf_coordinates.py
-    start = 300
+    start = 340
     end = 590
     length_of_one_letter = 9  # Use some 'monospaced' font so that each letter will have the same length.
     y = 285
@@ -43,7 +43,7 @@ def create_page(name, affiliation, paper):
 
     # =======================================================================================================
     # Code to centre a string between a starting and ending coordinates.
-    font_size = 15
+    font_size = 13
     can.setFont('Roboto', font_size)
 
     # You'll have to determine the following values with the help of the helper file, get_pdf_coordinates.py
