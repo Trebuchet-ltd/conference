@@ -101,3 +101,6 @@ class Feedback(models.Model):
     interactive = models.CharField(max_length=255, choices=ANSWERS, null=True, blank=True)
     knowledge = models.CharField(max_length=255, choices=ANSWERS, null=True, blank=True)
     comments = models.CharField(max_length=512, null=True, blank=True)
+
+    def __str__(self):
+        return f'{self.name}'
